@@ -4,6 +4,7 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
+      <itemPath>libjsapi.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -12,6 +13,7 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
+      <itemPath>libjsapi.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
                    displayName="Test Files"
@@ -34,9 +36,19 @@
         <rebuildPropChanged>false</rebuildPropChanged>
       </toolsSet>
       <compileType>
+        <ccTool>
+          <standard>8</standard>
+          <incDir>
+            <pElem>../../externals/installed/include/mozjs-31</pElem>
+          </incDir>
+        </ccTool>
         <archiverTool>
         </archiverTool>
       </compileType>
+      <item path="libjsapi.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="libjsapi.h" ex="false" tool="3" flavor2="0">
+      </item>
     </conf>
     <conf name="Release" type="3">
       <toolsSet>
@@ -50,6 +62,10 @@
         </cTool>
         <ccTool>
           <developmentMode>5</developmentMode>
+          <standard>8</standard>
+          <incDir>
+            <pElem>../../externals/installed/include/mozjs-31</pElem>
+          </incDir>
         </ccTool>
         <fortranCompilerTool>
           <developmentMode>5</developmentMode>
@@ -60,6 +76,10 @@
         <archiverTool>
         </archiverTool>
       </compileType>
+      <item path="libjsapi.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="libjsapi.h" ex="false" tool="3" flavor2="0">
+      </item>
     </conf>
   </confs>
 </configurationDescriptor>
