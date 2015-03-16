@@ -25,6 +25,8 @@ rs::jsapi::Runtime::Instance::Instance() {
             JS_Init();
             count_ += 1;
         }
+    } else {
+        count_ += 1;
     }
     
 }
