@@ -43,11 +43,31 @@ rs::jsapi::Runtime::Runtime() :
     global_(cx_, JS_NewGlobalObject(cx_, &globalClass, nullptr, JS::DontFireOnNewGlobalHook)),
     ac_(cx_, global_) {
     JS_InitStandardClasses(cx_, global_);
-    JS_BeginRequest(cx_);
+
+    JS_SetContextPrivate(cx_, this);
+    JS_SetErrorReporter(cx_, &ReportError);
 }
 
 rs::jsapi::Runtime::~Runtime() {
-    JS_EndRequest(cx_);
     JS_DestroyContext(cx_);
     JS_DestroyRuntime(rt_);
+}
+
+void rs::jsapi::Runtime::ReportError(JSContext* cx, const char* message, JSErrorReport* report) {
+    auto rt = static_cast<Runtime*>(JS_GetContextPrivate(cx));
+    if (rt != nullptr) {
+        rt->error_ = message;
+    }
+}
+
+bool rs::jsapi::Runtime::HasError() {
+    return error_.length() > 0;
+}
+
+const std::string& rs::jsapi::Runtime::getError() {
+    return error_;
+}
+
+bool rs::jsapi::Runtime::ClearError() {
+    error_.clear();
 }

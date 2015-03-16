@@ -36,7 +36,8 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 # Object Files
 OBJECTFILES= \
 	${OBJECTDIR}/libjsapi.o \
-	${OBJECTDIR}/runtime.o
+	${OBJECTDIR}/runtime.o \
+	${OBJECTDIR}/script.o
 
 
 # C Compiler Flags
@@ -74,6 +75,11 @@ ${OBJECTDIR}/runtime.o: runtime.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs-31 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/runtime.o runtime.cpp
+
+${OBJECTDIR}/script.o: script.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs-31 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/script.o script.cpp
 
 # Subprojects
 .build-subprojects:

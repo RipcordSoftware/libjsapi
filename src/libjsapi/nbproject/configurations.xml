@@ -6,6 +6,8 @@
                    projectFiles="true">
       <itemPath>libjsapi.h</itemPath>
       <itemPath>runtime.h</itemPath>
+      <itemPath>script.h</itemPath>
+      <itemPath>value.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -16,6 +18,7 @@
                    projectFiles="true">
       <itemPath>libjsapi.cpp</itemPath>
       <itemPath>runtime.cpp</itemPath>
+      <itemPath>script.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
                    displayName="Test Files"
@@ -55,6 +58,12 @@
       </item>
       <item path="runtime.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="script.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="script.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="value.h" ex="false" tool="3" flavor2="0">
+      </item>
     </conf>
     <conf name="Release" type="3">
       <toolsSet>
@@ -89,6 +98,12 @@
       <item path="runtime.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="runtime.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="script.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="script.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="value.h" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
   </confs>

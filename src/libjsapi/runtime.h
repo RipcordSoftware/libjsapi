@@ -1,5 +1,5 @@
 #ifndef RS_JSAPI_RUNTIME_H
-#define	RS_JSAPI_RUNTIME_H
+#define RS_JSAPI_RUNTIME_H
 
 #include <jsapi.h>
 
@@ -9,7 +9,7 @@
 namespace rs {
 namespace jsapi {
 
-class Runtime {
+class Runtime final {
 public:
     Runtime();
     Runtime(const Runtime&) = delete;
@@ -20,6 +20,10 @@ public:
     JSRuntime* getRuntime() { return rt_; }
     JS::HandleObject getGlobal() { return global_; }
     JSContext* getContext() { return cx_; }
+    
+    bool HasError();
+    const std::string& getError();
+    bool ClearError();
     
 private:
     
@@ -33,11 +37,15 @@ private:
         static std::mutex m_;
     };
     
+    static void ReportError(JSContext *cx, const char *message, JSErrorReport *report);    
+    
     Instance inst_;
     JSRuntime* rt_;
     JSContext* cx_;
     JS::RootedObject global_;
     JSAutoCompartment ac_;
+    
+    std::string error_;
 };
 
 }}
