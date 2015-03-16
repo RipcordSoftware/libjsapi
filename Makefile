@@ -13,7 +13,7 @@ clean: force_true
 		cd externals && \
 		mkdir -p installed && \
 		curl http://ftp.gnu.org/gnu/autoconf/autoconf-2.13.tar.gz -O && \
-		tar xvfz autoconf-2.13.tar.gz && \
+		tar xfz autoconf-2.13.tar.gz && \
 		cd autoconf-2.13 && \
 		./configure --prefix=${PWD}/externals/installed && \
 		make && \
@@ -26,7 +26,7 @@ clean: force_true
 		cd externals && \
 		mkdir -p installed && \
 		if [ ! -f mozjs-31.5.0.tar.bz2 ]; then curl https://people.mozilla.org/~sstangl/mozjs-31.5.0.tar.bz2 -O; fi && \
-		tar xvfj mozjs-31.5.0.tar.bz2 && \
+		tar xfj mozjs-31.5.0.tar.bz2 && \
 		cd mozjs-31.5.0 && \
 		cd js/src && \
 		mkdir build_OPT.OBJ && \
