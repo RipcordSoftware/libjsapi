@@ -27,8 +27,7 @@ rs::jsapi::Runtime::Instance::Instance() {
         }
     } else {
         count_ += 1;
-    }
-    
+    }   
 }
 
 rs::jsapi::Runtime::Instance::~Instance() {
