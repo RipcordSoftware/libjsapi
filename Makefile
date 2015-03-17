@@ -38,7 +38,7 @@ clean: force_true
 		mkdir build_OPT.OBJ && \
 		cd build_OPT.OBJ && \
 		export PATH=${PWD}/externals/installed/bin:${PATH} && \
-		../configure --prefix=${PWD}/externals/installed --disable-shared-js && \
+		../configure --prefix=${PWD}/externals/installed --disable-shared-js --disable-tests && \
 		make -j 2 && \
 		make install; \
 	fi
