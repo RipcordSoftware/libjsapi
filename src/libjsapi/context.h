@@ -32,10 +32,10 @@ private:
     static void ReportError(JSContext *cx, const char *message, JSErrorReport *report);
     
     void DestroyContext();
-    
+   
     JSContext* cx_;
     JS::RootedObject global_;
-    JSAutoCompartment ac_;
+    JSCompartment* oldCompartment_;
     
     std::string error_;
 };
@@ -43,4 +43,3 @@ private:
 }}
 
 #endif	/* RS_JSAPI_CONTEXT_H */
-

@@ -54,11 +54,29 @@ int main() {
                 std::cout << val << std::endl;
             }
         }
+        
+        auto context2b = rt2.NewContext();
+        rs::jsapi::Script script2b(*context2b, "(function(){return 2.7182818;})();");
+        script2b.Compile();
+
+        if (context2b->HasError()) {
+            std::cout << context2b->getError() << std::endl;
+        } else {    
+            rs::jsapi::Value result(*context2b);
+            script2b.Execute(result);
+
+            if (context2b->HasError()) {
+                std::cout << context2b->getError() << std::endl;
+            } else if (result().isNumber()) {
+                auto val = result().toNumber();
+                std::cout << val << std::endl;
+            }
+        }
     });
     
     t1.join();
     t2.join();
-    
+
     return 0;
 }
 

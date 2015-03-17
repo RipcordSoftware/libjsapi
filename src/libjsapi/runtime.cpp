@@ -34,6 +34,10 @@ rs::jsapi::Runtime::~Runtime() {
     JS_DestroyRuntime(rt_);
 }
 
+std::unique_ptr<rs::jsapi::Context> rs::jsapi::Runtime::NewContext() {
+    return std::unique_ptr<Context>(new Context(*this));
+}
+
 bool rs::jsapi::Runtime::HasError() {
     return cx_.HasError();
 }

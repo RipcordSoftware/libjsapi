@@ -19,7 +19,8 @@ static JSClass globalClass = {
 rs::jsapi::Context::Context(Runtime& rt) : 
         cx_(JS_NewContext(rt.getRuntime(), 8192)),
         global_(cx_, JS_NewGlobalObject(cx_, &globalClass, nullptr, JS::DontFireOnNewGlobalHook)),
-        ac_(cx_, global_) {
+        oldCompartment_(nullptr) {
+    oldCompartment_ = JS_EnterCompartment(cx_, global_);
     JS_InitStandardClasses(cx_, global_);
     
     JS_SetContextPrivate(cx_, this);
@@ -51,6 +52,12 @@ bool rs::jsapi::Context::ClearError() {
 
 void rs::jsapi::Context::DestroyContext() {
     if (cx_) {
+        JS_SetErrorReporter(cx_, nullptr);
+        JS_SetContextPrivate(cx_, nullptr);
+        
+        JS_LeaveCompartment(cx_, oldCompartment_);
+        oldCompartment_ = nullptr;
+        
         JS_DestroyContext(cx_);
         cx_ = nullptr;
     }

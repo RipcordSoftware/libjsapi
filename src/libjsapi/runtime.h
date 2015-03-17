@@ -5,6 +5,7 @@
 
 #include <atomic>
 #include <mutex>
+#include <memory>
 
 #include "context.h"
 
@@ -20,6 +21,8 @@ public:
     ~Runtime();
     
     Runtime& operator=(const Runtime&) = delete;
+    
+    std::unique_ptr<Context> NewContext();
     
     JSRuntime* getRuntime() { return rt_; }
     Context& getContext() { return cx_; }
