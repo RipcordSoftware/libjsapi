@@ -1,9 +1,6 @@
 language: cpp
 compiler: gcc
 script: make all
-cache:
-    directories:
-    - externals
 
 before_install:
 # g++ 4.8.1
