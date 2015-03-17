@@ -4,10 +4,6 @@
 #include "libjsapi.h"
 
 int main() {
-    // Initialize the JS engine.
-    if (!JS_Init())
-       return 1;
-    
     std::thread t1([]() {
         rs::jsapi::Runtime rt1;
         
@@ -19,6 +15,16 @@ int main() {
         } else {    
             rs::jsapi::Value result(rt1);
             script1.Execute(result);
+
+            if (rt1.HasError()) {
+                std::cout << rt1.getError() << std::endl;
+            } else if (result().isNumber()) {
+                auto val = result().toNumber();
+                std::cout << val << std::endl;
+            }
+            
+            rs::jsapi::Value result2(rt1);
+            script1.Execute(result2);
 
             if (rt1.HasError()) {
                 std::cout << rt1.getError() << std::endl;

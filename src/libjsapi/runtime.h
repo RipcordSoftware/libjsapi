@@ -42,7 +42,7 @@ private:
     
     Instance inst_;
     JSRuntime* rt_;
-    rs::jsapi::Context cx_;    
+    rs::jsapi::Context cx_;
 };
 
 }}

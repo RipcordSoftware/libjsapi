@@ -30,6 +30,7 @@ rs::jsapi::Runtime::Runtime() :
 }
 
 rs::jsapi::Runtime::~Runtime() {
+    cx_.DestroyContext();
     JS_DestroyRuntime(rt_);
 }
 

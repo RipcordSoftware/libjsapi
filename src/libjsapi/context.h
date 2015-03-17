@@ -11,6 +11,7 @@ namespace jsapi {
 class Runtime;
     
 class Context final {
+    friend class Runtime;
 public:
     Context(Runtime& rt);    
     ~Context();
@@ -29,6 +30,8 @@ public:
         
 private:
     static void ReportError(JSContext *cx, const char *message, JSErrorReport *report);
+    
+    void DestroyContext();
     
     JSContext* cx_;
     JS::RootedObject global_;

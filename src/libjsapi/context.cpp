@@ -27,7 +27,7 @@ rs::jsapi::Context::Context(Runtime& rt) :
 }
 
 rs::jsapi::Context::~Context() {
-    JS_DestroyContext(cx_);
+    DestroyContext();
 }
 
 void rs::jsapi::Context::ReportError(JSContext* cx, const char* message, JSErrorReport* report) {
@@ -47,4 +47,11 @@ const std::string& rs::jsapi::Context::getError() {
 
 bool rs::jsapi::Context::ClearError() {
     error_.clear();
+}
+
+void rs::jsapi::Context::DestroyContext() {
+    if (cx_) {
+        JS_DestroyContext(cx_);
+        cx_ = nullptr;
+    }
 }
