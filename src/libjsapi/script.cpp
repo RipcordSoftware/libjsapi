@@ -16,7 +16,12 @@ void rs::jsapi::Script::Compile() {
     script_ = JS_CompileScript(cx_, cx_.getGlobal(), code_.c_str(), code_.length(), options);        
 }
 
+bool rs::jsapi::Script::Execute() {
+    auto status = JS_ExecuteScript(cx_, cx_.getGlobal(), script_);
+    return status;
+}
+
 bool rs::jsapi::Script::Execute(Value& result) {
     auto status = JS_ExecuteScript(cx_, cx_.getGlobal(), script_, result);    
-    return status;    
+    return status;
 }

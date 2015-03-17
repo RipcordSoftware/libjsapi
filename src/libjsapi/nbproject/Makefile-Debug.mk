@@ -40,6 +40,12 @@ OBJECTFILES= \
 	${OBJECTDIR}/runtime.o \
 	${OBJECTDIR}/script.o
 
+# Test Directory
+TESTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}/tests
+
+# Test Files
+TESTFILES= \
+	${TESTDIR}/TestFiles/f1
 
 # C Compiler Flags
 CFLAGS=
@@ -89,6 +95,86 @@ ${OBJECTDIR}/script.o: script.cpp
 
 # Subprojects
 .build-subprojects:
+
+# Build Test Targets
+.build-tests-conf: .build-conf ${TESTFILES}
+${TESTDIR}/TestFiles/f1: ../../externals/installed/lib/libmozjs-31.a
+
+${TESTDIR}/TestFiles/f1: ../../externals/installed/lib/libgtest.a
+
+${TESTDIR}/TestFiles/f1: ../../externals/installed/lib/libgtest_main.a
+
+${TESTDIR}/TestFiles/f1: ${TESTDIR}/tests/simple_script_tests.o ${OBJECTFILES:%.o=%_nomain.o}
+	${MKDIR} -p ${TESTDIR}/TestFiles
+	${LINK.cc}   -o ${TESTDIR}/TestFiles/f1 $^ ${LDLIBSOPTIONS} -lpthread -ldl `pkg-config --libs zlib`   
+
+
+${TESTDIR}/tests/simple_script_tests.o: tests/simple_script_tests.cpp 
+	${MKDIR} -p ${TESTDIR}/tests
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs-31 -I../../externals/installed/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/simple_script_tests.o tests/simple_script_tests.cpp
+
+
+${OBJECTDIR}/context_nomain.o: ${OBJECTDIR}/context.o context.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/context.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -g -I../../externals/installed/include/mozjs-31 -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/context_nomain.o context.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/context.o ${OBJECTDIR}/context_nomain.o;\
+	fi
+
+${OBJECTDIR}/libjsapi_nomain.o: ${OBJECTDIR}/libjsapi.o libjsapi.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/libjsapi.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -g -I../../externals/installed/include/mozjs-31 -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/libjsapi_nomain.o libjsapi.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/libjsapi.o ${OBJECTDIR}/libjsapi_nomain.o;\
+	fi
+
+${OBJECTDIR}/runtime_nomain.o: ${OBJECTDIR}/runtime.o runtime.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/runtime.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -g -I../../externals/installed/include/mozjs-31 -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/runtime_nomain.o runtime.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/runtime.o ${OBJECTDIR}/runtime_nomain.o;\
+	fi
+
+${OBJECTDIR}/script_nomain.o: ${OBJECTDIR}/script.o script.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/script.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -g -I../../externals/installed/include/mozjs-31 -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/script_nomain.o script.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/script.o ${OBJECTDIR}/script_nomain.o;\
+	fi
+
+# Run Test Targets
+.test-conf:
+	@if [ "${TEST}" = "" ]; \
+	then  \
+	    ${TESTDIR}/TestFiles/f1 || true; \
+	else  \
+	    ./${TEST} || true; \
+	fi
 
 # Clean Targets
 .clean-conf: ${CLEAN_SUBPROJECTS}

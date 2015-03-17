@@ -7,6 +7,9 @@ build: force_true .jsapi .googletest
 all: force_true .jsapi .googletest
 	cd src/libjsapi && $(MAKE) $(MFLAGS) $(MAKEOVERRIDES) all
 
+test: force_true .jsapi .googletest
+	cd src/libjsapi && $(MAKE) $(MFLAGS) $(MAKEOVERRIDES) test
+
 clean: force_true
 	cd src/libjsapi && $(MAKE) $(MFLAGS) $(MAKEOVERRIDES) clean
 

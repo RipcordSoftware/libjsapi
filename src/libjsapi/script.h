@@ -21,6 +21,7 @@ public:
     Script& operator=(const Script&) = delete;
     
     void Compile();
+    bool Execute();
     bool Execute(Value& result);
     
 private:

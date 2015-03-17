@@ -26,6 +26,12 @@
                    displayName="Test Files"
                    projectFiles="false"
                    kind="TEST_LOGICAL_FOLDER">
+      <logicalFolder name="f1"
+                     displayName="Simple Script Tests"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/simple_script_tests.cpp</itemPath>
+      </logicalFolder>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -56,6 +62,36 @@
       </item>
       <item path="context.h" ex="false" tool="3" flavor2="0">
       </item>
+      <folder path="TestFiles">
+        <ccTool>
+          <incDir>
+            <pElem>../../externals/installed/include</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <additionalDep>../../externals/installed/lib/libmozjs-31.a ../../externals/installed/lib/libgtest.a ../../externals/installed/lib/libgtest_main.a</additionalDep>
+          <linkerLibItems>
+            <linkerLibStdlibItem>PosixThreads</linkerLibStdlibItem>
+            <linkerLibStdlibItem>DynamicLinking</linkerLibStdlibItem>
+            <linkerOptionItem>`pkg-config --libs zlib`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f1">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f1</output>
+        </linkerTool>
+      </folder>
       <item path="libjsapi.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="libjsapi.h" ex="false" tool="3" flavor2="0">
@@ -67,6 +103,8 @@
       <item path="script.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="script.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/simple_script_tests.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="value.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -101,6 +139,36 @@
       </item>
       <item path="context.h" ex="false" tool="3" flavor2="0">
       </item>
+      <folder path="TestFiles">
+        <ccTool>
+          <incDir>
+            <pElem>../../externals/installed/include</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <additionalDep>../../externals/installed/lib/libmozjs-31.a ../../externals/installed/lib/libgtest.a ../../externals/installed/lib/libgtest_main.a</additionalDep>
+          <linkerLibItems>
+            <linkerLibStdlibItem>PosixThreads</linkerLibStdlibItem>
+            <linkerLibStdlibItem>DynamicLinking</linkerLibStdlibItem>
+            <linkerOptionItem>`pkg-config --libs zlib`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f1">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f1</output>
+        </linkerTool>
+      </folder>
       <item path="libjsapi.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="libjsapi.h" ex="false" tool="3" flavor2="0">
@@ -112,6 +180,8 @@
       <item path="script.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="script.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/simple_script_tests.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="value.h" ex="false" tool="3" flavor2="0">
       </item>
