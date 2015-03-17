@@ -5,7 +5,7 @@
 
 #include <jsapi.h>
 
-#include "runtime.h"
+#include "context.h"
 #include "value.h"
 
 namespace rs {
@@ -13,6 +13,7 @@ namespace jsapi {
 
 class Script final {
 public:
+    Script(Context& cx, const char* code);
     Script(Runtime& rt, const char* code);
     Script(const Script&) = delete;
     ~Script();
@@ -23,7 +24,7 @@ public:
     bool Execute(Value& result);
     
 private:
-    Runtime& rt_;
+    Context& cx_;
     const std::string code_;
     
     JS::RootedScript script_;

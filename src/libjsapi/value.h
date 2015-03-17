@@ -3,6 +3,7 @@
 
 #include <jsapi.h>
 
+#include "context.h"
 #include "runtime.h"
 
 namespace rs {
@@ -10,6 +11,9 @@ namespace jsapi {
     
 class Value final {
 public:
+    Value(Context& cx) : value_(cx), mutableValue_(&value_) {
+    };
+    
     Value(Runtime& rt) : value_(rt.getContext()), mutableValue_(&value_) {
     };
     

@@ -6,8 +6,12 @@
 #include <atomic>
 #include <mutex>
 
+#include "context.h"
+
 namespace rs {
 namespace jsapi {
+    
+class Context;
 
 class Runtime final {
 public:
@@ -18,8 +22,7 @@ public:
     Runtime& operator=(const Runtime&) = delete;
     
     JSRuntime* getRuntime() { return rt_; }
-    JS::HandleObject getGlobal() { return global_; }
-    JSContext* getContext() { return cx_; }
+    Context& getContext() { return cx_; }
     
     bool HasError();
     const std::string& getError();
@@ -35,17 +38,11 @@ private:
     private:
         static std::atomic<int> count_;
         static std::mutex m_;
-    };
-    
-    static void ReportError(JSContext *cx, const char *message, JSErrorReport *report);    
+    };        
     
     Instance inst_;
     JSRuntime* rt_;
-    JSContext* cx_;
-    JS::RootedObject global_;
-    JSAutoCompartment ac_;
-    
-    std::string error_;
+    rs::jsapi::Context cx_;    
 };
 
 }}
