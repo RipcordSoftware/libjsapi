@@ -8,7 +8,7 @@ clean: force_true
 	cd src/libjsapi && $(MAKE) $(MFLAGS) $(MAKEOVERRIDES) clean
 
 .autoconf-2.13: force_true
-	if [ "${CI}" == "true" ]; then \
+	if [ "${CI}" = "true" ]; then \
 		curl ftp://ftp.ripcordsoftware.com/pub/autoconf-2.13-travis-ci-externals-installed.tar.xz -O && \
 		tar xfJ autoconf-*; \
 	elif [ ! -d externals/autoconf-2.13 ]; then \
@@ -24,7 +24,7 @@ clean: force_true
 	fi
 
 .jsapi: .autoconf-2.13 force_true
-	if [ "${CI}" == "true" ]; then \
+	if [ "${CI}" = "true" ]; then \
 		curl ftp://ftp.ripcordsoftware.com/pub/mozjs-31.5.0-travis-ci-externals-installed.tar.xz -O && \
 		tar xfJ mozjs-*; \
 	elif [ ! -d externals/mozjs-31.5.0 ]; then \
