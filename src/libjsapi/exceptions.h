@@ -31,7 +31,9 @@ public:
         lineno(error->lineno),
         column(error->column), 
         linebuf(error->linebuf != nullptr ? error->linebuf : ""),
+        tokenOffset(error->tokenptr - error->linebuf),
         uclinebuf(error->uclinebuf != nullptr ? error->uclinebuf : u""),
+        uctokenOffset(error->uctokenptr - error->uclinebuf),
         errorNumber(error->errorNumber),
         exnType(error->exnType) {
     }
@@ -45,9 +47,9 @@ public:
     const unsigned lineno;
     const unsigned column;
     const std::string linebuf;
-    const std::string token;
+    const unsigned tokenOffset;
     const std::u16string uclinebuf;
-    const std::u16string uctoken;
+    const unsigned uctokenOffset;
     const unsigned errorNumber;
     const int16_t exnType;
 };
