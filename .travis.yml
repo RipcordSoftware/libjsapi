@@ -1,6 +1,6 @@
 language: cpp
 compiler: gcc
-script: make all && make test
+script: make all && make test && ./coverage.sh
 
 before_install:
 # g++ 4.8.1
