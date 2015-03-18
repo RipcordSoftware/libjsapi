@@ -16,6 +16,13 @@ public:
     }
 };
 
+class RuntimeWrongThreadException : public Exception {
+public:
+    virtual const char* what() const noexcept override {
+        return "Runtime call made from the wrong thread";
+    }
+};
+
 class ScriptException : public Exception {
 public:
     ScriptException(const char* message, JSErrorReport* error) :
@@ -27,7 +34,10 @@ public:
         uclinebuf(error->uclinebuf != nullptr ? error->uclinebuf : u""),
         errorNumber(error->errorNumber),
         exnType(error->exnType) {
+    }
         
+    virtual const char* what() const noexcept override {
+        return message.length() > 0 ? message.c_str() : "An error or exception happened in JSAPI";
     }
     
     const std::string message;

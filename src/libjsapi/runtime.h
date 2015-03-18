@@ -6,8 +6,8 @@
 #include <atomic>
 #include <mutex>
 #include <memory>
+#include <thread>
 
-#include "exceptions.h"
 #include "context.h"
 
 namespace rs {
@@ -38,6 +38,7 @@ private:
         static std::mutex m_;
     };        
     
+    const std::thread::id threadId_;
     Instance inst_;
     JSRuntime* rt_;
     Context cx_;
