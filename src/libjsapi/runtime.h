@@ -7,6 +7,7 @@
 #include <mutex>
 #include <memory>
 #include <thread>
+#include <vector>
 
 #include "context.h"
 
@@ -36,12 +37,24 @@ private:
     private:
         static std::atomic<int> count_;
         static std::mutex m_;
-    };        
+    };  
+    
+    class RuntimeThreadGuard {
+    public:
+        RuntimeThreadGuard(std::thread::id id);
+    };
+    
+    static std::vector<std::thread::id> activeRuntimes_;
+    static std::mutex activeRuntimesLock_;
     
     const std::thread::id threadId_;
+    const RuntimeThreadGuard threadGuard_;    
     Instance inst_;
     JSRuntime* rt_;
     Context cx_;
+    
+    static bool AddRuntime(std::thread::id id);
+    static bool RemoveRuntime(std::thread::id id);
 };
 
 }}

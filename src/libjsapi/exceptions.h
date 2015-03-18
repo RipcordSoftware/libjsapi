@@ -23,6 +23,13 @@ public:
     }
 };
 
+class RuntimeThreadInstanceException : public Exception {
+public:
+    virtual const char* what() const noexcept override {
+        return "A runtime is already active on this thread";
+    }
+};
+
 class ScriptException : public Exception {
 public:
     ScriptException(const char* message, JSErrorReport* error) :
