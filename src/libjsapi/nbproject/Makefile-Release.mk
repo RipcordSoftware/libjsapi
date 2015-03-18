@@ -38,7 +38,8 @@ OBJECTFILES= \
 	${OBJECTDIR}/context.o \
 	${OBJECTDIR}/libjsapi.o \
 	${OBJECTDIR}/runtime.o \
-	${OBJECTDIR}/script.o
+	${OBJECTDIR}/script.o \
+	${OBJECTDIR}/value.o
 
 # Test Directory
 TESTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}/tests
@@ -92,6 +93,11 @@ ${OBJECTDIR}/script.o: script.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -I../../externals/installed/include/mozjs-31 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/script.o script.cpp
+
+${OBJECTDIR}/value.o: value.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../../externals/installed/include/mozjs-31 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/value.o value.cpp
 
 # Subprojects
 .build-subprojects:
@@ -165,6 +171,19 @@ ${OBJECTDIR}/script_nomain.o: ${OBJECTDIR}/script.o script.cpp
 	    $(COMPILE.cc) -O2 -I../../externals/installed/include/mozjs-31 -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/script_nomain.o script.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/script.o ${OBJECTDIR}/script_nomain.o;\
+	fi
+
+${OBJECTDIR}/value_nomain.o: ${OBJECTDIR}/value.o value.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/value.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -I../../externals/installed/include/mozjs-31 -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/value_nomain.o value.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/value.o ${OBJECTDIR}/value_nomain.o;\
 	fi
 
 # Run Test Targets

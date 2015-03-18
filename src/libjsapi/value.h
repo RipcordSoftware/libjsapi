@@ -1,6 +1,8 @@
 #ifndef RS_JSAPI_VALUE_H
 #define RS_JSAPI_VALUE_H
 
+#include <string>
+
 #include <jsapi.h>
 
 #include "context.h"
@@ -11,10 +13,10 @@ namespace jsapi {
     
 class Value final {
 public:
-    Value(Context& cx) : value_(cx), mutableValue_(&value_) {
+    Value(Context& cx) : cx_(cx), value_(cx), mutableValue_(&value_) {
     };
     
-    Value(Runtime& rt) : value_(rt.getContext()), mutableValue_(&value_) {
+    Value(Runtime& rt) : cx_(rt.getContext()), value_(rt.getContext()), mutableValue_(&value_) {
     };
     
     Value(const Value&) = delete;
@@ -24,7 +26,10 @@ public:
     
     JS::RootedValue& operator()() { return value_; }
 
+    std::string ToString();
+
 private:
+    Context& cx_;
     JS::RootedValue value_;
     JS::MutableHandleValue mutableValue_;
 };

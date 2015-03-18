@@ -98,3 +98,98 @@ TEST_F(SimpleScriptTests, test4) {
     ASSERT_EQ(result2a().isNumber(), true);
     ASSERT_EQ(result2a().toNumber(), 42);
 }
+
+TEST_F(SimpleScriptTests, test5) {
+    rs::jsapi::Script script(rt_, "(function(){return 'hello';})();");
+    script.Compile();
+    
+    rs::jsapi::Value result(rt_);
+    script.Execute(result);
+
+    ASSERT_EQ(result().isString(), true);
+    ASSERT_STRCASEEQ(result.ToString().c_str(), "hello");
+}
+
+TEST_F(SimpleScriptTests, test6) {
+    rs::jsapi::Script script(rt_, "(function(){return 1234;})();");
+    script.Compile();
+    
+    rs::jsapi::Value result(rt_);
+    script.Execute(result);
+
+    ASSERT_EQ(result().isNumber(), true);
+    ASSERT_EQ(result().isString(), false);
+    ASSERT_STRCASEEQ(result.ToString().c_str(), "1234");
+}
+
+TEST_F(SimpleScriptTests, test7) {
+    rs::jsapi::Script script(rt_, "(function(){return 1234.567;})();");
+    script.Compile();
+    
+    rs::jsapi::Value result(rt_);
+    script.Execute(result);
+
+    ASSERT_EQ(result().isNumber(), true);
+    ASSERT_EQ(result().isString(), false);
+    ASSERT_EQ(result.ToString().find("1234.567"), 0);
+}
+
+TEST_F(SimpleScriptTests, test8) {
+    rs::jsapi::Script script(rt_, "(function(){return true;})();");
+    script.Compile();
+    
+    rs::jsapi::Value result(rt_);
+    script.Execute(result);
+
+    ASSERT_EQ(result().isBoolean(), true);
+    ASSERT_EQ(result().isString(), false);
+    ASSERT_STRCASEEQ(result.ToString().c_str(), "true");
+}
+
+TEST_F(SimpleScriptTests, test9) {
+    rs::jsapi::Script script(rt_, "(function(){return false;})();");
+    script.Compile();
+    
+    rs::jsapi::Value result(rt_);
+    script.Execute(result);
+
+    ASSERT_EQ(result().isBoolean(), true);
+    ASSERT_EQ(result().isString(), false);
+    ASSERT_STRCASEEQ(result.ToString().c_str(), "false");
+}
+
+TEST_F(SimpleScriptTests, test10) {
+    rs::jsapi::Script script(rt_, "(function(){return {};})();");
+    script.Compile();
+    
+    rs::jsapi::Value result(rt_);
+    script.Execute(result);
+
+    ASSERT_EQ(result().isObject(), true);
+    ASSERT_EQ(result().isString(), false);
+    ASSERT_STRCASEEQ(result.ToString().c_str(), "[object Object]");
+}
+
+TEST_F(SimpleScriptTests, test11) {
+    rs::jsapi::Script script(rt_, "(function(){return [];})();");
+    script.Compile();
+    
+    rs::jsapi::Value result(rt_);
+    script.Execute(result);
+
+    ASSERT_EQ(result().isObject(), true);
+    ASSERT_EQ(result().isString(), false);
+    ASSERT_STRCASEEQ(result.ToString().c_str(), "[object Object]");
+}
+
+TEST_F(SimpleScriptTests, test12) {
+    rs::jsapi::Script script(rt_, "(function(){return null;})();");
+    script.Compile();
+    
+    rs::jsapi::Value result(rt_);
+    script.Execute(result);
+
+    ASSERT_EQ(result().isNull(), true);
+    ASSERT_EQ(result().isString(), false);
+    ASSERT_STRCASEEQ(result.ToString().c_str(), "null");
+}
