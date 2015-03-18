@@ -25,8 +25,8 @@ TEST_F(MultiContextTests, test1) {
     rs::jsapi::Value result(*context);
     script.Execute(result);
     
-    ASSERT_EQ(result().isNumber(), true);
-    ASSERT_EQ(result().toNumber(), 42);
+    ASSERT_TRUE(result().isNumber());
+    ASSERT_EQ(42, result().toNumber());
 }
 
 TEST_F(MultiContextTests, test2) {
@@ -48,20 +48,20 @@ TEST_F(MultiContextTests, test2) {
     rs::jsapi::Value result1a(rt_);
     script1.Execute(result1a);
 
-    ASSERT_EQ(result1a().isNumber(), true);
-    ASSERT_EQ(result1a().toNumber(), 42);
+    ASSERT_TRUE(result1a().isNumber());
+    ASSERT_EQ(42, result1a().toNumber());
     
     rs::jsapi::Value result1b(rt_);
     script1.Execute(result1b);
 
-    ASSERT_EQ(result1b().isNumber(), true);
-    ASSERT_EQ(result1b().toNumber(), 43);
+    ASSERT_TRUE(result1b().isNumber());
+    ASSERT_EQ(43, result1b().toNumber());
     
     rs::jsapi::Value result2a(*context2);
     script2.Execute(result2a);
 
-    ASSERT_EQ(result2a().isNumber(), true);
-    ASSERT_EQ(result2a().toNumber(), 42);
+    ASSERT_TRUE(result2a().isNumber());
+    ASSERT_EQ(42, result2a().toNumber());
 }
 
 TEST_F(MultiContextTests, test3) {        
@@ -104,8 +104,8 @@ TEST_F(MultiContextTests, test6) {
         rs::jsapi::Value result(*cx);
         script.Execute(result);
 
-        ASSERT_EQ(result().isNumber(), true);
-        ASSERT_EQ(result().toNumber(), 42);
+        ASSERT_TRUE(result().isNumber());
+        ASSERT_EQ(42, result().toNumber());
     });
        
     t.join();

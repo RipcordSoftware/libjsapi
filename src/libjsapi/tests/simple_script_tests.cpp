@@ -22,8 +22,8 @@ TEST_F(SimpleScriptTests, test1) {
     rs::jsapi::Value result(rt_);
     script.Execute(result);
 
-    ASSERT_EQ(result().isNumber(), true);
-    ASSERT_EQ(result().toNumber(), 42);
+    ASSERT_TRUE(result().isNumber());
+    ASSERT_EQ(42, result().toNumber());
 }
 
 TEST_F(SimpleScriptTests, test2) {
@@ -33,14 +33,14 @@ TEST_F(SimpleScriptTests, test2) {
     rs::jsapi::Value result1(rt_);
     script.Execute(result1);
 
-    ASSERT_EQ(result1().isNumber(), true);
-    ASSERT_EQ(result1().toNumber(), 42);
+    ASSERT_TRUE(result1().isNumber());
+    ASSERT_EQ(42, result1().toNumber());
     
     rs::jsapi::Value result2(rt_);
     script.Execute(result2);
 
-    ASSERT_EQ(result2().isNumber(), true);
-    ASSERT_EQ(result2().toNumber(), 42);
+    ASSERT_TRUE(result2().isNumber());
+    ASSERT_EQ(42, result2().toNumber());
 }
 
 TEST_F(SimpleScriptTests, test3) {
@@ -54,14 +54,14 @@ TEST_F(SimpleScriptTests, test3) {
     rs::jsapi::Value result1(rt_);
     script.Execute(result1);
 
-    ASSERT_EQ(result1().isNumber(), true);
-    ASSERT_EQ(result1().toNumber(), 42);
+    ASSERT_TRUE(result1().isNumber());
+    ASSERT_EQ(42, result1().toNumber());
     
     rs::jsapi::Value result2(rt_);
     script.Execute(result2);
 
-    ASSERT_EQ(result2().isNumber(), true);
-    ASSERT_EQ(result2().toNumber(), 43);
+    ASSERT_TRUE(result2().isNumber());
+    ASSERT_EQ(43, result2().toNumber());
 }
 
 // Test moved
@@ -75,8 +75,8 @@ TEST_F(SimpleScriptTests, test5) {
     rs::jsapi::Value result(rt_);
     script.Execute(result);
 
-    ASSERT_EQ(result().isString(), true);
-    ASSERT_STRCASEEQ(result.ToString().c_str(), "hello");
+    ASSERT_TRUE(result().isString());
+    ASSERT_STRCASEEQ("hello", result.ToString().c_str());
 }
 
 TEST_F(SimpleScriptTests, test6) {
@@ -86,9 +86,9 @@ TEST_F(SimpleScriptTests, test6) {
     rs::jsapi::Value result(rt_);
     script.Execute(result);
 
-    ASSERT_EQ(result().isNumber(), true);
-    ASSERT_EQ(result().isString(), false);
-    ASSERT_STRCASEEQ(result.ToString().c_str(), "1234");
+    ASSERT_TRUE(result().isNumber());
+    ASSERT_FALSE(result().isString());
+    ASSERT_STRCASEEQ("1234", result.ToString().c_str());
 }
 
 TEST_F(SimpleScriptTests, test7) {
@@ -98,9 +98,9 @@ TEST_F(SimpleScriptTests, test7) {
     rs::jsapi::Value result(rt_);
     script.Execute(result);
 
-    ASSERT_EQ(result().isNumber(), true);
-    ASSERT_EQ(result().isString(), false);
-    ASSERT_EQ(result.ToString().find("1234.567"), 0);
+    ASSERT_TRUE(result().isNumber());
+    ASSERT_FALSE(result().isString());
+    ASSERT_EQ(0, result.ToString().find("1234.567"));
 }
 
 TEST_F(SimpleScriptTests, test8) {
@@ -110,9 +110,9 @@ TEST_F(SimpleScriptTests, test8) {
     rs::jsapi::Value result(rt_);
     script.Execute(result);
 
-    ASSERT_EQ(result().isBoolean(), true);
-    ASSERT_EQ(result().isString(), false);
-    ASSERT_STRCASEEQ(result.ToString().c_str(), "true");
+    ASSERT_TRUE(result().isBoolean());
+    ASSERT_FALSE(result().isString());
+    ASSERT_STRCASEEQ("true", result.ToString().c_str());
 }
 
 TEST_F(SimpleScriptTests, test9) {
@@ -122,9 +122,9 @@ TEST_F(SimpleScriptTests, test9) {
     rs::jsapi::Value result(rt_);
     script.Execute(result);
 
-    ASSERT_EQ(result().isBoolean(), true);
-    ASSERT_EQ(result().isString(), false);
-    ASSERT_STRCASEEQ(result.ToString().c_str(), "false");
+    ASSERT_TRUE(result().isBoolean());
+    ASSERT_FALSE(result().isString());
+    ASSERT_STRCASEEQ("false", result.ToString().c_str());
 }
 
 TEST_F(SimpleScriptTests, test10) {
@@ -134,9 +134,9 @@ TEST_F(SimpleScriptTests, test10) {
     rs::jsapi::Value result(rt_);
     script.Execute(result);
 
-    ASSERT_EQ(result().isObject(), true);
-    ASSERT_EQ(result().isString(), false);
-    ASSERT_STRCASEEQ(result.ToString().c_str(), "[object Object]");
+    ASSERT_TRUE(result().isObject());
+    ASSERT_FALSE(result().isString());
+    ASSERT_STRCASEEQ("[object Object]", result.ToString().c_str());
 }
 
 TEST_F(SimpleScriptTests, test11) {
@@ -146,9 +146,9 @@ TEST_F(SimpleScriptTests, test11) {
     rs::jsapi::Value result(rt_);
     script.Execute(result);
 
-    ASSERT_EQ(result().isObject(), true);
-    ASSERT_EQ(result().isString(), false);
-    ASSERT_STRCASEEQ(result.ToString().c_str(), "[object Object]");
+    ASSERT_TRUE(result().isObject());
+    ASSERT_FALSE(result().isString());
+    ASSERT_STRCASEEQ("[object Object]", result.ToString().c_str());
 }
 
 TEST_F(SimpleScriptTests, test12) {
@@ -158,7 +158,7 @@ TEST_F(SimpleScriptTests, test12) {
     rs::jsapi::Value result(rt_);
     script.Execute(result);
 
-    ASSERT_EQ(result().isNull(), true);
-    ASSERT_EQ(result().isString(), false);
-    ASSERT_STRCASEEQ(result.ToString().c_str(), "null");
+    ASSERT_TRUE(result().isNull());
+    ASSERT_FALSE(result().isString());
+    ASSERT_STRCASEEQ("null", result.ToString().c_str());
 }

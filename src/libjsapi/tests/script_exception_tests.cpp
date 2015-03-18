@@ -49,8 +49,8 @@ TEST_F(ScriptExceptionTests, test4) {
     script.Compile();
     rs::jsapi::Value result(rt_);
     script.Execute(result);
-    ASSERT_EQ(result().isNumber(), true);
-    ASSERT_EQ(result().toNumber(), 42);
+    ASSERT_TRUE(result().isNumber());
+    ASSERT_EQ(42, result().toNumber());
 }
 
 TEST_F(ScriptExceptionTests, test5) {        
@@ -65,7 +65,7 @@ TEST_F(ScriptExceptionTests, test5) {
     rs::jsapi::Value result(rt_);
     script.Execute(result);
     ASSERT_EQ(result().isNumber(), true);
-    ASSERT_EQ(result().toNumber(), 42);
+    ASSERT_EQ(42, result().toNumber());
 }
 
 TEST_F(ScriptExceptionTests, test6) {        
@@ -80,6 +80,26 @@ TEST_F(ScriptExceptionTests, test6) {
     script.Compile();
     rs::jsapi::Value result(rt_);
     script.Execute(result);
-    ASSERT_EQ(result().isNumber(), true);
-    ASSERT_EQ(result().toNumber(), 42);
+    ASSERT_TRUE(result().isNumber());
+    ASSERT_EQ(42, result().toNumber());
+}
+
+TEST_F(ScriptExceptionTests, test7) {
+    std::string message;
+    unsigned lineno = 0;
+    unsigned column = 0;
+
+    try {
+        rs::jsapi::Script script(rt_, "var xyz = abc;");
+        script.Compile();
+        script.Execute();   
+    } catch (const rs::jsapi::ScriptException& e) {
+        message = e.what();
+        lineno = e.lineno;
+        column = e.column;
+    }
+
+    ASSERT_STRCASEEQ("ReferenceError: abc is not defined", message.c_str());
+    ASSERT_EQ(1, lineno);
+    ASSERT_EQ(8, column);
 }
