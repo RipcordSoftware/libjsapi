@@ -55,6 +55,7 @@
           <incDir>
             <pElem>../../externals/installed/include/mozjs-31</pElem>
           </incDir>
+          <commandLine>--coverage</commandLine>
         </ccTool>
         <archiverTool>
         </archiverTool>
@@ -68,6 +69,7 @@
           <incDir>
             <pElem>../../externals/installed/include</pElem>
           </incDir>
+          <commandLine>--coverage</commandLine>
         </ccTool>
         <linkerTool>
           <additionalDep>../../externals/installed/lib/libmozjs-31.a ../../externals/installed/lib/libgtest.a ../../externals/installed/lib/libgtest_main.a</additionalDep>
@@ -76,6 +78,7 @@
             <linkerLibStdlibItem>DynamicLinking</linkerLibStdlibItem>
             <linkerOptionItem>`pkg-config --libs zlib`</linkerOptionItem>
           </linkerLibItems>
+          <commandLine>--coverage</commandLine>
         </linkerTool>
       </folder>
       <folder path="TestFiles/f1">

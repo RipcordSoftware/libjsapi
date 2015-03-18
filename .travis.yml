@@ -9,9 +9,17 @@ before_install:
 
 install:
 # g++4.8.1
-- sudo apt-get install -qq g++-4.8 zlib1g-dev
+- sudo apt-get install -qq g++-4.8 zlib1g-dev lcov ruby rubygems
 - export CC="gcc-4.8"
 - export CXX="g++-4.8"
+- pushd ~
+- mkdir Downloads
+- cd Downloads
+- curl http://ftp.uk.debian.org/debian/pool/main/l/lcov/lcov_1.11.orig.tar.gz -O
+- tar xfz lcov_1.11.orig.tar.gz
+- sudo make -C lcov-1.11/ install
+- popd
+- gem install coveralls-lcov
 - sudo rm -f /usr/bin/g++
 - sudo rm -f /usr/bin/gcc
 - sudo rm -f /usr/bin/gcov

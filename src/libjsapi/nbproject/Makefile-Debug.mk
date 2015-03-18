@@ -52,8 +52,8 @@ TESTFILES= \
 CFLAGS=
 
 # CC Compiler Flags
-CCFLAGS=
-CXXFLAGS=
+CCFLAGS=--coverage
+CXXFLAGS=--coverage
 
 # Fortran Compiler Flags
 FFLAGS=
@@ -112,13 +112,13 @@ ${TESTDIR}/TestFiles/f1: ../../externals/installed/lib/libgtest_main.a
 
 ${TESTDIR}/TestFiles/f1: ${TESTDIR}/tests/simple_script_tests.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
-	${LINK.cc}   -o ${TESTDIR}/TestFiles/f1 $^ ${LDLIBSOPTIONS} -lpthread -ldl `pkg-config --libs zlib`   
+	${LINK.cc} --coverage  -o ${TESTDIR}/TestFiles/f1 $^ ${LDLIBSOPTIONS} -lpthread -ldl `pkg-config --libs zlib`   
 
 
 ${TESTDIR}/tests/simple_script_tests.o: tests/simple_script_tests.cpp 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs-31 -I../../externals/installed/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/simple_script_tests.o tests/simple_script_tests.cpp
+	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs-31 -I../../externals/installed/include -I. -std=c++11 --coverage -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/simple_script_tests.o tests/simple_script_tests.cpp
 
 
 ${OBJECTDIR}/context_nomain.o: ${OBJECTDIR}/context.o context.cpp 
