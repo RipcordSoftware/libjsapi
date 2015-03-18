@@ -1,5 +1,4 @@
 #include "runtime.h"
-#include "context.h"
 
 std::atomic<int> rs::jsapi::Runtime::Instance::count_;
 std::mutex rs::jsapi::Runtime::Instance::m_;
@@ -34,18 +33,14 @@ rs::jsapi::Runtime::~Runtime() {
     JS_DestroyRuntime(rt_);
 }
 
+JSRuntime* rs::jsapi::Runtime::getRuntime() {
+    return rt_; 
+}
+
+rs::jsapi::Context& rs::jsapi::Runtime::getContext() {
+    return cx_; 
+}
+
 std::unique_ptr<rs::jsapi::Context> rs::jsapi::Runtime::NewContext() {
     return std::unique_ptr<Context>(new Context(*this));
-}
-
-bool rs::jsapi::Runtime::HasError() {
-    return cx_.HasError();
-}
-
-const std::string& rs::jsapi::Runtime::getError() {
-    return cx_.getError();
-}
-
-bool rs::jsapi::Runtime::ClearError() {
-    return cx_.ClearError();
 }

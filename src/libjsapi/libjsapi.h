@@ -5,6 +5,7 @@
 #include "context.h"
 #include "script.h"
 #include "value.h"
+#include "exceptions.h"
 
 #endif	/* RS_LIBJSAPI_H */
 

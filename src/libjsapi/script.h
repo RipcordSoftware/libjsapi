@@ -5,11 +5,12 @@
 
 #include <jsapi.h>
 
-#include "context.h"
-#include "value.h"
-
 namespace rs {
 namespace jsapi {
+    
+class Context;
+class Runtime;
+class Value;
 
 class Script final {
 public:

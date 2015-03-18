@@ -32,22 +32,14 @@ rs::jsapi::Context::~Context() {
 }
 
 void rs::jsapi::Context::ReportError(JSContext* cx, const char* message, JSErrorReport* report) {
-    auto rt = static_cast<Context*>(JS_GetContextPrivate(cx));
-    if (rt != nullptr) {
-        rt->error_ = message;
+    auto that = static_cast<Context*>(JS_GetContextPrivate(cx));
+    if (that != nullptr) {
+        that->exception_.reset(new ScriptException(message, report));
     }
 }
 
-bool rs::jsapi::Context::HasError() {
-    return error_.length() > 0;
-}
-
-const std::string& rs::jsapi::Context::getError() {
-    return error_;
-}
-
-bool rs::jsapi::Context::ClearError() {
-    error_.clear();
+std::unique_ptr<rs::jsapi::ScriptException> rs::jsapi::Context::getError() {
+    return std::move(exception_);
 }
 
 void rs::jsapi::Context::DestroyContext() {

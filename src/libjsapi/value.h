@@ -5,19 +5,17 @@
 
 #include <jsapi.h>
 
-#include "context.h"
-#include "runtime.h"
-
 namespace rs {
 namespace jsapi {
+
+class Context;
+class Runtime;
+class Value;
     
 class Value final {
 public:
-    Value(Context& cx) : cx_(cx), value_(cx), mutableValue_(&value_) {
-    };
-    
-    Value(Runtime& rt) : cx_(rt.getContext()), value_(rt.getContext()), mutableValue_(&value_) {
-    };
+    Value(Context& cx);    
+    Value(Runtime& rt);
     
     Value(const Value&) = delete;
     Value& operator=(const Value&) = delete;

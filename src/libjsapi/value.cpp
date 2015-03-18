@@ -1,4 +1,12 @@
 #include "value.h"
+#include "context.h"
+#include "runtime.h"
+
+rs::jsapi::Value::Value(Context& cx) : cx_(cx), value_(cx), mutableValue_(&value_) {
+}
+    
+rs::jsapi::Value::Value(Runtime& rt) : cx_(rt.getContext()), value_(rt.getContext()), mutableValue_(&value_) {
+}
 
 // TODO: revise this since it is ugly
 std::string rs::jsapi::Value::ToString() {

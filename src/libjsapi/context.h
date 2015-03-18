@@ -2,8 +2,12 @@
 #define RS_JSAPI_CONTEXT_H
 
 #include <string>
+#include <memory>
 
 #include <jsapi.h>
+
+#include "exceptions.h"
+#include "script.h"
 
 namespace rs {
 namespace jsapi {
@@ -22,13 +26,15 @@ public:
     JSContext* getContext() { return cx_; }
     JS::HandleObject getGlobal() { return global_; }
     
-    operator JSContext*() { return cx_; }
-    
-    bool HasError();
-    const std::string& getError();
-    bool ClearError();
+    operator JSContext*() { return cx_; }        
         
 private:
+    friend void Script::Compile();
+    friend bool Script::Execute();
+    friend bool Script::Execute(Value& result);
+    
+    std::unique_ptr<ScriptException> getError();
+    
     static void ReportError(JSContext *cx, const char *message, JSErrorReport *report);
     
     void DestroyContext();
@@ -37,7 +43,7 @@ private:
     JS::RootedObject global_;
     JSCompartment* oldCompartment_;
     
-    std::string error_;
+    std::unique_ptr<ScriptException> exception_;
 };
 
 }}

@@ -7,12 +7,11 @@
 #include <mutex>
 #include <memory>
 
+#include "exceptions.h"
 #include "context.h"
 
 namespace rs {
 namespace jsapi {
-    
-class Context;
 
 class Runtime final {
 public:
@@ -24,12 +23,8 @@ public:
     
     std::unique_ptr<Context> NewContext();
     
-    JSRuntime* getRuntime() { return rt_; }
-    Context& getContext() { return cx_; }
-    
-    bool HasError();
-    const std::string& getError();
-    bool ClearError();
+    JSRuntime* getRuntime();
+    Context& getContext();
     
 private:
     
@@ -45,7 +40,7 @@ private:
     
     Instance inst_;
     JSRuntime* rt_;
-    rs::jsapi::Context cx_;
+    Context cx_;
 };
 
 }}

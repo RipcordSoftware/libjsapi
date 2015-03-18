@@ -13,8 +13,8 @@ CND_BUILDDIR=build
 CND_DLIB_EXT=so
 NBTMPDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}/tmp-packaging
 TMPDIRNAME=tmp-packaging
-OUTPUT_PATH=${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/liblibjsapi.a
-OUTPUT_BASENAME=liblibjsapi.a
+OUTPUT_PATH=${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libjsapi.a
+OUTPUT_BASENAME=libjsapi.a
 PACKAGE_TOP_DIR=libjsapi/
 
 # Functions
