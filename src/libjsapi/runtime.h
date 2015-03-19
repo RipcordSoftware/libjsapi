@@ -13,6 +13,8 @@
 
 namespace rs {
 namespace jsapi {
+    
+class FunctionArguments;
 
 class Runtime final {
 public:
@@ -23,7 +25,9 @@ public:
     bool Evaluate(const char* script);
     bool Evaluate(const char* script, Value& result);
     bool Call(const char* name);
+    bool Call(const char* name, const FunctionArguments& args);
     bool Call(const char* name, Value& result);
+    bool Call(const char* name, const FunctionArguments& args, Value& result);
     
     Runtime& operator=(const Runtime&) = delete;
     
@@ -31,6 +35,8 @@ public:
     
     JSRuntime* getRuntime();
     Context& getContext();
+    
+    operator Context&() { return cx_; }
     
 private:
     

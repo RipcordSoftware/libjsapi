@@ -1,6 +1,7 @@
 #include "context.h"
 #include "runtime.h"
 #include "value.h"
+#include "function_arguments.h"
 
 // The class of the global object.
 static JSClass globalClass = {
@@ -80,6 +81,23 @@ bool rs::jsapi::Context::Call(const char* name) {
 
 bool rs::jsapi::Context::Call(const char* name, Value& result) {
     auto status = JS_CallFunctionName(cx_, global_, name, JS::HandleValueArray::empty(), result);    
+    
+    auto error = getError();
+    if (!!error) {
+        throw *error;
+    }
+    
+    return status;
+}
+
+bool rs::jsapi::Context::Call(const char* name, const FunctionArguments& args) {
+    Value result(*this);        
+    return Call(name, args, result);
+}
+
+bool rs::jsapi::Context::Call(const char* name, const FunctionArguments& args, Value& result) {
+    JS::HandleValueArray argArray(args);
+    auto status = JS_CallFunctionName(cx_, global_, name, argArray, result);    
     
     auto error = getError();
     if (!!error) {

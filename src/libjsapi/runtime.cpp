@@ -107,8 +107,16 @@ bool rs::jsapi::Runtime::Call(const char* name) {
     return cx_.Call(name);
 }
 
+bool rs::jsapi::Runtime::Call(const char* name, const FunctionArguments& args) {
+    return cx_.Call(name, args);
+}
+
 bool rs::jsapi::Runtime::Call(const char* name, Value& result) {
     return cx_.Call(name, result);
+}
+
+bool rs::jsapi::Runtime::Call(const char* name, const FunctionArguments& args, Value& result) {
+    return cx_.Call(name, args, result);
 }
 
 bool rs::jsapi::Runtime::Evaluate(const char* script) {

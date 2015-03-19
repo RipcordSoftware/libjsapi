@@ -36,6 +36,7 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 # Object Files
 OBJECTFILES= \
 	${OBJECTDIR}/context.o \
+	${OBJECTDIR}/function_arguments.o \
 	${OBJECTDIR}/libjsapi.o \
 	${OBJECTDIR}/runtime.o \
 	${OBJECTDIR}/script.o \
@@ -82,6 +83,11 @@ ${OBJECTDIR}/context.o: context.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs-31 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/context.o context.cpp
+
+${OBJECTDIR}/function_arguments.o: function_arguments.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs-31 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/function_arguments.o function_arguments.cpp
 
 ${OBJECTDIR}/libjsapi.o: libjsapi.cpp 
 	${MKDIR} -p ${OBJECTDIR}
@@ -200,6 +206,19 @@ ${OBJECTDIR}/context_nomain.o: ${OBJECTDIR}/context.o context.cpp
 	    $(COMPILE.cc) -g -I../../externals/installed/include/mozjs-31 -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/context_nomain.o context.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/context.o ${OBJECTDIR}/context_nomain.o;\
+	fi
+
+${OBJECTDIR}/function_arguments_nomain.o: ${OBJECTDIR}/function_arguments.o function_arguments.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/function_arguments.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -g -I../../externals/installed/include/mozjs-31 -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/function_arguments_nomain.o function_arguments.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/function_arguments.o ${OBJECTDIR}/function_arguments_nomain.o;\
 	fi
 
 ${OBJECTDIR}/libjsapi_nomain.o: ${OBJECTDIR}/libjsapi.o libjsapi.cpp 

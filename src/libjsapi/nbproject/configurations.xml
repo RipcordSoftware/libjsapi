@@ -6,6 +6,7 @@
                    projectFiles="true">
       <itemPath>context.h</itemPath>
       <itemPath>exceptions.h</itemPath>
+      <itemPath>function_arguments.h</itemPath>
       <itemPath>libjsapi.h</itemPath>
       <itemPath>runtime.h</itemPath>
       <itemPath>script.h</itemPath>
@@ -19,6 +20,7 @@
                    displayName="Source Files"
                    projectFiles="true">
       <itemPath>context.cpp</itemPath>
+      <itemPath>function_arguments.cpp</itemPath>
       <itemPath>libjsapi.cpp</itemPath>
       <itemPath>runtime.cpp</itemPath>
       <itemPath>script.cpp</itemPath>
@@ -184,6 +186,10 @@
           <output>${TESTDIR}/TestFiles/f5</output>
         </linkerTool>
       </folder>
+      <item path="function_arguments.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="function_arguments.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="libjsapi.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="libjsapi.h" ex="false" tool="3" flavor2="0">
@@ -334,6 +340,10 @@
           <output>${TESTDIR}/TestFiles/f5</output>
         </linkerTool>
       </folder>
+      <item path="function_arguments.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="function_arguments.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="libjsapi.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="libjsapi.h" ex="false" tool="3" flavor2="0">
