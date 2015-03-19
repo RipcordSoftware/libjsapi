@@ -173,3 +173,16 @@ TEST_F(ScriptExceptionTests, test7b) {
     ASSERT_EQ(1, lineno);
     ASSERT_EQ(8, column);
 }
+
+TEST_F(ScriptExceptionTests, test8) {
+    ASSERT_THROW({                        
+        rt_.Call("yoyoyoyo");
+    }, rs::jsapi::ScriptException);         
+}
+
+TEST_F(ScriptExceptionTests, test9) {
+    ASSERT_THROW({
+        rs::jsapi::Value result(rt_);
+        rt_.Call("yoyoyoyo", result);
+    }, rs::jsapi::ScriptException);         
+}
