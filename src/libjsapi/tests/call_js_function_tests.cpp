@@ -19,7 +19,7 @@ protected:
 
 TEST_F(CallJSFunctionTests, test1) {
     auto context = rt_.NewContext();
-    context->Evaluate("var myfunc = function(){return 42;};");
+    context->Evaluate("var myfunc=function(){return 42;};");
     
     rs::jsapi::Value result(*context);
     context->Call("myfunc", result);
@@ -30,8 +30,8 @@ TEST_F(CallJSFunctionTests, test1) {
 
 TEST_F(CallJSFunctionTests, test2) {
     auto context = rt_.NewContext();
-    context->Evaluate("var myfunc1 = function(){return 42;};");
-    context->Evaluate("var myfunc2 = function(){return 69;};");
+    context->Evaluate("var myfunc1=function(){return 42;};");
+    context->Evaluate("var myfunc2=function(){return 69;};");
     
     rs::jsapi::Value result1(*context);
     context->Call("myfunc1", result1);
@@ -50,7 +50,7 @@ TEST_F(CallJSFunctionTests, test3) {
     auto context = rt_.NewContext();
     
     rs::jsapi::Value result1(*context);
-    context->Evaluate("var myfunc = function(){return 42;};(function(){return myfunc()+1;})();", result1);    
+    context->Evaluate("var myfunc=function(){return 42;};(function(){return myfunc()+1;})();", result1);    
     
     ASSERT_TRUE(result1().isNumber());
     ASSERT_EQ(43, result1().toNumber());
@@ -65,7 +65,7 @@ TEST_F(CallJSFunctionTests, test3) {
 TEST_F(CallJSFunctionTests, test4) {
     auto context = rt_.NewContext();
     
-    context->Evaluate("var count = 7; var inc = function() { count++; }; var get = function() { return count; };");        
+    context->Evaluate("var count=7;var inc=function(){count++;};var get=function(){return count;};");        
     
     rs::jsapi::Value result1(*context);
     context->Call("get", result1);

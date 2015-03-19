@@ -110,3 +110,11 @@ bool rs::jsapi::Runtime::Call(const char* name) {
 bool rs::jsapi::Runtime::Call(const char* name, Value& result) {
     return cx_.Call(name, result);
 }
+
+bool rs::jsapi::Runtime::Evaluate(const char* script) {
+    return cx_.Evaluate(script);
+}
+
+bool rs::jsapi::Runtime::Evaluate(const char* script, Value& result) {
+    return cx_.Evaluate(script, result);
+}
