@@ -28,6 +28,12 @@
                    displayName="Test Files"
                    projectFiles="false"
                    kind="TEST_LOGICAL_FOLDER">
+      <logicalFolder name="f5"
+                     displayName="Call JS Function Tests"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/call_js_function_tests.cpp</itemPath>
+      </logicalFolder>
       <logicalFolder name="f3"
                      displayName="Multi Context Tests"
                      projectFiles="true"
@@ -163,6 +169,21 @@
           <output>${TESTDIR}/TestFiles/f4</output>
         </linkerTool>
       </folder>
+      <folder path="TestFiles/f5">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f5</output>
+        </linkerTool>
+      </folder>
       <item path="libjsapi.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="libjsapi.h" ex="false" tool="3" flavor2="0">
@@ -174,6 +195,8 @@
       <item path="script.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="script.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/call_js_function_tests.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/multi_context_tests.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -296,6 +319,21 @@
           <output>${TESTDIR}/TestFiles/f4</output>
         </linkerTool>
       </folder>
+      <folder path="TestFiles/f5">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f5</output>
+        </linkerTool>
+      </folder>
       <item path="libjsapi.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="libjsapi.h" ex="false" tool="3" flavor2="0">
@@ -307,6 +345,8 @@
       <item path="script.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="script.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/call_js_function_tests.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/multi_context_tests.cpp" ex="false" tool="1" flavor2="0">
       </item>

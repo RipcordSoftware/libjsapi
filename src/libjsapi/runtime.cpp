@@ -102,3 +102,11 @@ bool rs::jsapi::Runtime::RemoveRuntime(std::thread::id id) {
     
     return remove;
 }
+
+bool rs::jsapi::Runtime::Call(const char* name) {
+    return cx_.Call(name);
+}
+
+bool rs::jsapi::Runtime::Call(const char* name, Value& result) {
+    return cx_.Call(name, result);
+}

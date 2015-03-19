@@ -20,6 +20,11 @@ public:
     Runtime(const Runtime&) = delete;
     ~Runtime();
     
+    bool Evaluate(const char* script);
+    bool Evaluate(const char* script, Value& result);
+    bool Call(const char* name);
+    bool Call(const char* name, Value& result);
+    
     Runtime& operator=(const Runtime&) = delete;
     
     std::unique_ptr<Context> NewContext();

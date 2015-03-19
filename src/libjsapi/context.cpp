@@ -1,5 +1,6 @@
 #include "context.h"
 #include "runtime.h"
+#include "value.h"
 
 // The class of the global object.
 static JSClass globalClass = {
@@ -53,4 +54,37 @@ void rs::jsapi::Context::DestroyContext() {
         JS_DestroyContext(cx_);
         cx_ = nullptr;
     }
+}
+
+bool rs::jsapi::Context::Evaluate(const char* script) {
+    Value result(*this);        
+    return Evaluate(script, result);
+}
+
+bool rs::jsapi::Context::Evaluate(const char* script, Value& result) {
+    JS::CompileOptions options(cx_);
+    auto status = JS::Evaluate(cx_, global_, options, script, ::strlen(script), result);
+    
+    auto error = getError();
+    if (!!error) {
+        throw *error;
+    }
+    
+    return status;
+}
+
+bool rs::jsapi::Context::Call(const char* name) {
+    Value result(*this);        
+    return Call(name, result);
+}
+
+bool rs::jsapi::Context::Call(const char* name, Value& result) {
+    auto status = JS_CallFunctionName(cx_, global_, name, JS::HandleValueArray::empty(), result);    
+    
+    auto error = getError();
+    if (!!error) {
+        throw *error;
+    }
+    
+    return status;
 }

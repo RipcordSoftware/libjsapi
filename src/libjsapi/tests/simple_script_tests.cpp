@@ -103,6 +103,17 @@ TEST_F(SimpleScriptTests, test7) {
     ASSERT_EQ(0, result.ToString().find("1234.567"));
 }
 
+TEST_F(SimpleScriptTests, test7b) {
+    rs::jsapi::Script script(rt_, "(function(){return 1234.567;})();");
+    script.Compile();
+    
+    rs::jsapi::Value result(rt_);
+    script.Execute(result);
+
+    ASSERT_TRUE(result().isNumber());
+    ASSERT_FLOAT_EQ(1234.567, result().toNumber());
+}
+
 TEST_F(SimpleScriptTests, test8) {
     rs::jsapi::Script script(rt_, "(function(){return true;})();");
     script.Compile();

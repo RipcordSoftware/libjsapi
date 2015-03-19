@@ -20,6 +20,11 @@ public:
     Context(Runtime& rt);    
     ~Context();
     
+    bool Evaluate(const char* script);
+    bool Evaluate(const char* script, Value& result);
+    bool Call(const char* name);
+    bool Call(const char* name, Value& result);
+    
     Context(const Context&) = delete;
     Context& operator =(const Context&) = delete;
     
@@ -31,7 +36,7 @@ public:
 private:
     friend void Script::Compile();
     friend bool Script::Execute();
-    friend bool Script::Execute(Value& result);
+    friend bool Script::Execute(Value&);
     
     std::unique_ptr<ScriptException> getError();
     
