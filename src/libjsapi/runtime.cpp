@@ -63,14 +63,6 @@ JSRuntime* rs::jsapi::Runtime::getRuntime() {
     return rt_; 
 }
 
-rs::jsapi::Context& rs::jsapi::Runtime::getContext() {
-    if (threadId_ != std::this_thread::get_id()) {
-        throw RuntimeWrongThreadException();
-    }
-    
-    return cx_; 
-}
-
 std::unique_ptr<rs::jsapi::Context> rs::jsapi::Runtime::NewContext() {
     if (threadId_ != std::this_thread::get_id()) {
         throw RuntimeWrongThreadException();

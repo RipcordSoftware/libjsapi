@@ -1,6 +1,5 @@
 #include "function_arguments.h"
 #include "context.h"
-#include "runtime.h"
 
 rs::jsapi::FunctionArguments::FunctionArguments(Context& cx) : cx_(cx), args_(cx_) {
     

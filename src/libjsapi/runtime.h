@@ -10,6 +10,7 @@
 #include <vector>
 
 #include "context.h"
+#include "exceptions.h"
 
 namespace rs {
 namespace jsapi {
@@ -34,9 +35,14 @@ public:
     std::unique_ptr<Context> NewContext();
     
     JSRuntime* getRuntime();
-    Context& getContext();
     
-    operator Context&() { return cx_; }
+    operator Context&() { 
+        if (threadId_ != std::this_thread::get_id()) {
+            throw RuntimeWrongThreadException();
+        }
+        
+        return cx_; 
+    }
     
 private:
     

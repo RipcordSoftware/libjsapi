@@ -9,13 +9,11 @@ namespace rs {
 namespace jsapi {
 
 class Context;
-class Runtime;
 class Value;
     
 class Value final {
 public:
     Value(Context& cx);    
-    Value(Runtime& rt);
     
     Value(const Value&) = delete;
     Value& operator=(const Value&) = delete;

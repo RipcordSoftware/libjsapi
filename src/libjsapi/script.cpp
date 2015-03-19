@@ -1,15 +1,10 @@
 #include "script.h"
 
-#include "runtime.h"
 #include "context.h"
 #include "value.h"
 
 rs::jsapi::Script::Script(Context& cx, const char* code) : 
     cx_(cx), code_(code), script_(cx) {
-}
-
-rs::jsapi::Script::Script(Runtime& rt, const char* code) : 
-    cx_(rt.getContext()), code_(code), script_(rt.getContext()) {
 }
 
 rs::jsapi::Script::~Script() {

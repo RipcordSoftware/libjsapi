@@ -9,13 +9,11 @@ namespace rs {
 namespace jsapi {
     
 class Context;
-class Runtime;
 class Value;
 
 class Script final {
 public:
     Script(Context& cx, const char* code);
-    Script(Runtime& rt, const char* code);
     Script(const Script&) = delete;
     ~Script();
     

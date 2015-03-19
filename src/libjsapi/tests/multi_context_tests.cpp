@@ -77,7 +77,7 @@ TEST_F(MultiContextTests, test3) {
 TEST_F(MultiContextTests, test4) {        
     std::thread t([]() {  
         ASSERT_THROW({
-            rt_.getContext();
+            rs::jsapi::Context& cx = rt_;
         }, rs::jsapi::RuntimeWrongThreadException);
     });
        
