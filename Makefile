@@ -58,6 +58,8 @@ clean: force_true
 		cd gtest-${GTEST_VER} && \
 		./configure && \
 		make -j 2 && \
+                if [ ! -d "../installed/include" ]; then mkdir -p ../installed/include; fi && \
+                if [ ! -d "../installed/lib" ]; then mkdir -p ../installed/lib; fi && \
 		cp -Rf include/* ../installed/include && \
 		cp -Rf lib/.libs/* ../installed/lib; \
 	fi
