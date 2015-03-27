@@ -8,7 +8,7 @@ The JSAPI interface to the SpiderMonkey JavaScript VM is difficult to integrate 
 applications without an intermediate abstraction layer managing object creation and 
 type mapping.
 
-Example:
+##Example:
 ```c++
 #include <iostream>
 #include "libjsapi.h"
