@@ -8,6 +8,12 @@ The JSAPI interface to the SpiderMonkey JavaScript VM is difficult to integrate 
 applications without an intermediate abstraction layer managing object creation and 
 type mapping.
 
+Example:
+```c++
+void main() {
+}
+```
+
 # Building
 Requires:
 * GCC 4.8.1+
