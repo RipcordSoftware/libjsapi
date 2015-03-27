@@ -10,7 +10,20 @@ type mapping.
 
 Example:
 ```c++
+#include <iostream>
+#include "libjsapi.h"
+
 void main() {
+    rs::jsapi::Runtime rt;
+    
+    rs::jsapi::Script script(rt, "(function(){return 42;})();");
+    script.Compile();
+    
+    rs::jsapi::Value result(rt);
+    script.Execute(result);
+    
+    auto val = result().toNumber();
+    std::cout << val << std::endl;
 }
 ```
 
