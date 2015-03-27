@@ -8,12 +8,24 @@ The JSAPI interface to the SpiderMonkey JavaScript VM is difficult to integrate 
 applications without an intermediate abstraction layer managing object creation and 
 type mapping.
 
-##Requirements
-* GCC 4.8.1+
-* GNU Make tools
-
 # Building
+Requires:
+* GCC 4.8.1+
+* GNU Make
+* lcov and Ruby (for test coverage)
+* valgrind (for memory analysis)
+
 To build type:
 ```bash
 $ make
+```
+
+To build tests with coverage:
+```bash
+$ make test
+```
+
+To create a coverage report:
+```bash
+$ ./coverage.sh
 ```
