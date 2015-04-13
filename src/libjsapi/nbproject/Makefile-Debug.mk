@@ -48,6 +48,7 @@ TESTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}/tests
 # Test Files
 TESTFILES= \
 	${TESTDIR}/TestFiles/f5 \
+	${TESTDIR}/TestFiles/f6 \
 	${TESTDIR}/TestFiles/f3 \
 	${TESTDIR}/TestFiles/f4 \
 	${TESTDIR}/TestFiles/f2 \
@@ -124,6 +125,16 @@ ${TESTDIR}/TestFiles/f5: ${TESTDIR}/tests/call_js_function_tests.o ${OBJECTFILES
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc} --coverage  -o ${TESTDIR}/TestFiles/f5 $^ ${LDLIBSOPTIONS} -lpthread -ldl `pkg-config --libs zlib`   
 
+${TESTDIR}/TestFiles/f6: ../../externals/installed/lib/libmozjs-31.a
+
+${TESTDIR}/TestFiles/f6: ../../externals/installed/lib/libgtest.a
+
+${TESTDIR}/TestFiles/f6: ../../externals/installed/lib/libgtest_main.a
+
+${TESTDIR}/TestFiles/f6: ${TESTDIR}/tests/call_native_function_tests.o ${OBJECTFILES:%.o=%_nomain.o}
+	${MKDIR} -p ${TESTDIR}/TestFiles
+	${LINK.cc} --coverage  -o ${TESTDIR}/TestFiles/f6 $^ ${LDLIBSOPTIONS} -lpthread -ldl `pkg-config --libs zlib`   
+
 ${TESTDIR}/TestFiles/f3: ../../externals/installed/lib/libmozjs-31.a
 
 ${TESTDIR}/TestFiles/f3: ../../externals/installed/lib/libgtest.a
@@ -169,6 +180,12 @@ ${TESTDIR}/tests/call_js_function_tests.o: tests/call_js_function_tests.cpp
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs-31 -I../../externals/installed/include -I. -std=c++11 --coverage -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/call_js_function_tests.o tests/call_js_function_tests.cpp
+
+
+${TESTDIR}/tests/call_native_function_tests.o: tests/call_native_function_tests.cpp 
+	${MKDIR} -p ${TESTDIR}/tests
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs-31 -I../../externals/installed/include -I. -std=c++11 --coverage -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/call_native_function_tests.o tests/call_native_function_tests.cpp
 
 
 ${TESTDIR}/tests/multi_context_tests.o: tests/multi_context_tests.cpp 
@@ -278,6 +295,7 @@ ${OBJECTDIR}/value_nomain.o: ${OBJECTDIR}/value.o value.cpp
 	@if [ "${TEST}" = "" ]; \
 	then  \
 	    ${TESTDIR}/TestFiles/f5 || true; \
+	    ${TESTDIR}/TestFiles/f6 || true; \
 	    ${TESTDIR}/TestFiles/f3 || true; \
 	    ${TESTDIR}/TestFiles/f4 || true; \
 	    ${TESTDIR}/TestFiles/f2 || true; \

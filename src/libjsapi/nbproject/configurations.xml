@@ -36,6 +36,12 @@
                      kind="TEST">
         <itemPath>tests/call_js_function_tests.cpp</itemPath>
       </logicalFolder>
+      <logicalFolder name="f6"
+                     displayName="Call Native Function Tests"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/call_native_function_tests.cpp</itemPath>
+      </logicalFolder>
       <logicalFolder name="f3"
                      displayName="Multi Context Tests"
                      projectFiles="true"
@@ -186,6 +192,21 @@
           <output>${TESTDIR}/TestFiles/f5</output>
         </linkerTool>
       </folder>
+      <folder path="TestFiles/f6">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f6</output>
+        </linkerTool>
+      </folder>
       <item path="function_arguments.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="function_arguments.h" ex="false" tool="3" flavor2="0">
@@ -203,6 +224,11 @@
       <item path="script.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="tests/call_js_function_tests.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/call_native_function_tests.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
       </item>
       <item path="tests/multi_context_tests.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -340,6 +366,21 @@
           <output>${TESTDIR}/TestFiles/f5</output>
         </linkerTool>
       </folder>
+      <folder path="TestFiles/f6">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f6</output>
+        </linkerTool>
+      </folder>
       <item path="function_arguments.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="function_arguments.h" ex="false" tool="3" flavor2="0">
@@ -357,6 +398,11 @@
       <item path="script.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="tests/call_js_function_tests.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/call_native_function_tests.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
       </item>
       <item path="tests/multi_context_tests.cpp" ex="false" tool="1" flavor2="0">
       </item>
