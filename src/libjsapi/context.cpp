@@ -1,6 +1,7 @@
 #include "context.h"
 #include "runtime.h"
 #include "value.h"
+#include "result.h"
 #include "function_arguments.h"
 
 // The class of the global object.
@@ -58,11 +59,11 @@ void rs::jsapi::Context::DestroyContext() {
 }
 
 bool rs::jsapi::Context::Evaluate(const char* script) {
-    Value result(*this);        
+    Result result(*this);        
     return Evaluate(script, result);
 }
 
-bool rs::jsapi::Context::Evaluate(const char* script, Value& result) {
+bool rs::jsapi::Context::Evaluate(const char* script, Result& result) {
     JS::CompileOptions options(cx_);
     auto status = JS::Evaluate(cx_, global_, options, script, ::strlen(script), result);
     
@@ -75,11 +76,11 @@ bool rs::jsapi::Context::Evaluate(const char* script, Value& result) {
 }
 
 bool rs::jsapi::Context::Call(const char* name) {
-    Value result(*this);        
+    Result result(*this);        
     return Call(name, result);
 }
 
-bool rs::jsapi::Context::Call(const char* name, Value& result) {
+bool rs::jsapi::Context::Call(const char* name, Result& result) {
     auto status = JS_CallFunctionName(cx_, global_, name, JS::HandleValueArray::empty(), result);    
     
     auto error = getError();
@@ -91,11 +92,11 @@ bool rs::jsapi::Context::Call(const char* name, Value& result) {
 }
 
 bool rs::jsapi::Context::Call(const char* name, const FunctionArguments& args) {
-    Value result(*this);        
+    Result result(*this);        
     return Call(name, args, result);
 }
 
-bool rs::jsapi::Context::Call(const char* name, const FunctionArguments& args, Value& result) {
+bool rs::jsapi::Context::Call(const char* name, const FunctionArguments& args, Result& result) {
     JS::HandleValueArray argArray(args);
     auto status = JS_CallFunctionName(cx_, global_, name, argArray, result);    
     

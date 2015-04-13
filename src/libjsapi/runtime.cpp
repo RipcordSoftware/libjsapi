@@ -1,7 +1,9 @@
 #include "runtime.h"
-#include "exceptions.h"
 
 #include <algorithm>
+
+#include "exceptions.h"
+#include "result.h"
 
 #ifdef __GNUC__
 #define INIT_PRIORITY(N) __attribute__ ((init_priority (N + 101)))
@@ -103,11 +105,11 @@ bool rs::jsapi::Runtime::Call(const char* name, const FunctionArguments& args) {
     return cx_.Call(name, args);
 }
 
-bool rs::jsapi::Runtime::Call(const char* name, Value& result) {
+bool rs::jsapi::Runtime::Call(const char* name, Result& result) {
     return cx_.Call(name, result);
 }
 
-bool rs::jsapi::Runtime::Call(const char* name, const FunctionArguments& args, Value& result) {
+bool rs::jsapi::Runtime::Call(const char* name, const FunctionArguments& args, Result& result) {
     return cx_.Call(name, args, result);
 }
 
@@ -115,6 +117,6 @@ bool rs::jsapi::Runtime::Evaluate(const char* script) {
     return cx_.Evaluate(script);
 }
 
-bool rs::jsapi::Runtime::Evaluate(const char* script, Value& result) {
+bool rs::jsapi::Runtime::Evaluate(const char* script, Result& result) {
     return cx_.Evaluate(script, result);
 }

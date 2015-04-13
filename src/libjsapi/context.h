@@ -14,6 +14,7 @@ namespace jsapi {
 
 class Runtime;
 class FunctionArguments;
+class Result;
 
 class Context final {
     friend class Runtime;
@@ -22,11 +23,11 @@ public:
     ~Context();
     
     bool Evaluate(const char* script);
-    bool Evaluate(const char* script, Value& result);
+    bool Evaluate(const char* script, Result& result);
     bool Call(const char* name);
     bool Call(const char* name, const FunctionArguments& args);
-    bool Call(const char* name, Value& result);
-    bool Call(const char* name, const FunctionArguments& args, Value& result);
+    bool Call(const char* name, Result& result);
+    bool Call(const char* name, const FunctionArguments& args, Result& result);
     
     Context(const Context&) = delete;
     Context& operator =(const Context&) = delete;
@@ -39,7 +40,7 @@ public:
 private:
     friend void Script::Compile();
     friend bool Script::Execute();
-    friend bool Script::Execute(Value&);
+    friend bool Script::Execute(Result&);
     
     std::unique_ptr<ScriptException> getError();
     

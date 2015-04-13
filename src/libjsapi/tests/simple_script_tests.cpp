@@ -19,7 +19,7 @@ TEST_F(SimpleScriptTests, test1) {
     rs::jsapi::Script script(rt_, "(function(){return 42;})();");
     script.Compile();
     
-    rs::jsapi::Value result(rt_);
+    rs::jsapi::Result result(rt_);
     script.Execute(result);
 
     ASSERT_TRUE(result().isNumber());
@@ -30,13 +30,13 @@ TEST_F(SimpleScriptTests, test2) {
     rs::jsapi::Script script(rt_, "(function(){return 42;})();");
     script.Compile();
     
-    rs::jsapi::Value result1(rt_);
+    rs::jsapi::Result result1(rt_);
     script.Execute(result1);
 
     ASSERT_TRUE(result1().isNumber());
     ASSERT_EQ(42, result1().toNumber());
     
-    rs::jsapi::Value result2(rt_);
+    rs::jsapi::Result result2(rt_);
     script.Execute(result2);
 
     ASSERT_TRUE(result2().isNumber());
@@ -51,13 +51,13 @@ TEST_F(SimpleScriptTests, test3) {
     rs::jsapi::Script script(rt_, "(function(){return count++;})();");
     script.Compile();
     
-    rs::jsapi::Value result1(rt_);
+    rs::jsapi::Result result1(rt_);
     script.Execute(result1);
 
     ASSERT_TRUE(result1().isNumber());
     ASSERT_EQ(42, result1().toNumber());
     
-    rs::jsapi::Value result2(rt_);
+    rs::jsapi::Result result2(rt_);
     script.Execute(result2);
 
     ASSERT_TRUE(result2().isNumber());
@@ -72,7 +72,7 @@ TEST_F(SimpleScriptTests, test5) {
     rs::jsapi::Script script(rt_, "(function(){return 'hello';})();");
     script.Compile();
     
-    rs::jsapi::Value result(rt_);
+    rs::jsapi::Result result(rt_);
     script.Execute(result);
 
     ASSERT_TRUE(result().isString());
@@ -83,7 +83,7 @@ TEST_F(SimpleScriptTests, test6) {
     rs::jsapi::Script script(rt_, "(function(){return 1234;})();");
     script.Compile();
     
-    rs::jsapi::Value result(rt_);
+    rs::jsapi::Result result(rt_);
     script.Execute(result);
 
     ASSERT_TRUE(result().isNumber());
@@ -95,7 +95,7 @@ TEST_F(SimpleScriptTests, test7) {
     rs::jsapi::Script script(rt_, "(function(){return 1234.567;})();");
     script.Compile();
     
-    rs::jsapi::Value result(rt_);
+    rs::jsapi::Result result(rt_);
     script.Execute(result);
 
     ASSERT_TRUE(result().isNumber());
@@ -107,7 +107,7 @@ TEST_F(SimpleScriptTests, test7b) {
     rs::jsapi::Script script(rt_, "(function(){return 1234.567;})();");
     script.Compile();
     
-    rs::jsapi::Value result(rt_);
+    rs::jsapi::Result result(rt_);
     script.Execute(result);
 
     ASSERT_TRUE(result().isNumber());
@@ -118,7 +118,7 @@ TEST_F(SimpleScriptTests, test8) {
     rs::jsapi::Script script(rt_, "(function(){return true;})();");
     script.Compile();
     
-    rs::jsapi::Value result(rt_);
+    rs::jsapi::Result result(rt_);
     script.Execute(result);
 
     ASSERT_TRUE(result().isBoolean());
@@ -130,7 +130,7 @@ TEST_F(SimpleScriptTests, test9) {
     rs::jsapi::Script script(rt_, "(function(){return false;})();");
     script.Compile();
     
-    rs::jsapi::Value result(rt_);
+    rs::jsapi::Result result(rt_);
     script.Execute(result);
 
     ASSERT_TRUE(result().isBoolean());
@@ -142,7 +142,7 @@ TEST_F(SimpleScriptTests, test10) {
     rs::jsapi::Script script(rt_, "(function(){return {};})();");
     script.Compile();
     
-    rs::jsapi::Value result(rt_);
+    rs::jsapi::Result result(rt_);
     script.Execute(result);
 
     ASSERT_TRUE(result().isObject());
@@ -154,7 +154,7 @@ TEST_F(SimpleScriptTests, test11) {
     rs::jsapi::Script script(rt_, "(function(){return [];})();");
     script.Compile();
     
-    rs::jsapi::Value result(rt_);
+    rs::jsapi::Result result(rt_);
     script.Execute(result);
 
     ASSERT_TRUE(result().isObject());
@@ -166,7 +166,7 @@ TEST_F(SimpleScriptTests, test12) {
     rs::jsapi::Script script(rt_, "(function(){return null;})();");
     script.Compile();
     
-    rs::jsapi::Value result(rt_);
+    rs::jsapi::Result result(rt_);
     script.Execute(result);
 
     ASSERT_TRUE(result().isNull());

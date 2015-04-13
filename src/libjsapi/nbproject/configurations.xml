@@ -8,6 +8,7 @@
       <itemPath>exceptions.h</itemPath>
       <itemPath>function_arguments.h</itemPath>
       <itemPath>libjsapi.h</itemPath>
+      <itemPath>result.h</itemPath>
       <itemPath>runtime.h</itemPath>
       <itemPath>script.h</itemPath>
       <itemPath>value.h</itemPath>
@@ -22,6 +23,7 @@
       <itemPath>context.cpp</itemPath>
       <itemPath>function_arguments.cpp</itemPath>
       <itemPath>libjsapi.cpp</itemPath>
+      <itemPath>result.cpp</itemPath>
       <itemPath>runtime.cpp</itemPath>
       <itemPath>script.cpp</itemPath>
       <itemPath>value.cpp</itemPath>
@@ -215,6 +217,10 @@
       </item>
       <item path="libjsapi.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="result.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="result.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="runtime.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="runtime.h" ex="false" tool="3" flavor2="0">
@@ -388,6 +394,10 @@
       <item path="libjsapi.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="libjsapi.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="result.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="result.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="runtime.cpp" ex="false" tool="1" flavor2="0">
       </item>

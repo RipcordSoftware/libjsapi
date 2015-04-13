@@ -11,23 +11,20 @@ namespace jsapi {
 class Context;
 class Value;
     
-class Value final {
+class Value {
 public:
-    Value(Context& cx);    
+    Value(Context& cx);
     
     Value(const Value&) = delete;
-    Value& operator=(const Value&) = delete;
-    
-    operator JS::MutableHandleValue&() { return mutableValue_; }
+    Value& operator=(const Value&) = delete;    
     
     JS::RootedValue& operator()() { return value_; }
 
     std::string ToString();
 
-private:
+protected:
     Context& cx_;
-    JS::RootedValue value_;
-    JS::MutableHandleValue mutableValue_;
+    JS::RootedValue value_;    
 };
 
 }}    

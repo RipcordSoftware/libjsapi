@@ -38,6 +38,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/context.o \
 	${OBJECTDIR}/function_arguments.o \
 	${OBJECTDIR}/libjsapi.o \
+	${OBJECTDIR}/result.o \
 	${OBJECTDIR}/runtime.o \
 	${OBJECTDIR}/script.o \
 	${OBJECTDIR}/value.o
@@ -94,6 +95,11 @@ ${OBJECTDIR}/libjsapi.o: libjsapi.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs-31 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/libjsapi.o libjsapi.cpp
+
+${OBJECTDIR}/result.o: result.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs-31 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/result.o result.cpp
 
 ${OBJECTDIR}/runtime.o: runtime.cpp 
 	${MKDIR} -p ${OBJECTDIR}
@@ -249,6 +255,19 @@ ${OBJECTDIR}/libjsapi_nomain.o: ${OBJECTDIR}/libjsapi.o libjsapi.cpp
 	    $(COMPILE.cc) -g -I../../externals/installed/include/mozjs-31 -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/libjsapi_nomain.o libjsapi.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/libjsapi.o ${OBJECTDIR}/libjsapi_nomain.o;\
+	fi
+
+${OBJECTDIR}/result_nomain.o: ${OBJECTDIR}/result.o result.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/result.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -g -I../../externals/installed/include/mozjs-31 -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/result_nomain.o result.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/result.o ${OBJECTDIR}/result_nomain.o;\
 	fi
 
 ${OBJECTDIR}/runtime_nomain.o: ${OBJECTDIR}/runtime.o runtime.cpp 

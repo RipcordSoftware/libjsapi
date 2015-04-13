@@ -9,12 +9,13 @@
 #include <thread>
 #include <vector>
 
-#include "context.h"
 #include "exceptions.h"
+#include "context.h"
 
 namespace rs {
 namespace jsapi {
     
+class Result;    
 class FunctionArguments;
 
 class Runtime final {
@@ -24,11 +25,11 @@ public:
     ~Runtime();
     
     bool Evaluate(const char* script);
-    bool Evaluate(const char* script, Value& result);
+    bool Evaluate(const char* script, Result& result);
     bool Call(const char* name);
     bool Call(const char* name, const FunctionArguments& args);
-    bool Call(const char* name, Value& result);
-    bool Call(const char* name, const FunctionArguments& args, Value& result);
+    bool Call(const char* name, Result& result);
+    bool Call(const char* name, const FunctionArguments& args, Result& result);
     
     Runtime& operator=(const Runtime&) = delete;
     

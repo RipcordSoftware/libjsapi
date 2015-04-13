@@ -1,7 +1,7 @@
 #include "script.h"
 
 #include "context.h"
-#include "value.h"
+#include "result.h"
 
 rs::jsapi::Script::Script(Context& cx, const char* code) : 
     cx_(cx), code_(code), script_(cx) {
@@ -31,7 +31,7 @@ bool rs::jsapi::Script::Execute() {
     return status;
 }
 
-bool rs::jsapi::Script::Execute(Value& result) {
+bool rs::jsapi::Script::Execute(Result& result) {
     auto status = JS_ExecuteScript(cx_, cx_.getGlobal(), script_, result);    
     
     auto error = cx_.getError();

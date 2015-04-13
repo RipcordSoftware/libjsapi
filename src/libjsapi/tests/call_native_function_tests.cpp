@@ -53,7 +53,7 @@ TEST_F(CallNativeFunctionTests, test1) {
     
     JS_DefineFunction(*context, context->getGlobal(), "getTheAnswer", &CallNativeFunctionTests::GetTheAnswer, 0, 0);
     
-    rs::jsapi::Value result(*context);
+    rs::jsapi::Result result(*context);
     context->Evaluate("(function(){return getTheAnswer();})();", result);
     
     ASSERT_TRUE(result().isInt32());
@@ -65,7 +65,7 @@ TEST_F(CallNativeFunctionTests, test2) {
     
     JS_DefineFunction(*context, context->getGlobal(), "getLorem", &CallNativeFunctionTests::GetLorem, 0, 0);
     
-    rs::jsapi::Value result(*context);
+    rs::jsapi::Result result(*context);
     context->Evaluate("(function(){return getLorem();})();", result);
     
     ASSERT_TRUE(result().isString());
@@ -80,7 +80,7 @@ TEST_F(CallNativeFunctionTests, test3) {
     rs::jsapi::FunctionArguments args(*context);
     args.Append(true);
     
-    rs::jsapi::Value result(*context);
+    rs::jsapi::Result result(*context);
     context->Call("echo", args, result); 
     
     ASSERT_TRUE(result().isBoolean());
@@ -95,7 +95,7 @@ TEST_F(CallNativeFunctionTests, test4) {
     rs::jsapi::FunctionArguments args(*context);
     args.Append(42);
     
-    rs::jsapi::Value result(*context);
+    rs::jsapi::Result result(*context);
     context->Call("echo", args, result); 
     
     ASSERT_TRUE(result().isNumber());
@@ -110,7 +110,7 @@ TEST_F(CallNativeFunctionTests, test5) {
     rs::jsapi::FunctionArguments args(*context);
     args.Append("hello");
     
-    rs::jsapi::Value result(*context);
+    rs::jsapi::Result result(*context);
     context->Call("echo", args, result); 
     
     ASSERT_TRUE(result().isString());

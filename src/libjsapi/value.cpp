@@ -1,7 +1,7 @@
 #include "value.h"
 #include "context.h"
 
-rs::jsapi::Value::Value(Context& cx) : cx_(cx), value_(cx), mutableValue_(&value_) {
+rs::jsapi::Value::Value(Context& cx) : cx_(cx), value_(cx) {
 }
     
 // TODO: revise this since it is ugly

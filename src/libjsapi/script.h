@@ -9,7 +9,7 @@ namespace rs {
 namespace jsapi {
     
 class Context;
-class Value;
+class Result;
 
 class Script final {
 public:
@@ -21,7 +21,7 @@ public:
     
     void Compile();
     bool Execute();
-    bool Execute(Value& result);
+    bool Execute(Result& result);
     
 private:
     Context& cx_;
