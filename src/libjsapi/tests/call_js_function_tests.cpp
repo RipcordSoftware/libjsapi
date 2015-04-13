@@ -24,8 +24,8 @@ TEST_F(CallJSFunctionTests, test1) {
     rs::jsapi::Result result(*context);
     context->Call("myfunc", result);
     
-    ASSERT_TRUE(result().isNumber());
-    ASSERT_EQ(42, result().toNumber());
+    ASSERT_TRUE(result.isNumber());
+    ASSERT_EQ(42, result.toNumber());
 }
 
 TEST_F(CallJSFunctionTests, test2) {
@@ -36,14 +36,14 @@ TEST_F(CallJSFunctionTests, test2) {
     rs::jsapi::Result result1(*context);
     context->Call("myfunc1", result1);
     
-    ASSERT_TRUE(result1().isNumber());
-    ASSERT_EQ(42, result1().toNumber());
+    ASSERT_TRUE(result1.isNumber());
+    ASSERT_EQ(42, result1.toNumber());
     
     rs::jsapi::Result result2(*context);
     context->Call("myfunc2", result2);
     
-    ASSERT_TRUE(result2().isNumber());
-    ASSERT_EQ(69, result2().toNumber());            
+    ASSERT_TRUE(result2.isNumber());
+    ASSERT_EQ(69, result2.toNumber());            
 }
 
 TEST_F(CallJSFunctionTests, test3) {
@@ -52,14 +52,14 @@ TEST_F(CallJSFunctionTests, test3) {
     rs::jsapi::Result result1(*context);
     context->Evaluate("var myfunc=function(){return 42;};(function(){return myfunc()+1;})();", result1);    
     
-    ASSERT_TRUE(result1().isNumber());
-    ASSERT_EQ(43, result1().toNumber());
+    ASSERT_TRUE(result1.isNumber());
+    ASSERT_EQ(43, result1.toNumber());
     
     rs::jsapi::Result result2(*context);
     context->Call("myfunc", result2);            
     
-    ASSERT_TRUE(result2().isNumber());
-    ASSERT_EQ(42, result2().toNumber());
+    ASSERT_TRUE(result2.isNumber());
+    ASSERT_EQ(42, result2.toNumber());
 }
 
 TEST_F(CallJSFunctionTests, test4) {
@@ -70,16 +70,16 @@ TEST_F(CallJSFunctionTests, test4) {
     rs::jsapi::Result result1(*context);
     context->Call("get", result1);
     
-    ASSERT_TRUE(result1().isNumber());
-    ASSERT_EQ(7, result1().toNumber());
+    ASSERT_TRUE(result1.isNumber());
+    ASSERT_EQ(7, result1.toNumber());
     
     context->Call("inc");
     
     rs::jsapi::Result result2(*context);
     context->Call("get", result2);            
     
-    ASSERT_TRUE(result2().isNumber());
-    ASSERT_EQ(8, result2().toNumber());
+    ASSERT_TRUE(result2.isNumber());
+    ASSERT_EQ(8, result2.toNumber());
 }
 
 TEST_F(CallJSFunctionTests, test5) {
@@ -92,8 +92,8 @@ TEST_F(CallJSFunctionTests, test5) {
     rs::jsapi::Result result(*context);
     context->Call("myfunc", args, result);
     
-    ASSERT_TRUE(result().isNumber());
-    ASSERT_FLOAT_EQ(3.14159, result().toNumber());    
+    ASSERT_TRUE(result.isNumber());
+    ASSERT_FLOAT_EQ(3.14159, result.toNumber());    
 }
 
 TEST_F(CallJSFunctionTests, test5b) {
@@ -106,8 +106,8 @@ TEST_F(CallJSFunctionTests, test5b) {
     rs::jsapi::Result result(*context);
     context->Call("myfunc", args, result);
     
-    ASSERT_TRUE(result().isInt32());
-    ASSERT_EQ(3, result().toInt32());       
+    ASSERT_TRUE(result.isInt32());
+    ASSERT_EQ(3, result.toInt32());       
 }
 
 TEST_F(CallJSFunctionTests, test5c) {
@@ -120,8 +120,8 @@ TEST_F(CallJSFunctionTests, test5c) {
     rs::jsapi::Result result(*context);
     context->Call("myfunc", args, result);
     
-    ASSERT_TRUE(result().isNumber());
-    ASSERT_EQ(7, result().toNumber());
+    ASSERT_TRUE(result.isNumber());
+    ASSERT_EQ(7, result.toNumber());
 }
 
 TEST_F(CallJSFunctionTests, test6) {
@@ -134,7 +134,7 @@ TEST_F(CallJSFunctionTests, test6) {
     rs::jsapi::Result result(*context);
     context->Call("myfunc", args, result);       
     
-    ASSERT_TRUE(result().isString());
+    ASSERT_TRUE(result.isString());
     ASSERT_STRCASEEQ("hello", result.ToString().c_str());
 }
 
@@ -148,8 +148,8 @@ TEST_F(CallJSFunctionTests, test7) {
     rs::jsapi::Result result(*context);
     context->Call("myfunc", args, result);       
     
-    ASSERT_TRUE(result().isBoolean());
-    ASSERT_TRUE(result().toBoolean());
+    ASSERT_TRUE(result.isBoolean());
+    ASSERT_TRUE(result.toBoolean());
 }
 
 TEST_F(CallJSFunctionTests, test8) {
@@ -162,8 +162,8 @@ TEST_F(CallJSFunctionTests, test8) {
     rs::jsapi::Result result(*context);
     context->Call("myfunc", args, result);       
     
-    ASSERT_TRUE(result().isBoolean());
-    ASSERT_FALSE(result().toBoolean());
+    ASSERT_TRUE(result.isBoolean());
+    ASSERT_FALSE(result.toBoolean());
     
     args.Clear();
     ASSERT_TRUE(args.Empty());
@@ -171,6 +171,6 @@ TEST_F(CallJSFunctionTests, test8) {
     args.Append(true);    
     context->Call("myfunc", args, result);       
     
-    ASSERT_TRUE(result().isBoolean());
-    ASSERT_TRUE(result().toBoolean());    
+    ASSERT_TRUE(result.isBoolean());
+    ASSERT_TRUE(result.toBoolean());    
 }

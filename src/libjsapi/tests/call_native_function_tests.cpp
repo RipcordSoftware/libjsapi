@@ -56,8 +56,8 @@ TEST_F(CallNativeFunctionTests, test1) {
     rs::jsapi::Result result(*context);
     context->Evaluate("(function(){return getTheAnswer();})();", result);
     
-    ASSERT_TRUE(result().isInt32());
-    ASSERT_EQ(42, result().toInt32());    
+    ASSERT_TRUE(result.isInt32());
+    ASSERT_EQ(42, result.toInt32());    
 }
 
 TEST_F(CallNativeFunctionTests, test2) {
@@ -68,7 +68,7 @@ TEST_F(CallNativeFunctionTests, test2) {
     rs::jsapi::Result result(*context);
     context->Evaluate("(function(){return getLorem();})();", result);
     
-    ASSERT_TRUE(result().isString());
+    ASSERT_TRUE(result.isString());
     ASSERT_STREQ("Lorem ipsum", result.ToString().c_str());
 }
 
@@ -83,8 +83,8 @@ TEST_F(CallNativeFunctionTests, test3) {
     rs::jsapi::Result result(*context);
     context->Call("echo", args, result); 
     
-    ASSERT_TRUE(result().isBoolean());
-    ASSERT_TRUE(result().toBoolean());
+    ASSERT_TRUE(result.isBoolean());
+    ASSERT_TRUE(result.toBoolean());
 }
 
 TEST_F(CallNativeFunctionTests, test4) {
@@ -98,8 +98,8 @@ TEST_F(CallNativeFunctionTests, test4) {
     rs::jsapi::Result result(*context);
     context->Call("echo", args, result); 
     
-    ASSERT_TRUE(result().isNumber());
-    ASSERT_EQ(42, result().toNumber());
+    ASSERT_TRUE(result.isNumber());
+    ASSERT_EQ(42, result.toNumber());
 }
 
 TEST_F(CallNativeFunctionTests, test5) {
@@ -113,6 +113,22 @@ TEST_F(CallNativeFunctionTests, test5) {
     rs::jsapi::Result result(*context);
     context->Call("echo", args, result); 
     
-    ASSERT_TRUE(result().isString());
+    ASSERT_TRUE(result.isString());
+    ASSERT_STREQ("hello", result.ToString().c_str());
+}
+
+TEST_F(CallNativeFunctionTests, test6) {
+    auto context = rt_.NewContext();
+    
+    JS_DefineFunction(*context, context->getGlobal(), "echo", &CallNativeFunctionTests::Echo, 1, 0);
+    
+    rs::jsapi::Value value(*context, "hello");
+    rs::jsapi::FunctionArguments args(*context);
+    args.Append(value);
+    
+    rs::jsapi::Result result(*context);
+    context->Call("echo", args, result);     
+    
+    ASSERT_TRUE(result.isString());
     ASSERT_STREQ("hello", result.ToString().c_str());
 }

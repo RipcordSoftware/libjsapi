@@ -32,8 +32,8 @@ TEST_F(MultiRuntimeTests, test2) {
         rs::jsapi::Result result(rt);
         script.Execute(result);
 
-        ASSERT_TRUE(result().isNumber());
-        ASSERT_EQ(42, result().toNumber());
+        ASSERT_TRUE(result.isNumber());
+        ASSERT_EQ(42, result.toNumber());
     });
     
     t.join();
@@ -77,8 +77,8 @@ TEST_F(MultiRuntimeTests, test5) {
             rs::jsapi::Result result(rt);
             script.Execute(result);
 
-            ASSERT_TRUE(result().isNumber());
-            ASSERT_EQ(42, result().toNumber());
+            ASSERT_TRUE(result.isNumber());
+            ASSERT_EQ(42, result.toNumber());
         } while (false);
         
         do {
@@ -89,8 +89,8 @@ TEST_F(MultiRuntimeTests, test5) {
             rs::jsapi::Result result(rt);
             script.Execute(result);
 
-            ASSERT_TRUE(result().isNumber());
-            ASSERT_EQ(42, result().toNumber());
+            ASSERT_TRUE(result.isNumber());
+            ASSERT_EQ(42, result.toNumber());
         } while (false);
     });
     
@@ -119,20 +119,20 @@ TEST_F(MultiRuntimeTests, test6) {
         rs::jsapi::Result result1a(rt);
         script1.Execute(result1a);
 
-        ASSERT_TRUE(result1a().isNumber());
-        ASSERT_EQ(42, result1a().toNumber());
+        ASSERT_TRUE(result1a.isNumber());
+        ASSERT_EQ(42, result1a.toNumber());
 
         rs::jsapi::Result result1b(rt);
         script1.Execute(result1b);
 
-        ASSERT_TRUE(result1b().isNumber());
-        ASSERT_EQ(43, result1b().toNumber());
+        ASSERT_TRUE(result1b.isNumber());
+        ASSERT_EQ(43, result1b.toNumber());
 
         rs::jsapi::Result result2a(*context2);
         script2.Execute(result2a);
 
-        ASSERT_TRUE(result2a().isNumber());
-        ASSERT_EQ(42, result2a().toNumber());
+        ASSERT_TRUE(result2a.isNumber());
+        ASSERT_EQ(42, result2a.toNumber());
     });
     
     t.join();

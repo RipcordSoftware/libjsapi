@@ -3,8 +3,23 @@
 
 rs::jsapi::Value::Value(Context& cx) : cx_(cx), value_(cx) {
 }
-    
-// TODO: revise this since it is ugly
+
+rs::jsapi::Value::Value(Context& cx, const char* str) : Value(cx) {
+    value_.setString(JS_NewStringCopyZ(cx, str));
+}
+
+rs::jsapi::Value::Value(Context& cx, int value): Value(cx) {
+    value_.setInt32(value);
+}
+
+rs::jsapi::Value::Value(Context& cx, bool value) : Value(cx) {
+    value_.setBoolean(value);
+}
+
+rs::jsapi::Value::Value(Context& cx, double value): Value(cx) {
+    value_.setNumber(value);
+}
+
 std::string rs::jsapi::Value::ToString() {
     if (value_.isString()) {
         auto jsStr = value_.toString();

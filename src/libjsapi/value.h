@@ -14,11 +14,28 @@ class Value;
 class Value {
 public:
     Value(Context& cx);
+    Value(Context& cx, const char* str);
+    Value(Context& cx, int value);
+    Value(Context& cx, bool value);
+    Value(Context& cx, double value);
     
     Value(const Value&) = delete;
     Value& operator=(const Value&) = delete;    
     
-    JS::RootedValue& operator()() { return value_; }
+    operator const JS::Value&() const { return value_.get(); }
+    
+    bool isString() { return value_.isString(); }
+    bool isNumber() { return value_.isNumber(); }
+    bool isInt32() { return value_.isInt32(); }
+    bool isBoolean() { return value_.isBoolean(); }
+    bool isObject() { return value_.isObject(); }
+    bool isNull() { return value_.isNull(); }
+    
+    JSString* toString() { return value_.toString(); }
+    double toNumber() { return value_.toNumber(); }
+    int32_t toInt32() { return value_.toInt32(); }
+    bool toBoolean() { return value_.toBoolean(); }
+    JSObject& toObject() { return value_.toObject(); }
 
     std::string ToString();
 

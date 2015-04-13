@@ -7,6 +7,7 @@ namespace rs {
 namespace jsapi {
 
 class Context;
+class Value;
     
 class FunctionArguments final {
 public:
@@ -17,6 +18,7 @@ public:
     bool Append(double value);
     bool Append(const char* value);
     bool Append(bool value);
+    bool Append(Value& value);
     
     void Clear();
     bool Empty();

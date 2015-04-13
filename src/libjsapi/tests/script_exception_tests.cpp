@@ -67,8 +67,8 @@ TEST_F(ScriptExceptionTests, test4) {
     script.Compile();
     rs::jsapi::Result result(rt_);
     script.Execute(result);
-    ASSERT_TRUE(result().isNumber());
-    ASSERT_EQ(42, result().toNumber());
+    ASSERT_TRUE(result.isNumber());
+    ASSERT_EQ(42, result.toNumber());
 }
 
 TEST_F(ScriptExceptionTests, test4b) {        
@@ -78,8 +78,8 @@ TEST_F(ScriptExceptionTests, test4b) {
     
     rs::jsapi::Result result(rt_);
     rt_.Evaluate("(function(){return 42;})()", result);        
-    ASSERT_EQ(result().isNumber(), true);
-    ASSERT_EQ(42, result().toNumber());
+    ASSERT_EQ(result.isNumber(), true);
+    ASSERT_EQ(42, result.toNumber());
 }
 
 TEST_F(ScriptExceptionTests, test5) {        
@@ -93,8 +93,8 @@ TEST_F(ScriptExceptionTests, test5) {
     script.Compile();
     rs::jsapi::Result result(rt_);
     script.Execute(result);
-    ASSERT_EQ(result().isNumber(), true);
-    ASSERT_EQ(42, result().toNumber());
+    ASSERT_EQ(result.isNumber(), true);
+    ASSERT_EQ(42, result.toNumber());
 }
 
 TEST_F(ScriptExceptionTests, test5b) {        
@@ -104,8 +104,8 @@ TEST_F(ScriptExceptionTests, test5b) {
     
     rs::jsapi::Result result(rt_);
     rt_.Evaluate("(function(){return 42;})()", result);        
-    ASSERT_EQ(result().isNumber(), true);
-    ASSERT_EQ(42, result().toNumber());
+    ASSERT_EQ(result.isNumber(), true);
+    ASSERT_EQ(42, result.toNumber());
 }
 
 TEST_F(ScriptExceptionTests, test6) {        
@@ -120,8 +120,8 @@ TEST_F(ScriptExceptionTests, test6) {
     script.Compile();
     rs::jsapi::Result result(rt_);
     script.Execute(result);
-    ASSERT_TRUE(result().isNumber());
-    ASSERT_EQ(42, result().toNumber());
+    ASSERT_TRUE(result.isNumber());
+    ASSERT_EQ(42, result.toNumber());
 }
 
 TEST_F(ScriptExceptionTests, test6b) {        
@@ -132,8 +132,8 @@ TEST_F(ScriptExceptionTests, test6b) {
     
     rs::jsapi::Result result(rt_);
     rt_.Evaluate("(function(){return 42;})()", result);
-    ASSERT_TRUE(result().isNumber());
-    ASSERT_EQ(42, result().toNumber());
+    ASSERT_TRUE(result.isNumber());
+    ASSERT_EQ(42, result.toNumber());
 }
 
 TEST_F(ScriptExceptionTests, test7) {

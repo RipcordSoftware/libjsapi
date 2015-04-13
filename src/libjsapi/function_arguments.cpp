@@ -1,5 +1,6 @@
 #include "function_arguments.h"
 #include "context.h"
+#include "value.h"
 
 rs::jsapi::FunctionArguments::FunctionArguments(Context& cx) : cx_(cx), args_(cx_) {
     
@@ -25,6 +26,10 @@ bool rs::jsapi::FunctionArguments::Append(const char* value) {
 
 bool rs::jsapi::FunctionArguments::Append(bool value) {
     return args_.append(JS::BooleanValue(value));
+}
+
+bool rs::jsapi::FunctionArguments::Append(Value& value) {
+    return args_.append(value);
 }
 
 void rs::jsapi::FunctionArguments::Clear() {
