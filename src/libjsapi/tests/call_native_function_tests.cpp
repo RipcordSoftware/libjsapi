@@ -132,3 +132,51 @@ TEST_F(CallNativeFunctionTests, test6) {
     ASSERT_TRUE(result.isString());
     ASSERT_STREQ("hello", result.ToString().c_str());
 }
+
+TEST_F(CallNativeFunctionTests, test7) {
+    auto context = rt_.NewContext();
+    
+    JS_DefineFunction(*context, context->getGlobal(), "echo", &CallNativeFunctionTests::Echo, 1, 0);
+    
+    rs::jsapi::Value value(*context, true);
+    rs::jsapi::FunctionArguments args(*context);
+    args.Append(value);
+    
+    rs::jsapi::Result result(*context);
+    context->Call("echo", args, result);     
+    
+    ASSERT_TRUE(result.isBoolean());
+    ASSERT_TRUE(result.toBoolean());
+}
+
+TEST_F(CallNativeFunctionTests, test8) {
+    auto context = rt_.NewContext();
+    
+    JS_DefineFunction(*context, context->getGlobal(), "echo", &CallNativeFunctionTests::Echo, 1, 0);
+    
+    rs::jsapi::Value value(*context, 42);
+    rs::jsapi::FunctionArguments args(*context);
+    args.Append(value);
+    
+    rs::jsapi::Result result(*context);
+    context->Call("echo", args, result);     
+    
+    ASSERT_TRUE(result.isInt32());
+    ASSERT_TRUE(result.toInt32());
+}
+
+TEST_F(CallNativeFunctionTests, test9) {
+    auto context = rt_.NewContext();
+    
+    JS_DefineFunction(*context, context->getGlobal(), "echo", &CallNativeFunctionTests::Echo, 1, 0);
+    
+    rs::jsapi::Value value(*context, 3.14159);
+    rs::jsapi::FunctionArguments args(*context);
+    args.Append(value);
+    
+    rs::jsapi::Result result(*context);
+    context->Call("echo", args, result);     
+    
+    ASSERT_TRUE(result.isNumber());
+    ASSERT_FLOAT_EQ(3.14159, result.toNumber());
+}
