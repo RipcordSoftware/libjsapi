@@ -53,7 +53,7 @@ int main() {
     
     // call the native function from JS
     rs::jsapi::Result result(rt);
-    context->Evaluate("(function(){return getTheAnswer();})();", result);
+    rt.Evaluate("(function(){return getTheAnswer();})();", result);
     
     // output the result to the console
     auto val = result.toNumber();
