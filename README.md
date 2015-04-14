@@ -8,7 +8,9 @@ The JSAPI interface to the SpiderMonkey JavaScript VM is difficult to integrate 
 applications without an intermediate abstraction layer managing object creation and 
 type mapping.
 
-##Example:
+##Examples:
+
+The simplist thing that could possibly work:
 ```c++
 #include <iostream>
 #include "libjsapi.h"
@@ -26,6 +28,31 @@ void main() {
     std::cout << val << std::endl;
 }
 ```
+
+Among other things we can expose C++ lambdas (and methods) to JS:
+```c++
+#include <iostream>
+#include "libjsapi.h"
+
+void main() {
+    // create the runtime which hosts spidermonkey
+    rs::jsapi::Runtime rt;
+    
+    // define a function in global scope implemented by a C++ lambda
+    rs::jsapi::Object::DefineGlobalFunction(rt, "getTheAnswer", 
+        [](JSContext* cx, unsigned argc, JS::Value* vp) { 
+            JS::CallArgsFromVp(argc, vp).rval().setInt32(42); 
+            return true; 
+    });
+    
+    rs::jsapi::Result result(rt);
+    context->Evaluate("(function(){return getTheAnswer();})();", result);
+    
+    // output the result to the console
+    auto val = result.toNumber();
+    std::cout << val << std::endl;
+}
+``
 
 # Building
 Requires:
