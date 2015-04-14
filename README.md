@@ -20,7 +20,7 @@ The simplest thing that could possibly work:
 #include <iostream>
 #include "libjsapi.h"
 
-void main() {
+int main() {
     // create the runtime which hosts spidermonkey
     rs::jsapi::Runtime rt;
     
@@ -31,6 +31,7 @@ void main() {
     // output the result to the console
     auto val = result.toNumber();
     std::cout << val << std::endl;
+    return 0;
 }
 ```
 
@@ -39,7 +40,7 @@ Among other things we can expose C++ lambdas (and methods) to JS:
 #include <iostream>
 #include "libjsapi.h"
 
-void main() {
+int main() {
     // create the runtime which hosts spidermonkey
     rs::jsapi::Runtime rt;
     
@@ -57,6 +58,7 @@ void main() {
     // output the result to the console
     auto val = result.toNumber();
     std::cout << val << std::endl;
+    return 0;
 }
 ```
 
