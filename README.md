@@ -14,15 +14,15 @@ type mapping.
 #include "libjsapi.h"
 
 void main() {
+    // create the runtime which hosts spidermonkey
     rs::jsapi::Runtime rt;
     
-    rs::jsapi::Script script(rt, "(function(){return 42;})();");
-    script.Compile();
+    // execute a script in the context of the runtime, getting the result
+    rs::jsapi::Result result(rt);
+    rt.Evaluate("(function(){return 42;})();", result);
     
-    rs::jsapi::Value result(rt);
-    script.Execute(result);
-    
-    auto val = result().toNumber();
+    // output the result to the console
+    auto val = result.toNumber();
     std::cout << val << std::endl;
 }
 ```
@@ -47,4 +47,9 @@ $ make test
 To create a coverage report:
 ```bash
 $ ./coverage.sh
+```
+
+To create a valgrind report:
+```bash
+$ ./grind.sh
 ```
