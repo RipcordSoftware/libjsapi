@@ -76,7 +76,7 @@ TEST_F(SimpleScriptTests, test5) {
     script.Execute(result);
 
     ASSERT_TRUE(result.isString());
-    ASSERT_STRCASEEQ("hello", result.ToString().c_str());
+    ASSERT_STREQ("hello", result.ToString().c_str());
 }
 
 TEST_F(SimpleScriptTests, test6) {
@@ -88,7 +88,7 @@ TEST_F(SimpleScriptTests, test6) {
 
     ASSERT_TRUE(result.isNumber());
     ASSERT_FALSE(result.isString());
-    ASSERT_STRCASEEQ("1234", result.ToString().c_str());
+    ASSERT_STREQ("1234", result.ToString().c_str());
 }
 
 TEST_F(SimpleScriptTests, test7) {
@@ -123,7 +123,7 @@ TEST_F(SimpleScriptTests, test8) {
 
     ASSERT_TRUE(result.isBoolean());
     ASSERT_FALSE(result.isString());
-    ASSERT_STRCASEEQ("true", result.ToString().c_str());
+    ASSERT_STREQ("true", result.ToString().c_str());
 }
 
 TEST_F(SimpleScriptTests, test9) {
@@ -135,7 +135,7 @@ TEST_F(SimpleScriptTests, test9) {
 
     ASSERT_TRUE(result.isBoolean());
     ASSERT_FALSE(result.isString());
-    ASSERT_STRCASEEQ("false", result.ToString().c_str());
+    ASSERT_STREQ("false", result.ToString().c_str());
 }
 
 TEST_F(SimpleScriptTests, test10) {
@@ -147,7 +147,7 @@ TEST_F(SimpleScriptTests, test10) {
 
     ASSERT_TRUE(result.isObject());
     ASSERT_FALSE(result.isString());
-    ASSERT_STRCASEEQ("[object Object]", result.ToString().c_str());
+    ASSERT_STREQ("[object Object]", result.ToString().c_str());
 }
 
 TEST_F(SimpleScriptTests, test11) {
@@ -159,7 +159,19 @@ TEST_F(SimpleScriptTests, test11) {
 
     ASSERT_TRUE(result.isObject());
     ASSERT_FALSE(result.isString());
-    ASSERT_STRCASEEQ("[object Object]", result.ToString().c_str());
+    ASSERT_STREQ("", result.ToString().c_str());
+}
+
+TEST_F(SimpleScriptTests, test11b) {
+    rs::jsapi::Script script(rt_, "(function(){return [1,2,3];})();");
+    script.Compile();
+    
+    rs::jsapi::Result result(rt_);
+    script.Execute(result);
+
+    ASSERT_TRUE(result.isObject());
+    ASSERT_FALSE(result.isString());
+    ASSERT_STREQ("1,2,3", result.ToString().c_str());
 }
 
 TEST_F(SimpleScriptTests, test12) {
@@ -171,5 +183,5 @@ TEST_F(SimpleScriptTests, test12) {
 
     ASSERT_TRUE(result.isNull());
     ASSERT_FALSE(result.isString());
-    ASSERT_STRCASEEQ("null", result.ToString().c_str());
+    ASSERT_STREQ("null", result.ToString().c_str());
 }
