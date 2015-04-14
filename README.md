@@ -52,7 +52,7 @@ void main() {
     auto val = result.toNumber();
     std::cout << val << std::endl;
 }
-``
+```
 
 # Building
 Requires:
