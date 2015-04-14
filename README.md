@@ -6,11 +6,16 @@ A SpiderMonkey 31 (Mozilla) JSAPI wrapper for C++ 11.
 
 The JSAPI interface to the SpiderMonkey JavaScript VM is difficult to integrate into 
 applications without an intermediate abstraction layer managing object creation and 
-type mapping.
+type mapping. This library is an attempt to hide the complexity of dealing with SpiderMonkey
+from modern C++ 11 applications. 
+
+The SM API is very complex, with many obscure types and functions which are not very well 
+documented. In a number of places you will be exposed directly to the SM type system - this is
+something we'd like to avoid and may be able to engineer out in future releases.
 
 ##Examples:
 
-The simplist thing that could possibly work:
+The simplest thing that could possibly work:
 ```c++
 #include <iostream>
 #include "libjsapi.h"
@@ -45,6 +50,7 @@ void main() {
             return true; 
     });
     
+    // call the native function from JS
     rs::jsapi::Result result(rt);
     context->Evaluate("(function(){return getTheAnswer();})();", result);
     
