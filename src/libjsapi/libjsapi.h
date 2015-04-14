@@ -6,6 +6,7 @@
 #include "script.h"
 #include "value.h"
 #include "result.h"
+#include "object.h"
 #include "function_arguments.h"
 #include "exceptions.h"
 

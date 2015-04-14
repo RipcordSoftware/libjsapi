@@ -14,7 +14,7 @@ protected:
     
     virtual void TearDown() {
         
-    }            
+    }    
 };
 
 TEST_F(CallJSFunctionTests, test1) {
@@ -173,4 +173,40 @@ TEST_F(CallJSFunctionTests, test8) {
     
     ASSERT_TRUE(result.isBoolean());
     ASSERT_TRUE(result.toBoolean());    
+}
+
+TEST_F(CallJSFunctionTests, test9) {
+    auto context = rt_.NewContext();    
+     
+    rs::jsapi::Object obj(*context);
+    obj.DefineProperty("the_answer", [](JSContext* cx, unsigned argc, JS::Value* vp) { *vp = JS::Int32Value(42); return true; });
+        
+    context->Evaluate("var myfunc=function(n){return n.the_answer;};");    
+    
+    rs::jsapi::FunctionArguments args(*context);
+    args.Append(obj);
+    
+    rs::jsapi::Result result(*context);
+    context->Call("myfunc", args, result);
+    
+    ASSERT_TRUE(result.isInt32());
+    ASSERT_EQ(42, result.toInt32());    
+}
+
+TEST_F(CallJSFunctionTests, test10) {
+    auto context = rt_.NewContext();    
+     
+    rs::jsapi::Object obj(*context);
+    obj.DefineProperty("hello", [](JSContext* cx, unsigned argc, JS::Value* vp) { *vp = JS::StringValue(JS_NewStringCopyZ(cx, "world")); return true; });
+        
+    context->Evaluate("var myfunc=function(n){return n.hello;};");    
+    
+    rs::jsapi::FunctionArguments args(*context);
+    args.Append(obj);
+    
+    rs::jsapi::Result result(*context);
+    context->Call("myfunc", args, result);
+    
+    ASSERT_TRUE(result.isString());
+    ASSERT_STREQ("world", result.ToString().c_str());    
 }
