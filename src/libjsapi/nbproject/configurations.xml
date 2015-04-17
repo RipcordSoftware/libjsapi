@@ -68,6 +68,12 @@
                      kind="TEST">
         <itemPath>tests/script_exception_tests.cpp</itemPath>
       </logicalFolder>
+      <logicalFolder name="f7"
+                     displayName="Simple Object Tests"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/simple_object_tests.cpp</itemPath>
+      </logicalFolder>
       <logicalFolder name="f1"
                      displayName="Simple Script Tests"
                      projectFiles="true"
@@ -219,6 +225,21 @@
           <output>${TESTDIR}/TestFiles/f6</output>
         </linkerTool>
       </folder>
+      <folder path="TestFiles/f7">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f7</output>
+        </linkerTool>
+      </folder>
       <item path="function_arguments.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="function_arguments.h" ex="false" tool="3" flavor2="0">
@@ -259,6 +280,8 @@
       <item path="tests/multi_runtime_tests.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/script_exception_tests.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/simple_object_tests.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/simple_script_tests.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -409,6 +432,21 @@
           <output>${TESTDIR}/TestFiles/f6</output>
         </linkerTool>
       </folder>
+      <folder path="TestFiles/f7">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f7</output>
+        </linkerTool>
+      </folder>
       <item path="function_arguments.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="function_arguments.h" ex="false" tool="3" flavor2="0">
@@ -449,6 +487,8 @@
       <item path="tests/multi_runtime_tests.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/script_exception_tests.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/simple_object_tests.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/simple_script_tests.cpp" ex="false" tool="1" flavor2="0">
       </item>

@@ -7,18 +7,22 @@ bool rs::jsapi::Object::Create(Context& cx, std::initializer_list<const char*> p
         Getter getter, Setter setter, std::initializer_list<Function> functions, JS::RootedObject& obj) {
     obj = JS::RootedObject(cx, JS_NewObject(cx, nullptr, JS::NullPtr(), JS::NullPtr()));    
     
-    for (auto p : properties) {
-        JS_DefineProperty(cx, obj, p, JS::NullHandleValue, 
-            JSPROP_SHARED | JSPROP_ENUMERATE, 
-            Object::GetCallback, Object::SetCallback);
+    if (obj) {
+        for (auto p : properties) {
+            JS_DefineProperty(cx, obj, p, JS::NullHandleValue, 
+                JSPROP_SHARED | JSPROP_ENUMERATE, 
+                Object::GetCallback, Object::SetCallback);
+        }
+
+        for (auto f : functions) {
+            JS_DefineFunction(cx, obj, f.first, f.second, 0, JSPROP_SHARED | JSPROP_ENUMERATE);
+        }
+
+        SetGetter(cx, obj, getter);
+        SetSetter(cx, obj, setter);
     }
     
-    for (auto f : functions) {
-        JS_DefineFunction(cx, obj, f.first, f.second, 0, JSPROP_SHARED | JSPROP_ENUMERATE);
-    }
-    
-    SetGetter(cx, obj, getter);
-    SetSetter(cx, obj, setter);    
+    return obj;
 }
 
 bool rs::jsapi::Object::GetCallback(JSContext* cx, JS::HandleObject obj, JS::HandleId id, JS::MutableHandleValue vp) {

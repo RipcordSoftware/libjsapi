@@ -36,8 +36,17 @@ public:
     std::unique_ptr<Context> NewContext();
     
     JSRuntime* getRuntime();
+    Context& getContext() { return cx_; }
     
     operator Context&() { 
+        if (threadId_ != std::this_thread::get_id()) {
+            throw RuntimeWrongThreadException();
+        }
+        
+        return cx_; 
+    }
+    
+    operator JSContext*() { 
         if (threadId_ != std::this_thread::get_id()) {
             throw RuntimeWrongThreadException();
         }

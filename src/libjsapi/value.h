@@ -31,6 +31,7 @@ public:
     bool isBoolean() { return value_.isBoolean(); }
     bool isObject() { return value_.isObject(); }
     bool isNull() { return value_.isNull(); }
+    bool isUndefined() { return value_.isUndefined(); }
     
     JSString* toString() { return value_.toString(); }
     double toNumber() { return value_.toNumber(); }

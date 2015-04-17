@@ -12,8 +12,10 @@ JSClass rs::jsapi::DynamicObject::class_ = {
 bool rs::jsapi::DynamicObject::Create(Context& cx, Getter getter, DynamicObject::Setter setter, JS::RootedObject& obj) {
     obj = JS::RootedObject(cx, JS_NewObject(cx, &class_, JS::NullPtr(), JS::NullPtr()));
     
-    auto callbacks = new ClassCallbacks { getter, setter };
-    DynamicObject::SetObjectCallbacks(obj, callbacks);        
+    if (obj) {
+        auto callbacks = new ClassCallbacks { getter, setter };
+        DynamicObject::SetObjectCallbacks(obj, callbacks);        
+    }
     
     return obj;
 }
