@@ -11,7 +11,6 @@ class Context;
 class Object final {
 public:
     Object(Context& cx);
-    Object(Context& cx, JSObject* obj);
     
     Object(const Object&) = delete;
     Object& operator=(const Object&) = delete;

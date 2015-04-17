@@ -2,10 +2,7 @@
 
 #include "context.h"
 
-rs::jsapi::Object::Object(Context& cx) : Object(cx, JS_NewObject(cx, nullptr, JS::NullPtr(), JS::NullPtr())) {    
-}
-
-rs::jsapi::Object::Object(Context& cx, JSObject* obj) : cx_(cx), obj_(cx, obj) {    
+rs::jsapi::Object::Object(Context& cx) : cx_(cx), obj_(cx, JS_NewObject(cx, nullptr, JS::NullPtr(), JS::NullPtr())) {    
 }
 
 bool rs::jsapi::Object::DefineProperty(const char* name, JSNative getter, JSNative setter, unsigned attrs) {
