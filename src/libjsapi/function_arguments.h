@@ -20,7 +20,6 @@ public:
     bool Append(const char* value);
     bool Append(bool value);
     bool Append(Value& value);
-    bool Append(Object& obj);
     bool Append(const JS::RootedObject& obj);
     
     void Clear();

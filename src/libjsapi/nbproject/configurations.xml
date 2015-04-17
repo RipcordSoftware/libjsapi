@@ -8,6 +8,7 @@
       <itemPath>dynamic_object.h</itemPath>
       <itemPath>exceptions.h</itemPath>
       <itemPath>function_arguments.h</itemPath>
+      <itemPath>global.h</itemPath>
       <itemPath>libjsapi.h</itemPath>
       <itemPath>object.h</itemPath>
       <itemPath>result.h</itemPath>
@@ -25,6 +26,7 @@
       <itemPath>context.cpp</itemPath>
       <itemPath>dynamic_object.cpp</itemPath>
       <itemPath>function_arguments.cpp</itemPath>
+      <itemPath>global.cpp</itemPath>
       <itemPath>libjsapi.cpp</itemPath>
       <itemPath>object.cpp</itemPath>
       <itemPath>result.cpp</itemPath>

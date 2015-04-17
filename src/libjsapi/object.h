@@ -3,6 +3,9 @@
 
 #include <jsapi.h>
 
+#include <initializer_list>
+#include <functional>
+
 namespace rs {
 namespace jsapi {
     
@@ -10,21 +13,27 @@ class Context;
 
 class Object final {
 public:
-    Object(Context& cx);
+    typedef bool (*Getter)(JSContext* cx, const char* name, JS::MutableHandleValue value);
+    typedef bool (*Setter)(JSContext* cx, const char* name, JS::MutableHandleValue value);
+    typedef std::pair<const char*, JSNative> Function;
     
+    Object(Context& cx) = delete;
     Object(const Object&) = delete;
-    Object& operator=(const Object&) = delete;
     
-    bool DefineProperty(const char* name, JSNative getter = nullptr, JSNative setter = nullptr, unsigned attrs = JSPROP_SHARED | JSPROP_ENUMERATE);    
-    bool DefineFunction(const char* name, JSNative func, unsigned attrs = JSPROP_SHARED | JSPROP_ENUMERATE);    
-    
-    operator const JS::HandleObject() const { return obj_; }
-    operator const JS::Value() const { return JS::ObjectValue(*obj_); }
+    static bool Create(Context& cx, 
+        std::initializer_list<const char*> properties,
+        Getter getter, Setter setter,
+        std::initializer_list<Function> functions,
+        JS::RootedObject& obj);
     
 private:
-    Context& cx_;
-    JS::RootedObject obj_;
-    
+    static bool GetCallback(JSContext*, JS::HandleObject, JS::HandleId, JS::MutableHandleValue);
+    static bool SetCallback(JSContext*, JS::HandleObject, JS::HandleId, bool, JS::MutableHandleValue);
+
+    static void SetGetter(JSContext* cx, JS::HandleObject obj, Getter getter);
+    static Getter GetGetter(JSContext* cx, JS::HandleObject obj);
+    static void SetSetter(JSContext* cx, JS::HandleObject obj, Setter setter);
+    static Setter GetSetter(JSContext* cx, JS::HandleObject obj);
 };
 
 }}

@@ -26,7 +26,6 @@ private:
     static ClassCallbacks* GetObjectCallbacks(JSObject* obj);
     static void SetObjectCallbacks(JSObject* obj, ClassCallbacks* callbacks);
     
-    Context& cx_;    
     static JSClass class_;
 };
 

@@ -178,9 +178,13 @@ TEST_F(CallJSFunctionTests, test8) {
 TEST_F(CallJSFunctionTests, test9) {
     auto context = rt_.NewContext();    
      
-    rs::jsapi::Object obj(*context);
-    obj.DefineProperty("the_answer", [](JSContext* cx, unsigned argc, JS::Value* vp) { *vp = JS::Int32Value(42); return true; });
-        
+    JS::RootedObject obj(*context);
+    rs::jsapi::Object::Create(*context, { "the_answer" }, 
+        [](JSContext* cx, const char* name, JS::MutableHandleValue value) { value.setInt32(42); return true; },
+        nullptr,
+        {},
+        obj);
+           
     context->Evaluate("var myfunc=function(n){return n.the_answer;};");    
     
     rs::jsapi::FunctionArguments args(*context);
@@ -196,8 +200,12 @@ TEST_F(CallJSFunctionTests, test9) {
 TEST_F(CallJSFunctionTests, test10) {
     auto context = rt_.NewContext();    
      
-    rs::jsapi::Object obj(*context);
-    obj.DefineProperty("hello", [](JSContext* cx, unsigned argc, JS::Value* vp) { *vp = JS::StringValue(JS_NewStringCopyZ(cx, "world")); return true; });
+    JS::RootedObject obj(*context);
+    rs::jsapi::Object::Create(*context, { "hello" }, 
+        [](JSContext* cx, const char* name, JS::MutableHandleValue value) { value.setString(JS_NewStringCopyZ(cx, "world")); return true; },
+        nullptr,
+        {},
+        obj);
         
     context->Evaluate("var myfunc=function(n){return n.hello;};");    
     
