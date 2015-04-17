@@ -74,6 +74,12 @@
                      kind="TEST">
         <itemPath>tests/script_exception_tests.cpp</itemPath>
       </logicalFolder>
+      <logicalFolder name="f9"
+                     displayName="Simple Dynamic Object Tests"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/simple_dynamic_object_tests.cpp</itemPath>
+      </logicalFolder>
       <logicalFolder name="f7"
                      displayName="Simple Object Tests"
                      projectFiles="true"
@@ -261,6 +267,21 @@
           <output>${TESTDIR}/TestFiles/f8</output>
         </linkerTool>
       </folder>
+      <folder path="TestFiles/f9">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f9</output>
+        </linkerTool>
+      </folder>
       <item path="function_arguments.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="function_arguments.h" ex="false" tool="3" flavor2="0">
@@ -303,6 +324,11 @@
       <item path="tests/multi_runtime_tests.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/script_exception_tests.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/simple_dynamic_object_tests.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
       </item>
       <item path="tests/simple_object_tests.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -485,6 +511,21 @@
           <output>${TESTDIR}/TestFiles/f8</output>
         </linkerTool>
       </folder>
+      <folder path="TestFiles/f9">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f9</output>
+        </linkerTool>
+      </folder>
       <item path="function_arguments.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="function_arguments.h" ex="false" tool="3" flavor2="0">
@@ -527,6 +568,11 @@
       <item path="tests/multi_runtime_tests.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/script_exception_tests.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/simple_dynamic_object_tests.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
       </item>
       <item path="tests/simple_object_tests.cpp" ex="false" tool="1" flavor2="0">
       </item>
