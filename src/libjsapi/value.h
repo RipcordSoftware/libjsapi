@@ -18,6 +18,7 @@ public:
     Value(Context& cx, int value);
     Value(Context& cx, bool value);
     Value(Context& cx, double value);
+    Value(Context& cx, const JS::RootedObject& obj);
     
     Value(const Value&) = delete;
     Value& operator=(const Value&) = delete;    
@@ -35,7 +36,7 @@ public:
     double toNumber() { return value_.toNumber(); }
     int32_t toInt32() { return value_.toInt32(); }
     bool toBoolean() { return value_.toBoolean(); }
-    JSObject& toObject() { return value_.toObject(); }
+    JSObject* toObject() { return value_.toObjectOrNull(); }
 
     std::string ToString();
 

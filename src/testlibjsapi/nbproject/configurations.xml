@@ -41,6 +41,7 @@
             <pElem>../libjsapi</pElem>
             <pElem>../../externals/installed/include/mozjs-31</pElem>
           </incDir>
+          <commandLine>--coverage</commandLine>
         </ccTool>
         <linkerTool>
           <linkerLibItems>
@@ -53,7 +54,7 @@
                             WD="../libjsapi"
                             BC="${MAKE}  -f Makefile CONF=Debug"
                             CC="${MAKE}  -f Makefile CONF=Debug clean"
-                            OP="${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/liblibjsapi.a">
+                            OP="${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libjsapi.a">
               </makeArtifact>
             </linkerLibProjectItem>
             <linkerLibStdlibItem>PosixThreads</linkerLibStdlibItem>
@@ -101,7 +102,7 @@
                             WD="../libjsapi"
                             BC="${MAKE}  -f Makefile CONF=Release"
                             CC="${MAKE}  -f Makefile CONF=Release clean"
-                            OP="${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/liblibjsapi.a">
+                            OP="${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libjsapi.a">
               </makeArtifact>
             </linkerLibProjectItem>
             <linkerLibStdlibItem>PosixThreads</linkerLibStdlibItem>

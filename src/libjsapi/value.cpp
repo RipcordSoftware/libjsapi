@@ -18,8 +18,12 @@ rs::jsapi::Value::Value(Context& cx, bool value) : Value(cx) {
     value_.setBoolean(value);
 }
 
-rs::jsapi::Value::Value(Context& cx, double value): Value(cx) {
+rs::jsapi::Value::Value(Context& cx, double value) : Value(cx) {
     value_.setNumber(value);
+}
+
+rs::jsapi::Value::Value(Context& cx, const JS::RootedObject& obj) : Value(cx) {
+    value_.setObjectOrNull(obj);
 }
 
 std::string rs::jsapi::Value::ToString() {

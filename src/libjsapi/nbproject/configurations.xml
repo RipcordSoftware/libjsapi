@@ -5,6 +5,7 @@
                    displayName="Header Files"
                    projectFiles="true">
       <itemPath>context.h</itemPath>
+      <itemPath>dynamic_object.h</itemPath>
       <itemPath>exceptions.h</itemPath>
       <itemPath>function_arguments.h</itemPath>
       <itemPath>libjsapi.h</itemPath>
@@ -22,6 +23,7 @@
                    displayName="Source Files"
                    projectFiles="true">
       <itemPath>context.cpp</itemPath>
+      <itemPath>dynamic_object.cpp</itemPath>
       <itemPath>function_arguments.cpp</itemPath>
       <itemPath>libjsapi.cpp</itemPath>
       <itemPath>object.cpp</itemPath>
@@ -101,6 +103,10 @@
       <item path="context.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="context.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dynamic_object.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="dynamic_object.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="exceptions.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -285,6 +291,10 @@
       <item path="context.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="context.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dynamic_object.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="dynamic_object.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="exceptions.h" ex="false" tool="3" flavor2="0">
       </item>

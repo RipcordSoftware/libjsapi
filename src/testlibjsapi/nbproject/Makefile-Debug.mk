@@ -42,8 +42,8 @@ OBJECTFILES= \
 CFLAGS=
 
 # CC Compiler Flags
-CCFLAGS=
-CXXFLAGS=
+CCFLAGS=--coverage
+CXXFLAGS=--coverage
 
 # Fortran Compiler Flags
 FFLAGS=
@@ -52,13 +52,13 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=../libjsapi/dist/Debug/GNU-Linux-x86/liblibjsapi.a -lpthread -lz -ldl
+LDLIBSOPTIONS=../libjsapi/dist/Debug/GNU-Linux-x86/libjsapi.a -lpthread -lz -ldl
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
 	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/testlibjsapi
 
-${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/testlibjsapi: ../libjsapi/dist/Debug/GNU-Linux-x86/liblibjsapi.a
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/testlibjsapi: ../libjsapi/dist/Debug/GNU-Linux-x86/libjsapi.a
 
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/testlibjsapi: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
