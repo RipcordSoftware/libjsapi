@@ -4,6 +4,7 @@
 
 #include <cstring>
 #include <string>
+#include <sstream>
 
 rs::jsapi::Runtime rt_;
 
@@ -124,6 +125,22 @@ TEST_F(SimpleObjectTests, test5) {
     
     ASSERT_TRUE(JS_GetProperty(rt_, obj, "xyz", value));
     ASSERT_TRUE(value.isUndefined());
+}
+
+TEST_F(SimpleObjectTests, test5b) {
+    JS::RootedObject obj(rt_);
+    rs::jsapi::Object::Create(rt_, 
+        {"hello", "pi", "lorem", "the_answer"}, 
+        nullptr, 
+        nullptr, 
+        {}, 
+        obj);
+    ASSERT_TRUE(obj);
+    
+    ASSERT_TRUE(JS_SetProperty(rt_, obj, "hello", rs::jsapi::Value(rt_, "world")));
+    ASSERT_TRUE(JS_SetProperty(rt_, obj, "pi", rs::jsapi::Value(rt_, 3.14159)));
+    ASSERT_TRUE(JS_SetProperty(rt_, obj, "the_answer", rs::jsapi::Value(rt_, 42)));
+    ASSERT_TRUE(JS_SetProperty(rt_, obj, "lorem", rs::jsapi::Value(rt_, "Lorem ipsum...")));
 }
 
 TEST_F(SimpleObjectTests, test6) {
@@ -271,4 +288,53 @@ TEST_F(SimpleObjectTests, test13) {
     
     ASSERT_TRUE(fieldValue.isString());
     ASSERT_STREQ("world", fieldValue.ToString().c_str());    
+}
+
+TEST_F(SimpleObjectTests, test14) {
+    std::string longFieldName(384, '1');
+    rs::jsapi::Result fieldValue(rt_);
+    
+    JS::RootedObject obj(rt_);
+    rs::jsapi::Object::Create(rt_, { longFieldName.c_str() },         
+        nullptr,
+        [&](JSContext* cx, const char* name, JS::MutableHandleValue value) { 
+            fieldValue.Set(value); 
+            return true; 
+        },
+        {},
+        obj);
+        
+    std::stringstream script;
+    script << "var myfunc=function(o){ o['" << longFieldName << "'] = 'world';};";
+    rt_.Evaluate(script.str().c_str());
+    
+    rs::jsapi::FunctionArguments args(rt_);
+    args.Append(obj);
+    
+    rt_.Call("myfunc", args);
+    
+    ASSERT_TRUE(fieldValue.isString());
+    ASSERT_STREQ("world", fieldValue.ToString().c_str());    
+}
+
+TEST_F(SimpleObjectTests, test15) {
+    JS::RootedObject obj(rt_);
+    rs::jsapi::Object::Create(rt_, 
+        {"hello", "pi", "lorem", "the_answer"}, 
+        nullptr, 
+        nullptr, 
+        {}, 
+        obj);
+    ASSERT_TRUE(obj);
+    
+    rt_.Evaluate("var myfunc = function(o){ var arr=[]; for (var prop in o) { arr.push(prop); } return arr.toString(); };");
+    
+    rs::jsapi::Result result(rt_);
+    rs::jsapi::FunctionArguments args(rt_);
+    args.Append(obj);
+    
+    rt_.Call("myfunc", args, result);
+    
+    ASSERT_TRUE(result.isString());
+    ASSERT_STREQ("hello,pi,lorem,the_answer", result.ToString().c_str());    
 }
