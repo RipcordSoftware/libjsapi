@@ -10,6 +10,8 @@ class Result final : public Value {
 public:
     Result(Context& cx);
     
+    void Set(const JS::HandleValue& value);
+    
     operator JS::MutableHandleValue&() { return mutableValue_; }
     
 private:

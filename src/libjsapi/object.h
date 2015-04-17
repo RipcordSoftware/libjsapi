@@ -13,8 +13,8 @@ class Context;
 
 class Object final {
 public:
-    typedef bool (*Getter)(JSContext* cx, const char* name, JS::MutableHandleValue value);
-    typedef bool (*Setter)(JSContext* cx, const char* name, JS::MutableHandleValue value);
+    typedef std::function<bool(JSContext* cx, const char* name, JS::MutableHandleValue value)> Getter;
+    typedef std::function<bool(JSContext* cx, const char* name, JS::MutableHandleValue value)> Setter;
     typedef std::pair<const char*, JSNative> Function;
     
     Object(Context& cx) = delete;
@@ -27,13 +27,16 @@ public:
         JS::RootedObject& obj);
     
 private:
+    struct ClassCallbacks { Getter getter; Setter setter; };
+    
     static bool GetCallback(JSContext*, JS::HandleObject, JS::HandleId, JS::MutableHandleValue);
     static bool SetCallback(JSContext*, JS::HandleObject, JS::HandleId, bool, JS::MutableHandleValue);
+    static void FinalizeCallback(JSFreeOp* fop, JSObject* obj);
 
-    static void SetGetter(JSContext* cx, JS::HandleObject obj, Getter getter);
-    static Getter GetGetter(JSContext* cx, JS::HandleObject obj);
-    static void SetSetter(JSContext* cx, JS::HandleObject obj, Setter setter);
-    static Setter GetSetter(JSContext* cx, JS::HandleObject obj);
+    static ClassCallbacks* GetObjectCallbacks(JSObject* obj);
+    static void SetObjectCallbacks(JSObject* obj, ClassCallbacks* callbacks);
+    
+    static JSClass class_;
 };
 
 }}

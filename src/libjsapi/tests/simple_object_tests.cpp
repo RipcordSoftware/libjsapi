@@ -20,13 +20,13 @@ protected:
 
 TEST_F(SimpleObjectTests, test1) {
     JS::RootedObject obj(rt_);
-    rs::jsapi::Object::Create(rt_, {}, nullptr, nullptr, {}, obj);
+    rs::jsapi::Object::Create(rt_, {}, rs::jsapi::Object::Getter(), rs::jsapi::Object::Setter(), {}, obj);
     ASSERT_TRUE(obj);
 }
 
 TEST_F(SimpleObjectTests, test2) {
     JS::RootedObject obj(rt_);
-    rs::jsapi::Object::Create(rt_, {"hello"}, nullptr, nullptr, {}, obj);
+    rs::jsapi::Object::Create(rt_, {"hello"}, rs::jsapi::Object::Getter(), rs::jsapi::Object::Setter(), {}, obj);
     ASSERT_TRUE(obj);
     
     JS::Rooted<JSPropertyDescriptor> desc(rt_);
@@ -37,7 +37,7 @@ TEST_F(SimpleObjectTests, test2) {
 
 TEST_F(SimpleObjectTests, test3) {
     JS::RootedObject obj(rt_);
-    rs::jsapi::Object::Create(rt_, {"hello", "pi", "lorem", "the_answer"}, nullptr, nullptr, {}, obj);
+    rs::jsapi::Object::Create(rt_, {"hello", "pi", "lorem", "the_answer"}, rs::jsapi::Object::Getter(), rs::jsapi::Object::Setter(), {}, obj);
     ASSERT_TRUE(obj);
     
     JS::Rooted<JSPropertyDescriptor> desc(rt_);
@@ -144,7 +144,47 @@ TEST_F(SimpleObjectTests, test6) {
     ASSERT_EQ(42, value.toInt32());
 }
 
-TEST_F(SimpleObjectTests, test7) {  
+TEST_F(SimpleObjectTests, test7) {
+    JS::RootedObject obj(rt_);
+    rs::jsapi::Object::Create(rt_, { "the_answer" }, 
+        [](JSContext* cx, const char* name, JS::MutableHandleValue value) { value.setInt32(42); return true; },
+        nullptr,
+        {},
+        obj);
+           
+    rt_.Evaluate("var myfunc=function(n){return n.the_answer;};");
+    
+    rs::jsapi::FunctionArguments args(rt_);
+    args.Append(obj);
+    
+    rs::jsapi::Result result(rt_);
+    rt_.Call("myfunc", args, result);
+    
+    ASSERT_TRUE(result.isInt32());
+    ASSERT_EQ(42, result.toInt32());
+}
+
+TEST_F(SimpleObjectTests, test8) {
+    JS::RootedObject obj(rt_);
+    rs::jsapi::Object::Create(rt_, { "hello" }, 
+        [](JSContext* cx, const char* name, JS::MutableHandleValue value) { value.setString(JS_NewStringCopyZ(cx, "world")); return true; },
+        nullptr,
+        {},
+        obj);
+        
+    rt_.Evaluate("var myfunc=function(n){return n.hello;};");
+    
+    rs::jsapi::FunctionArguments args(rt_);
+    args.Append(obj);
+    
+    rs::jsapi::Result result(rt_);
+    rt_.Call("myfunc", args, result);
+    
+    ASSERT_TRUE(result.isString());
+    ASSERT_STREQ("world", result.ToString().c_str());
+}
+
+TEST_F(SimpleObjectTests, test9) {  
     JS::RootedObject obj(rt_);
     rs::jsapi::Object::Create(rt_, 
         {},
@@ -161,7 +201,7 @@ TEST_F(SimpleObjectTests, test7) {
     ASSERT_TRUE(JS_IsNative(desc.object()));
 }
 
-TEST_F(SimpleObjectTests, test8) {  
+TEST_F(SimpleObjectTests, test10) {  
     JS::RootedObject obj(rt_);
     rs::jsapi::Object::Create(rt_, 
         {},
@@ -182,7 +222,7 @@ TEST_F(SimpleObjectTests, test8) {
     ASSERT_EQ(42, result.toInt32());
 }
 
-TEST_F(SimpleObjectTests, test9) {    
+TEST_F(SimpleObjectTests, test11) {    
     JS::RootedObject obj(rt_);
     rs::jsapi::Object::Create(rt_, 
         {},
@@ -209,42 +249,26 @@ TEST_F(SimpleObjectTests, test9) {
     ASSERT_EQ(42, result.toInt32());
 }
 
-TEST_F(SimpleObjectTests, test10) {
+TEST_F(SimpleObjectTests, test13) {
+    rs::jsapi::Result fieldValue(rt_);
+    
     JS::RootedObject obj(rt_);
-    rs::jsapi::Object::Create(rt_, { "the_answer" }, 
-        [](JSContext* cx, const char* name, JS::MutableHandleValue value) { value.setInt32(42); return true; },
+    rs::jsapi::Object::Create(rt_, { "hello" },         
         nullptr,
-        {},
-        obj);
-           
-    rt_.Evaluate("var myfunc=function(n){return n.the_answer;};");    
-    
-    rs::jsapi::FunctionArguments args(rt_);
-    args.Append(obj);
-    
-    rs::jsapi::Result result(rt_);
-    rt_.Call("myfunc", args, result);
-    
-    ASSERT_TRUE(result.isInt32());
-    ASSERT_EQ(42, result.toInt32());    
-}
-
-TEST_F(SimpleObjectTests, test11) {
-    JS::RootedObject obj(rt_);
-    rs::jsapi::Object::Create(rt_, { "hello" }, 
-        [](JSContext* cx, const char* name, JS::MutableHandleValue value) { value.setString(JS_NewStringCopyZ(cx, "world")); return true; },
-        nullptr,
+        [&](JSContext* cx, const char* name, JS::MutableHandleValue value) { 
+            fieldValue.Set(value); 
+            return true; 
+        },
         {},
         obj);
         
-    rt_.Evaluate("var myfunc=function(n){return n.hello;};");    
+    rt_.Evaluate("var myfunc=function(o){ o.hello = 'world';};");    
     
     rs::jsapi::FunctionArguments args(rt_);
     args.Append(obj);
     
-    rs::jsapi::Result result(rt_);
-    rt_.Call("myfunc", args, result);
+    rt_.Call("myfunc", args);
     
-    ASSERT_TRUE(result.isString());
-    ASSERT_STREQ("world", result.ToString().c_str());    
+    ASSERT_TRUE(fieldValue.isString());
+    ASSERT_STREQ("world", fieldValue.ToString().c_str());    
 }
