@@ -45,7 +45,7 @@ int main() {
     rs::jsapi::Runtime rt;
     
     // define a function in global scope implemented by a C++ lambda
-    rs::jsapi::Object::DefineGlobalFunction(rt, "getTheAnswer", 
+    rs::jsapi::Global::DefineFunction(rt, "getTheAnswer", 
         [](JSContext* cx, unsigned argc, JS::Value* vp) { 
             JS::CallArgsFromVp(argc, vp).rval().setInt32(42); 
             return true; 
