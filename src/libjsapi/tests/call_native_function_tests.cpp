@@ -34,7 +34,7 @@ bool CallNativeFunctionTests::Echo(JSContext* cx, unsigned argc, JS::Value* vp) 
 TEST_F(CallNativeFunctionTests, test1) {
     auto context = rt_.NewContext();
     
-    rs::jsapi::Object::DefineGlobalFunction(*context, "getTheAnswer", [](JSContext* cx, unsigned argc, JS::Value* vp) { JS::CallArgsFromVp(argc, vp).rval().setInt32(42); return true; });
+    rs::jsapi::Global::DefineFunction(*context, "getTheAnswer", [](JSContext* cx, unsigned argc, JS::Value* vp) { JS::CallArgsFromVp(argc, vp).rval().setInt32(42); return true; });
     
     rs::jsapi::Result result(*context);
     context->Evaluate("(function(){return getTheAnswer();})();", result);
@@ -46,7 +46,7 @@ TEST_F(CallNativeFunctionTests, test1) {
 TEST_F(CallNativeFunctionTests, test2) {
     auto context = rt_.NewContext();
     
-    rs::jsapi::Object::DefineGlobalFunction(*context, "getLorem", 
+    rs::jsapi::Global::DefineFunction(*context, "getLorem", 
         [](JSContext* cx, unsigned argc, JS::Value* vp) { JS::CallArgsFromVp(argc, vp).rval().setString(JS_NewStringCopyZ(cx, "Lorem ipsum")); return true; });
     
     rs::jsapi::Result result(*context);
@@ -59,7 +59,7 @@ TEST_F(CallNativeFunctionTests, test2) {
 TEST_F(CallNativeFunctionTests, test3) {
     auto context = rt_.NewContext();
     
-    rs::jsapi::Object::DefineGlobalFunction(*context, "echo", &CallNativeFunctionTests::Echo);
+    rs::jsapi::Global::DefineFunction(*context, "echo", &CallNativeFunctionTests::Echo);
     
     rs::jsapi::FunctionArguments args(*context);
     args.Append(true);
@@ -74,7 +74,7 @@ TEST_F(CallNativeFunctionTests, test3) {
 TEST_F(CallNativeFunctionTests, test4) {
     auto context = rt_.NewContext();
     
-    rs::jsapi::Object::DefineGlobalFunction(*context, "echo", &CallNativeFunctionTests::Echo);
+    rs::jsapi::Global::DefineFunction(*context, "echo", &CallNativeFunctionTests::Echo);
     
     rs::jsapi::FunctionArguments args(*context);
     args.Append(42);
@@ -89,7 +89,7 @@ TEST_F(CallNativeFunctionTests, test4) {
 TEST_F(CallNativeFunctionTests, test5) {
     auto context = rt_.NewContext();
     
-    rs::jsapi::Object::DefineGlobalFunction(*context, "echo", &CallNativeFunctionTests::Echo);
+    rs::jsapi::Global::DefineFunction(*context, "echo", &CallNativeFunctionTests::Echo);
     
     rs::jsapi::FunctionArguments args(*context);
     args.Append("hello");
@@ -104,7 +104,7 @@ TEST_F(CallNativeFunctionTests, test5) {
 TEST_F(CallNativeFunctionTests, test6) {
     auto context = rt_.NewContext();
     
-    rs::jsapi::Object::DefineGlobalFunction(*context, "echo", &CallNativeFunctionTests::Echo);
+    rs::jsapi::Global::DefineFunction(*context, "echo", &CallNativeFunctionTests::Echo);
     
     rs::jsapi::Value value(*context, "hello");
     rs::jsapi::FunctionArguments args(*context);
@@ -120,7 +120,7 @@ TEST_F(CallNativeFunctionTests, test6) {
 TEST_F(CallNativeFunctionTests, test7) {
     auto context = rt_.NewContext();
     
-    rs::jsapi::Object::DefineGlobalFunction(*context, "echo", &CallNativeFunctionTests::Echo);
+    rs::jsapi::Global::DefineFunction(*context, "echo", &CallNativeFunctionTests::Echo);
     
     rs::jsapi::Value value(*context, true);
     rs::jsapi::FunctionArguments args(*context);
@@ -136,7 +136,7 @@ TEST_F(CallNativeFunctionTests, test7) {
 TEST_F(CallNativeFunctionTests, test8) {
     auto context = rt_.NewContext();
     
-    rs::jsapi::Object::DefineGlobalFunction(*context, "echo", &CallNativeFunctionTests::Echo);
+    rs::jsapi::Global::DefineFunction(*context, "echo", &CallNativeFunctionTests::Echo);
     
     rs::jsapi::Value value(*context, 42);
     rs::jsapi::FunctionArguments args(*context);
@@ -152,7 +152,7 @@ TEST_F(CallNativeFunctionTests, test8) {
 TEST_F(CallNativeFunctionTests, test9) {
     auto context = rt_.NewContext();
     
-    rs::jsapi::Object::DefineGlobalFunction(*context, "echo", &CallNativeFunctionTests::Echo);
+    rs::jsapi::Global::DefineFunction(*context, "echo", &CallNativeFunctionTests::Echo);
     
     rs::jsapi::Value value(*context, 3.14159);
     rs::jsapi::FunctionArguments args(*context);
