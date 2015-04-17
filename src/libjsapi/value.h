@@ -24,6 +24,7 @@ public:
     Value& operator=(const Value&) = delete;    
     
     operator const JS::Value&() const { return value_.get(); }
+    operator const JS::HandleValue() const { return value_; }
     
     bool isString() { return value_.isString(); }
     bool isNumber() { return value_.isNumber(); }

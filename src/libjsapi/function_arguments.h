@@ -26,6 +26,7 @@ public:
     bool Empty();
     
     operator const JS::AutoValueVector&() const { return args_; }
+    operator const JS::HandleValueArray() const { return args_; }
     
 private:
     Context& cx_;

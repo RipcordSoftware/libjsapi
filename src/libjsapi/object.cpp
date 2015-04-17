@@ -9,13 +9,12 @@ bool rs::jsapi::Object::Create(Context& cx, std::initializer_list<const char*> p
     
     if (obj) {
         for (auto p : properties) {
-            JS_DefineProperty(cx, obj, p, JS::NullHandleValue, 
-                JSPROP_SHARED | JSPROP_ENUMERATE, 
+            JS_DefineProperty(cx, obj, p, JS::NullHandleValue, JSPROP_ENUMERATE, 
                 Object::GetCallback, Object::SetCallback);
         }
 
         for (auto f : functions) {
-            JS_DefineFunction(cx, obj, f.first, f.second, 0, JSPROP_SHARED | JSPROP_ENUMERATE);
+            JS_DefineFunction(cx, obj, f.first, f.second, 0, JSPROP_ENUMERATE);
         }
 
         SetGetter(cx, obj, getter);

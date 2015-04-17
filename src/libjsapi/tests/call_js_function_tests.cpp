@@ -175,50 +175,6 @@ TEST_F(CallJSFunctionTests, test8) {
     ASSERT_TRUE(result.toBoolean());    
 }
 
-TEST_F(CallJSFunctionTests, test9) {
-    auto context = rt_.NewContext();    
-     
-    JS::RootedObject obj(*context);
-    rs::jsapi::Object::Create(*context, { "the_answer" }, 
-        [](JSContext* cx, const char* name, JS::MutableHandleValue value) { value.setInt32(42); return true; },
-        nullptr,
-        {},
-        obj);
-           
-    context->Evaluate("var myfunc=function(n){return n.the_answer;};");    
-    
-    rs::jsapi::FunctionArguments args(*context);
-    args.Append(obj);
-    
-    rs::jsapi::Result result(*context);
-    context->Call("myfunc", args, result);
-    
-    ASSERT_TRUE(result.isInt32());
-    ASSERT_EQ(42, result.toInt32());    
-}
-
-TEST_F(CallJSFunctionTests, test10) {
-    auto context = rt_.NewContext();    
-     
-    JS::RootedObject obj(*context);
-    rs::jsapi::Object::Create(*context, { "hello" }, 
-        [](JSContext* cx, const char* name, JS::MutableHandleValue value) { value.setString(JS_NewStringCopyZ(cx, "world")); return true; },
-        nullptr,
-        {},
-        obj);
-        
-    context->Evaluate("var myfunc=function(n){return n.hello;};");    
-    
-    rs::jsapi::FunctionArguments args(*context);
-    args.Append(obj);
-    
-    rs::jsapi::Result result(*context);
-    context->Call("myfunc", args, result);
-    
-    ASSERT_TRUE(result.isString());
-    ASSERT_STREQ("world", result.ToString().c_str());    
-}
-
 TEST_F(CallJSFunctionTests, test11) {
     auto context = rt_.NewContext();    
     

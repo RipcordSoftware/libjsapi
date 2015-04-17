@@ -97,8 +97,7 @@ bool rs::jsapi::Context::Call(const char* name, const FunctionArguments& args) {
 }
 
 bool rs::jsapi::Context::Call(const char* name, const FunctionArguments& args, Result& result) {
-    JS::HandleValueArray argArray(args);
-    auto status = JS_CallFunctionName(cx_, global_, name, argArray, result);    
+    auto status = JS_CallFunctionName(cx_, global_, name, args, result);    
     
     auto error = getError();
     if (!!error) {
