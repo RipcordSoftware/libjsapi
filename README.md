@@ -62,6 +62,8 @@ int main() {
 }
 ```
 
+The [[wiki|wiki]] contains more background on JSAPI, libjsapi and further examples.
+
 # Building
 Requires:
 * GCC 4.8.1+
