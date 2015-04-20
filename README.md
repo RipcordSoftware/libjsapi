@@ -25,7 +25,7 @@ int main() {
     rs::jsapi::Runtime rt;
     
     // execute a script in the context of the runtime, getting the result
-    rs::jsapi::Result result(rt);
+    rs::jsapi::Value result(rt);
     rt.Evaluate("(function(){return 42;})();", result);
     
     // output the result to the console
@@ -52,7 +52,7 @@ int main() {
     });
     
     // call the native function from JS
-    rs::jsapi::Result result(rt);
+    rs::jsapi::Value result(rt);
     rt.Evaluate("(function(){return getTheAnswer();})();", result);
     
     // output the result to the console
