@@ -62,7 +62,7 @@ int main() {
 }
 ```
 
-The [[wiki|wiki]] contains more background on JSAPI, libjsapi and further examples.
+The [wiki](/RipcordSoftware/libjsapi/wiki) contains more background on JSAPI, libjsapi and further examples.
 
 # Building
 Requires:
