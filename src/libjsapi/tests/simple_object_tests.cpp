@@ -68,15 +68,15 @@ TEST_F(SimpleObjectTests, test4) {
     JS::RootedObject obj(*context);
     rs::jsapi::Object::Create(*context, 
         {"hello", "pi", "lorem", "the_answer"}, 
-        [](JSContext* cx, const char* name, JS::MutableHandleValue value) {
+        [](const char* name, rs::jsapi::Value& value) {
             if (std::strcmp(name, "hello") == 0) {
-                value.setString(JS_NewStringCopyZ(cx, "world"));
+                value.set("world");
             } else if (std::strcmp(name, "pi") == 0) {
-                value.setNumber(3.14159);
+                value.set(3.14159);
             } else if (std::strcmp(name, "lorem") == 0) {
-                value.setString(JS_NewStringCopyZ(cx, "Lorem ipsum..."));
+                value.set("Lorem ipsum...");
             } else if (std::strcmp(name, "the_answer") == 0) {
-                value.setInt32(42);
+                value.set(42);
             } else {
                 value.setUndefined();
             }
@@ -163,7 +163,7 @@ TEST_F(SimpleObjectTests, test6) {
     JS::RootedObject obj(*context);
     rs::jsapi::Object::Create(*context, 
         { longFieldName.c_str() },
-        [](JSContext* cx, const char* name, JS::MutableHandleValue value) { value.setInt32(42); return true; },
+        [](const char* name, rs::jsapi::Value& value) { value.set(42); return true; },
         nullptr, 
         {}, 
         obj);
@@ -180,7 +180,7 @@ TEST_F(SimpleObjectTests, test7) {
     
     JS::RootedObject obj(*context);
     rs::jsapi::Object::Create(*context, { "the_answer" }, 
-        [](JSContext* cx, const char* name, JS::MutableHandleValue value) { value.setInt32(42); return true; },
+        [](const char* name, rs::jsapi::Value& value) { value.set(42); return true; },
         nullptr,
         {},
         obj);
@@ -202,7 +202,7 @@ TEST_F(SimpleObjectTests, test8) {
     
     JS::RootedObject obj(*context);
     rs::jsapi::Object::Create(*context, { "hello" }, 
-        [](JSContext* cx, const char* name, JS::MutableHandleValue value) { value.setString(JS_NewStringCopyZ(cx, "world")); return true; },
+        [](const char* name, rs::jsapi::Value& value) { value.set("world"); return true; },
         nullptr,
         {},
         obj);
@@ -298,7 +298,7 @@ TEST_F(SimpleObjectTests, test13) {
     JS::RootedObject obj(*context);
     rs::jsapi::Object::Create(*context, { "hello" },         
         nullptr,
-        [&](JSContext* cx, const char* name, JS::MutableHandleValue value) { 
+        [&](const char* name, const rs::jsapi::Value& value) { 
             fieldValue.set(value); 
             return true; 
         },
@@ -325,7 +325,7 @@ TEST_F(SimpleObjectTests, test14) {
     JS::RootedObject obj(*context);
     rs::jsapi::Object::Create(*context, { longFieldName.c_str() },         
         nullptr,
-        [&](JSContext* cx, const char* name, JS::MutableHandleValue value) { 
+        [&](const char* name, const rs::jsapi::Value& value) { 
             fieldValue.set(value); 
             return true; 
         },

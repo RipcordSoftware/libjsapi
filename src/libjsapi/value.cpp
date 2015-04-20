@@ -54,6 +54,14 @@ void rs::jsapi::Value::set(double value) {
     value_.setDouble(value);
 }
 
+void rs::jsapi::Value::setUndefined() {
+    value_.setUndefined();
+}
+
+void rs::jsapi::Value::setNull() {
+    value_.setNull();
+}
+
 std::string rs::jsapi::Value::ToString() {
     auto str = JS::ToString(cx_, value_);
     std::vector<char> chars(JS_GetStringLength(str));
@@ -107,4 +115,8 @@ bool rs::jsapi::Value::toBoolean() {
 
 JSObject* rs::jsapi::Value::toObject() { 
     return value_.toObjectOrNull(); 
+}
+
+JSContext* rs::jsapi::Value::getContext() { 
+    return cx_; 
 }

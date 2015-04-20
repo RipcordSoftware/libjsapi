@@ -27,6 +27,9 @@ public:
     operator const JS::Value&() const { return value_.get(); }
     operator const JS::HandleValue() const { return value_; }
     operator JS::MutableHandleValue() { return &value_; }
+    operator JSContext*() { return cx_; }
+    
+    JSContext* getContext();
     
     void set(const char* str);
     void set(const std::string& str);
@@ -34,6 +37,8 @@ public:
     void set(bool value);
     void set(double value);
     void set(const JS::HandleValue& value);
+    void setUndefined();
+    void setNull();
     
     bool isString();
     bool isNumber();

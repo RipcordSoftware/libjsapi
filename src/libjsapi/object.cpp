@@ -1,5 +1,6 @@
 #include "object.h"
 #include "context.h"
+#include "value.h"
 
 #include <vector>
 
@@ -33,18 +34,28 @@ bool rs::jsapi::Object::Create(Context& cx, std::initializer_list<const char*> p
 bool rs::jsapi::Object::GetCallback(JSContext* cx, JS::HandleObject obj, JS::HandleId id, JS::MutableHandleValue vp) {
     auto callbacks = Object::GetObjectCallbacks(obj);    
     if (callbacks != nullptr && callbacks->getter != nullptr) {
+        Value value(cx, vp);
+        
         auto name = JSID_TO_STRING(id);
         char nameBuffer[256];
         auto nameLength = JS_EncodeStringToBuffer(cx, name, nameBuffer, sizeof(nameBuffer) - 1);
+        auto status = false;
+        
         if (nameLength < sizeof(nameBuffer)) {
-            nameBuffer[nameLength] = '\0';    
-            return callbacks->getter(cx, nameBuffer, vp);    
+            nameBuffer[nameLength] = '\0';
+            status = callbacks->getter(nameBuffer, value);
         } else {
             std::vector<char> nameVector(nameLength + 1);
             nameLength = JS_EncodeStringToBuffer(cx, name, &nameVector[0], nameVector.size() - 1);
             nameVector[nameLength] = '\0';
-            return callbacks->getter(cx, &nameVector[0], vp);
+            status = callbacks->getter(&nameVector[0], value);
         }
+        
+        if (status) {
+            vp.set(value);
+        }
+        
+        return status;
     } else {
         vp.setUndefined();
         return true;
@@ -54,17 +65,20 @@ bool rs::jsapi::Object::GetCallback(JSContext* cx, JS::HandleObject obj, JS::Han
 bool rs::jsapi::Object::SetCallback(JSContext* cx, JS::HandleObject obj, JS::HandleId id, bool strict, JS::MutableHandleValue vp) {
     auto callbacks = Object::GetObjectCallbacks(obj);
     if (callbacks != nullptr && callbacks->setter != nullptr) {
-        auto name = JSID_TO_STRING(id);
+        Value value(cx, vp);
+        
         char nameBuffer[256];
+        auto name = JSID_TO_STRING(id);                
         auto nameLength = JS_EncodeStringToBuffer(cx, name, nameBuffer, sizeof(nameBuffer) - 1);
+        
         if (nameLength < sizeof(nameBuffer)) {
             nameBuffer[nameLength] = '\0';    
-            return callbacks->setter(cx, nameBuffer, vp);    
+            return callbacks->setter(nameBuffer, value);    
         } else {
             std::vector<char> nameVector(nameLength + 1);
             nameLength = JS_EncodeStringToBuffer(cx, name, &nameVector[0], nameVector.size() - 1);
             nameVector[nameLength] = '\0';
-            return callbacks->setter(cx, &nameVector[0], vp);
+            return callbacks->setter(&nameVector[0], value);
         }    
     } else {
         // TODO: what will this do to the JS?

@@ -10,11 +10,12 @@ namespace rs {
 namespace jsapi {
     
 class Context;
+class Value;
 
 class Object final {
 public:
-    typedef std::function<bool(JSContext* cx, const char* name, JS::MutableHandleValue value)> Getter;
-    typedef std::function<bool(JSContext* cx, const char* name, JS::MutableHandleValue value)> Setter;
+    typedef std::function<bool(const char* name, Value& value)> Getter;
+    typedef std::function<bool(const char* name, const Value& value)> Setter;
     typedef std::pair<const char*, JSNative> Function;
     
     Object(Context& cx) = delete;
