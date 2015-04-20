@@ -3,30 +3,30 @@
 
 #include <vector>
 
-rs::jsapi::Value::Value(Context& cx) : cx_(cx), value_(cx) {
+rs::jsapi::Value::Value(JSContext* cx) : cx_(cx), value_(cx) {
 }
 
-rs::jsapi::Value::Value(Context& cx, const char* str) : Value(cx) {
+rs::jsapi::Value::Value(JSContext* cx, const char* str) : Value(cx) {
     set(str);
 }
 
-rs::jsapi::Value::Value(Context& cx, const std::string& str) : Value(cx) {
+rs::jsapi::Value::Value(JSContext* cx, const std::string& str) : Value(cx) {
     set(str);
 }
 
-rs::jsapi::Value::Value(Context& cx, int value): Value(cx) {
+rs::jsapi::Value::Value(JSContext* cx, int value): Value(cx) {
     set(value);
 }
 
-rs::jsapi::Value::Value(Context& cx, bool value) : Value(cx) {
+rs::jsapi::Value::Value(JSContext* cx, bool value) : Value(cx) {
     set(value);
 }
 
-rs::jsapi::Value::Value(Context& cx, double value) : Value(cx) {
+rs::jsapi::Value::Value(JSContext* cx, double value) : Value(cx) {
     set(value);
 }
 
-rs::jsapi::Value::Value(Context& cx, const JS::HandleValue& value) : Value(cx) {
+rs::jsapi::Value::Value(JSContext* cx, const JS::HandleValue& value) : Value(cx) {
     set(value);
 }
 

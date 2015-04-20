@@ -13,13 +13,13 @@ class Value;
     
 class Value {
 public:
-    Value(Context& cx);
-    Value(Context& cx, const char* str);
-    Value(Context& cx, const std::string& str);
-    Value(Context& cx, int value);
-    Value(Context& cx, bool value);
-    Value(Context& cx, double value);
-    Value(Context& cx, const JS::HandleValue& obj);
+    Value(JSContext* cx);
+    Value(JSContext* cx, const char* str);
+    Value(JSContext* cx, const std::string& str);
+    Value(JSContext* cx, int value);
+    Value(JSContext* cx, bool value);
+    Value(JSContext* cx, double value);
+    Value(JSContext* cx, const JS::HandleValue& obj);
     
     Value(const Value&) = delete;
     Value& operator=(const Value&) = delete;    
@@ -52,7 +52,7 @@ public:
     std::string ToString();
 
 protected:
-    Context& cx_;
+    JSContext* cx_;
     JS::RootedValue value_;    
 };
 
