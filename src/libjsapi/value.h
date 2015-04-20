@@ -35,19 +35,19 @@ public:
     void set(double value);
     void set(const JS::HandleValue& value);
     
-    bool isString() { return value_.isString(); }
-    bool isNumber() { return value_.isNumber(); }
-    bool isInt32() { return value_.isInt32(); }
-    bool isBoolean() { return value_.isBoolean(); }
-    bool isObject() { return value_.isObject(); }
-    bool isNull() { return value_.isNull(); }
-    bool isUndefined() { return value_.isUndefined(); }
+    bool isString();
+    bool isNumber();
+    bool isInt32();
+    bool isBoolean();
+    bool isObject();
+    bool isNull();
+    bool isUndefined();
     
-    JSString* toString() { return value_.toString(); }
-    double toNumber() { return value_.toNumber(); }
-    int32_t toInt32() { return value_.toInt32(); }
-    bool toBoolean() { return value_.toBoolean(); }
-    JSObject* toObject() { return value_.toObjectOrNull(); }
+    JSString* toString();
+    double toNumber();
+    int32_t toInt32();
+    bool toBoolean();
+    JSObject* toObject();
 
     std::string ToString();
 
