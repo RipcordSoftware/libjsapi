@@ -39,4 +39,10 @@ externals/**
 
 # ignore the coverage output files
 coverage.info
+*.gcda
+*.gcno
 coverage/*
+
+# ignore the example output files
+examples/helloworld
+examples/square
