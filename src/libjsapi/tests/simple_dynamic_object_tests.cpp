@@ -23,8 +23,8 @@ TEST_F(SimpleDynamicObjectTests, test1) {
     JS::RootedObject obj(*context);
     rs::jsapi::DynamicObject::Create(
         *context,
-        [](JSContext* cx, const char* name, JS::MutableHandleValue value) {            
-            value.setInt32(42);
+        [](const char* name, rs::jsapi::Value& value) {            
+            value.set(42);
             return true;
         }, 
         nullptr, obj);
@@ -48,8 +48,8 @@ TEST_F(SimpleDynamicObjectTests, test2) {
     JS::RootedObject obj(*context);
     rs::jsapi::DynamicObject::Create(
         *context,
-        [](JSContext* cx, const char* name, JS::MutableHandleValue value) {            
-            value.setString(JS_NewStringCopyZ(cx, "world"));
+        [](const char* name, rs::jsapi::Value& value) {            
+            value.set("world");
             return true;
         }, 
         nullptr, obj);            
@@ -74,8 +74,8 @@ TEST_F(SimpleDynamicObjectTests, test3) {
     JS::RootedObject obj(*context);
     rs::jsapi::DynamicObject::Create(
         *context,
-        [](JSContext* cx, const char* name, JS::MutableHandleValue value) {            
-            value.setInt32(42);
+        [](const char* name, rs::jsapi::Value& value) {            
+            value.set(42);
             return true;
         }, 
         nullptr, obj);
@@ -104,7 +104,7 @@ TEST_F(SimpleDynamicObjectTests, test4) {
     rs::jsapi::DynamicObject::Create(
         *context,
         nullptr, 
-        [&](JSContext* cx, const char* name, JS::MutableHandleValue value) { 
+        [&](const char* name, const rs::jsapi::Value& value) { 
             fieldValue.set(value); 
             return true; 
         },
@@ -132,7 +132,7 @@ TEST_F(SimpleDynamicObjectTests, test5) {
     rs::jsapi::DynamicObject::Create(
         *context,
         nullptr, 
-        [&](JSContext* cx, const char* name, JS::MutableHandleValue value) { 
+        [&](const char* name, const rs::jsapi::Value& value) { 
             fieldValue.set(value); 
             return true; 
         },

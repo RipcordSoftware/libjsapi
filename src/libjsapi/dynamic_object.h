@@ -9,11 +9,12 @@ namespace rs {
 namespace jsapi {
     
 class Context;
+class Value;
 
 class DynamicObject final {
 public:
-    typedef std::function<bool(JSContext* cx, const char* name, JS::MutableHandleValue value)> Getter;
-    typedef std::function<bool(JSContext* cx, const char* name, JS::MutableHandleValue value)> Setter;        
+    typedef std::function<bool(const char* name, Value& value)> Getter;
+    typedef std::function<bool(const char* name, const Value& value)> Setter;        
     
     static bool Create(Context& cx, Getter getter, Setter setter, JS::RootedObject& obj);
     
