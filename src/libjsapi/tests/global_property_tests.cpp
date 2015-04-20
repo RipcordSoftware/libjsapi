@@ -25,7 +25,7 @@ TEST_F(GlobalPropertyTests, test1) {
         nullptr)
     );
         
-    rs::jsapi::Result result(rt_);
+    rs::jsapi::Value result(rt_);
     rt_.Evaluate("(function(){return test1;})();", result);
     ASSERT_TRUE(result.isInt32());
     ASSERT_EQ(42, result.toInt32());
@@ -41,7 +41,7 @@ TEST_F(GlobalPropertyTests, test2) {
         nullptr)
     );
         
-    rs::jsapi::Result result(rt_);
+    rs::jsapi::Value result(rt_);
     rt_.Evaluate("(function(){return test2;})();", result);
     ASSERT_TRUE(result.isString());
     ASSERT_STREQ("hello", result.ToString().c_str());
@@ -57,7 +57,7 @@ TEST_F(GlobalPropertyTests, test3) {
         nullptr)
     );
         
-    rs::jsapi::Result result(rt_);
+    rs::jsapi::Value result(rt_);
     rt_.Evaluate("(function(){return test3;})();", result);
     ASSERT_TRUE(result.isObject());
 }

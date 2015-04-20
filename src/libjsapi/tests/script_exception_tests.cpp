@@ -46,7 +46,7 @@ TEST_F(ScriptExceptionTests, test3) {
     ASSERT_THROW({                
         rs::jsapi::Script script(rt_, "(function(){return abc;})()");
         script.Compile();
-        rs::jsapi::Result result(rt_);
+        rs::jsapi::Value result(rt_);
         script.Execute(result);
     }, rs::jsapi::ScriptException);        
 }
@@ -65,7 +65,7 @@ TEST_F(ScriptExceptionTests, test4) {
     
     rs::jsapi::Script script(rt_, "(function(){return 42;})()");
     script.Compile();
-    rs::jsapi::Result result(rt_);
+    rs::jsapi::Value result(rt_);
     script.Execute(result);
     ASSERT_TRUE(result.isNumber());
     ASSERT_EQ(42, result.toNumber());
@@ -76,7 +76,7 @@ TEST_F(ScriptExceptionTests, test4b) {
         rt_.Evaluate("!)(*\")(!*\"!");
     }, rs::jsapi::ScriptException);        
     
-    rs::jsapi::Result result(rt_);
+    rs::jsapi::Value result(rt_);
     rt_.Evaluate("(function(){return 42;})()", result);        
     ASSERT_EQ(result.isNumber(), true);
     ASSERT_EQ(42, result.toNumber());
@@ -91,7 +91,7 @@ TEST_F(ScriptExceptionTests, test5) {
     
     rs::jsapi::Script script(rt_, "(function(){return 42;})()");
     script.Compile();
-    rs::jsapi::Result result(rt_);
+    rs::jsapi::Value result(rt_);
     script.Execute(result);
     ASSERT_EQ(result.isNumber(), true);
     ASSERT_EQ(42, result.toNumber());
@@ -102,7 +102,7 @@ TEST_F(ScriptExceptionTests, test5b) {
         rt_.Evaluate("var xyz = abc;");
     }, rs::jsapi::ScriptException);  
     
-    rs::jsapi::Result result(rt_);
+    rs::jsapi::Value result(rt_);
     rt_.Evaluate("(function(){return 42;})()", result);        
     ASSERT_EQ(result.isNumber(), true);
     ASSERT_EQ(42, result.toNumber());
@@ -112,13 +112,13 @@ TEST_F(ScriptExceptionTests, test6) {
     ASSERT_THROW({                
         rs::jsapi::Script script(rt_, "(function(){return abc;})()");
         script.Compile();
-        rs::jsapi::Result result(rt_);
+        rs::jsapi::Value result(rt_);
         script.Execute(result);
     }, rs::jsapi::ScriptException);      
     
     rs::jsapi::Script script(rt_, "(function(){return 42;})()");
     script.Compile();
-    rs::jsapi::Result result(rt_);
+    rs::jsapi::Value result(rt_);
     script.Execute(result);
     ASSERT_TRUE(result.isNumber());
     ASSERT_EQ(42, result.toNumber());
@@ -126,11 +126,11 @@ TEST_F(ScriptExceptionTests, test6) {
 
 TEST_F(ScriptExceptionTests, test6b) {        
     ASSERT_THROW({                
-        rs::jsapi::Result result(rt_);
+        rs::jsapi::Value result(rt_);
         rt_.Evaluate("(function(){return abc;})()", result);
     }, rs::jsapi::ScriptException);      
     
-    rs::jsapi::Result result(rt_);
+    rs::jsapi::Value result(rt_);
     rt_.Evaluate("(function(){return 42;})()", result);
     ASSERT_TRUE(result.isNumber());
     ASSERT_EQ(42, result.toNumber());
@@ -182,7 +182,7 @@ TEST_F(ScriptExceptionTests, test8) {
 
 TEST_F(ScriptExceptionTests, test9) {
     ASSERT_THROW({
-        rs::jsapi::Result result(rt_);
+        rs::jsapi::Value result(rt_);
         rt_.Call("yoyoyoyo", result);
     }, rs::jsapi::ScriptException);         
 }

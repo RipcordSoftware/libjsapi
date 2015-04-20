@@ -87,7 +87,7 @@ TEST_F(SimpleObjectTests, test4) {
         obj);
     ASSERT_TRUE(obj);
     
-    rs::jsapi::Result value(*context);
+    rs::jsapi::Value value(*context);
     ASSERT_TRUE(JS_GetProperty(*context, obj, "hello", value));
     ASSERT_TRUE(value.isString());
     ASSERT_STREQ("world", value.ToString().c_str());
@@ -120,7 +120,7 @@ TEST_F(SimpleObjectTests, test5) {
         obj);
     ASSERT_TRUE(obj);
     
-    rs::jsapi::Result value(*context);
+    rs::jsapi::Value value(*context);
     ASSERT_TRUE(JS_GetProperty(*context, obj, "hello", value));
     ASSERT_TRUE(value.isUndefined());
     
@@ -169,7 +169,7 @@ TEST_F(SimpleObjectTests, test6) {
         obj);
     ASSERT_TRUE(obj);
     
-    rs::jsapi::Result value(*context);
+    rs::jsapi::Value value(*context);
     ASSERT_TRUE(JS_GetProperty(*context, obj, longFieldName.c_str(), value));
     ASSERT_TRUE(value.isInt32());
     ASSERT_EQ(42, value.toInt32());
@@ -190,7 +190,7 @@ TEST_F(SimpleObjectTests, test7) {
     rs::jsapi::FunctionArguments args(*context);
     args.Append(obj);
     
-    rs::jsapi::Result result(*context);
+    rs::jsapi::Value result(*context);
     context->Call("myfunc", args, result);
     
     ASSERT_TRUE(result.isInt32());
@@ -212,7 +212,7 @@ TEST_F(SimpleObjectTests, test8) {
     rs::jsapi::FunctionArguments args(*context);
     args.Append(obj);
     
-    rs::jsapi::Result result(*context);
+    rs::jsapi::Value result(*context);
     context->Call("myfunc", args, result);
     
     ASSERT_TRUE(result.isString());
@@ -255,7 +255,7 @@ TEST_F(SimpleObjectTests, test10) {
     ASSERT_TRUE(obj);
     
     rs::jsapi::FunctionArguments args(*context);
-    rs::jsapi::Result result(*context);
+    rs::jsapi::Value result(*context);
     ASSERT_TRUE(JS_CallFunctionName(*context, obj, "myfunc", args, result));
     ASSERT_TRUE(result.isInt32());
     ASSERT_EQ(42, result.toInt32());
@@ -271,7 +271,7 @@ TEST_F(SimpleObjectTests, test11) {
         nullptr, 
         { 
             std::make_pair("myfunc", [](JSContext* cx, unsigned argc, JS::Value* vp) { 
-                auto args = JS::CallArgsFromVp(argc, vp); 
+                auto args = JS::CallArgsFromVp(argc, vp);
                 args.rval().setInt32(42);
                 return true;
             })
@@ -283,7 +283,7 @@ TEST_F(SimpleObjectTests, test11) {
     
     rs::jsapi::FunctionArguments args(*context);
     args.Append(obj);
-    rs::jsapi::Result result(*context);
+    rs::jsapi::Value result(*context);
     context->Call("myfunc", args, result);    
     
     ASSERT_TRUE(result.isInt32());
@@ -293,13 +293,13 @@ TEST_F(SimpleObjectTests, test11) {
 TEST_F(SimpleObjectTests, test13) {
     auto context = rt_.NewContext();
     
-    rs::jsapi::Result fieldValue(*context);
+    rs::jsapi::Value fieldValue(*context);
     
     JS::RootedObject obj(*context);
     rs::jsapi::Object::Create(*context, { "hello" },         
         nullptr,
         [&](JSContext* cx, const char* name, JS::MutableHandleValue value) { 
-            fieldValue.Set(value); 
+            fieldValue.set(value); 
             return true; 
         },
         {},
@@ -320,13 +320,13 @@ TEST_F(SimpleObjectTests, test14) {
     auto context = rt_.NewContext();
     
     std::string longFieldName(384, '1');
-    rs::jsapi::Result fieldValue(*context);
+    rs::jsapi::Value fieldValue(*context);
     
     JS::RootedObject obj(*context);
     rs::jsapi::Object::Create(*context, { longFieldName.c_str() },         
         nullptr,
         [&](JSContext* cx, const char* name, JS::MutableHandleValue value) { 
-            fieldValue.Set(value); 
+            fieldValue.set(value); 
             return true; 
         },
         {},
@@ -359,7 +359,7 @@ TEST_F(SimpleObjectTests, test15) {
     
     context->Evaluate("var myfunc = function(o){ var arr=[]; for (var prop in o) { arr.push(prop); } return arr.toString(); };");
     
-    rs::jsapi::Result result(*context);
+    rs::jsapi::Value result(*context);
     rs::jsapi::FunctionArguments args(*context);
     args.Append(obj);
     

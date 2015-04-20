@@ -36,7 +36,7 @@ TEST_F(CallNativeFunctionTests, test1) {
     
     rs::jsapi::Global::DefineFunction(*context, "getTheAnswer", [](JSContext* cx, unsigned argc, JS::Value* vp) { JS::CallArgsFromVp(argc, vp).rval().setInt32(42); return true; });
     
-    rs::jsapi::Result result(*context);
+    rs::jsapi::Value result(*context);
     context->Evaluate("(function(){return getTheAnswer();})();", result);
     
     ASSERT_TRUE(result.isInt32());
@@ -49,7 +49,7 @@ TEST_F(CallNativeFunctionTests, test2) {
     rs::jsapi::Global::DefineFunction(*context, "getLorem", 
         [](JSContext* cx, unsigned argc, JS::Value* vp) { JS::CallArgsFromVp(argc, vp).rval().setString(JS_NewStringCopyZ(cx, "Lorem ipsum")); return true; });
     
-    rs::jsapi::Result result(*context);
+    rs::jsapi::Value result(*context);
     context->Evaluate("(function(){return getLorem();})();", result);
     
     ASSERT_TRUE(result.isString());
@@ -64,7 +64,7 @@ TEST_F(CallNativeFunctionTests, test3) {
     rs::jsapi::FunctionArguments args(*context);
     args.Append(true);
     
-    rs::jsapi::Result result(*context);
+    rs::jsapi::Value result(*context);
     context->Call("echo", args, result); 
     
     ASSERT_TRUE(result.isBoolean());
@@ -79,7 +79,7 @@ TEST_F(CallNativeFunctionTests, test4) {
     rs::jsapi::FunctionArguments args(*context);
     args.Append(42);
     
-    rs::jsapi::Result result(*context);
+    rs::jsapi::Value result(*context);
     context->Call("echo", args, result); 
     
     ASSERT_TRUE(result.isNumber());
@@ -94,7 +94,7 @@ TEST_F(CallNativeFunctionTests, test5) {
     rs::jsapi::FunctionArguments args(*context);
     args.Append("hello");
     
-    rs::jsapi::Result result(*context);
+    rs::jsapi::Value result(*context);
     context->Call("echo", args, result); 
     
     ASSERT_TRUE(result.isString());
@@ -110,7 +110,7 @@ TEST_F(CallNativeFunctionTests, test6) {
     rs::jsapi::FunctionArguments args(*context);
     args.Append(value);
     
-    rs::jsapi::Result result(*context);
+    rs::jsapi::Value result(*context);
     context->Call("echo", args, result);     
     
     ASSERT_TRUE(result.isString());
@@ -126,7 +126,7 @@ TEST_F(CallNativeFunctionTests, test7) {
     rs::jsapi::FunctionArguments args(*context);
     args.Append(value);
     
-    rs::jsapi::Result result(*context);
+    rs::jsapi::Value result(*context);
     context->Call("echo", args, result);     
     
     ASSERT_TRUE(result.isBoolean());
@@ -142,7 +142,7 @@ TEST_F(CallNativeFunctionTests, test8) {
     rs::jsapi::FunctionArguments args(*context);
     args.Append(value);
     
-    rs::jsapi::Result result(*context);
+    rs::jsapi::Value result(*context);
     context->Call("echo", args, result);     
     
     ASSERT_TRUE(result.isInt32());
@@ -158,7 +158,7 @@ TEST_F(CallNativeFunctionTests, test9) {
     rs::jsapi::FunctionArguments args(*context);
     args.Append(value);
     
-    rs::jsapi::Result result(*context);
+    rs::jsapi::Value result(*context);
     context->Call("echo", args, result);     
     
     ASSERT_TRUE(result.isNumber());

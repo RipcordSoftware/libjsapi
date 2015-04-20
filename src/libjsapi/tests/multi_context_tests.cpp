@@ -22,7 +22,7 @@ TEST_F(MultiContextTests, test1) {
     rs::jsapi::Script script(*context, "(function(){return 42;})();");
     script.Compile();
     
-    rs::jsapi::Result result(*context);
+    rs::jsapi::Value result(*context);
     script.Execute(result);
     
     ASSERT_TRUE(result.isNumber());
@@ -45,19 +45,19 @@ TEST_F(MultiContextTests, test2) {
     rs::jsapi::Script script2(*context2, "(function(){return count++;})();");
     script2.Compile();
     
-    rs::jsapi::Result result1a(rt_);
+    rs::jsapi::Value result1a(rt_);
     script1.Execute(result1a);
 
     ASSERT_TRUE(result1a.isNumber());
     ASSERT_EQ(42, result1a.toNumber());
     
-    rs::jsapi::Result result1b(rt_);
+    rs::jsapi::Value result1b(rt_);
     script1.Execute(result1b);
 
     ASSERT_TRUE(result1b.isNumber());
     ASSERT_EQ(43, result1b.toNumber());
     
-    rs::jsapi::Result result2a(*context2);
+    rs::jsapi::Value result2a(*context2);
     script2.Execute(result2a);
 
     ASSERT_TRUE(result2a.isNumber());
@@ -101,7 +101,7 @@ TEST_F(MultiContextTests, test6) {
         rs::jsapi::Script script(*cx, "(function(){return 42;})();");
         script.Compile();
 
-        rs::jsapi::Result result(*cx);
+        rs::jsapi::Value result(*cx);
         script.Execute(result);
 
         ASSERT_TRUE(result.isNumber());

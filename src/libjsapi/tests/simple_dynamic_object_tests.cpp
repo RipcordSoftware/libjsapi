@@ -35,7 +35,7 @@ TEST_F(SimpleDynamicObjectTests, test1) {
     rs::jsapi::FunctionArguments args(*context);    
     args.Append(obj);
     
-    rs::jsapi::Result result(*context);
+    rs::jsapi::Value result(*context);
     context->Call("myfunc", args, result);
     
     ASSERT_TRUE(result.isInt32());
@@ -60,7 +60,7 @@ TEST_F(SimpleDynamicObjectTests, test2) {
     rs::jsapi::FunctionArguments args(*context);    
     args.Append(obj);
     
-    rs::jsapi::Result result(*context);
+    rs::jsapi::Value result(*context);
     context->Call("myfunc", args, result);
     
     ASSERT_TRUE(result.isString());
@@ -88,7 +88,7 @@ TEST_F(SimpleDynamicObjectTests, test3) {
     rs::jsapi::FunctionArguments args(*context);    
     args.Append(obj);
     
-    rs::jsapi::Result result(*context);
+    rs::jsapi::Value result(*context);
     context->Call("myfunc", args, result);
     
     ASSERT_TRUE(result.isInt32());
@@ -96,7 +96,7 @@ TEST_F(SimpleDynamicObjectTests, test3) {
 }
 
 TEST_F(SimpleDynamicObjectTests, test4) {
-    rs::jsapi::Result fieldValue(rt_);
+    rs::jsapi::Value fieldValue(rt_);
     
     auto context = rt_.NewContext();    
     
@@ -105,7 +105,7 @@ TEST_F(SimpleDynamicObjectTests, test4) {
         *context,
         nullptr, 
         [&](JSContext* cx, const char* name, JS::MutableHandleValue value) { 
-            fieldValue.Set(value); 
+            fieldValue.set(value); 
             return true; 
         },
         obj);        
@@ -124,7 +124,7 @@ TEST_F(SimpleDynamicObjectTests, test4) {
 
 TEST_F(SimpleDynamicObjectTests, test5) {
     std::string longFieldName(384, '1');
-    rs::jsapi::Result fieldValue(rt_);
+    rs::jsapi::Value fieldValue(rt_);
     
     auto context = rt_.NewContext();    
     
@@ -133,7 +133,7 @@ TEST_F(SimpleDynamicObjectTests, test5) {
         *context,
         nullptr, 
         [&](JSContext* cx, const char* name, JS::MutableHandleValue value) { 
-            fieldValue.Set(value); 
+            fieldValue.set(value); 
             return true; 
         },
         obj);

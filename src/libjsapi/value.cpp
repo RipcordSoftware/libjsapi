@@ -7,23 +7,51 @@ rs::jsapi::Value::Value(Context& cx) : cx_(cx), value_(cx) {
 }
 
 rs::jsapi::Value::Value(Context& cx, const char* str) : Value(cx) {
-    value_.setString(JS_NewStringCopyZ(cx, str));
+    set(str);
+}
+
+rs::jsapi::Value::Value(Context& cx, const std::string& str) : Value(cx) {
+    set(str);
 }
 
 rs::jsapi::Value::Value(Context& cx, int value): Value(cx) {
-    value_.setInt32(value);
+    set(value);
 }
 
 rs::jsapi::Value::Value(Context& cx, bool value) : Value(cx) {
-    value_.setBoolean(value);
+    set(value);
 }
 
 rs::jsapi::Value::Value(Context& cx, double value) : Value(cx) {
-    value_.setNumber(value);
+    set(value);
 }
 
-rs::jsapi::Value::Value(Context& cx, const JS::RootedObject& obj) : Value(cx) {
-    value_.setObjectOrNull(obj);
+rs::jsapi::Value::Value(Context& cx, const JS::HandleValue& value) : Value(cx) {
+    set(value);
+}
+
+void rs::jsapi::Value::set(const JS::HandleValue& value) {
+    value_.set(value);
+}
+
+void rs::jsapi::Value::set(const char* str) {
+    value_.setString(JS_NewStringCopyZ(cx_, str));
+}
+
+void rs::jsapi::Value::set(const std::string& str) {
+    value_.setString(JS_NewStringCopyN(cx_, str.c_str(), str.length()));
+}
+
+void rs::jsapi::Value::set(int value) {
+    value_.setInt32(value);
+}
+
+void rs::jsapi::Value::set(bool value) {
+    value_.setBoolean(value);
+}
+
+void rs::jsapi::Value::set(double value) {
+    value_.setDouble(value);
 }
 
 std::string rs::jsapi::Value::ToString() {
