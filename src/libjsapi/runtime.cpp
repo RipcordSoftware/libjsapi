@@ -42,10 +42,10 @@ rs::jsapi::Runtime::Instance::~Instance() {
     }
 }
 
-rs::jsapi::Runtime::Runtime() :
+rs::jsapi::Runtime::Runtime(uint32_t maxBytes) :
     threadId_(std::this_thread::get_id()),
     threadGuard_(threadId_),
-    rt_(JS_NewRuntime(8L * 1024L * 1024L, JSUseHelperThreads::JS_USE_HELPER_THREADS)),
+    rt_(JS_NewRuntime(maxBytes, JSUseHelperThreads::JS_USE_HELPER_THREADS)),
     cx_(*this) {
 }
 
