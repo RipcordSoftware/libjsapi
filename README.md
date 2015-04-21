@@ -17,6 +17,8 @@ With `libjsapi` you will be able to:
 * Consume JavaScript objects in C++
 * Handle errors with C++ exceptions
 * Create any number of Runtimes and Contexts - simultaneously on multiple threads
+ 
+`libjsapi` uses the MIT license.
 
 ##Examples:
 
