@@ -9,9 +9,14 @@ applications without an intermediate abstraction layer managing object creation 
 type mapping. This library is an attempt to hide the complexity of dealing with SpiderMonkey
 from modern C++ 11 applications. 
 
-The SM API is very complex, with many obscure types and functions which are not very well 
-documented. In a number of places you will be exposed directly to the SM type system - this is
-something we'd like to avoid and may be able to engineer out in future releases.
+With `libjsapi` you will be able to:
+* Execute any valid JavaScript
+* Invoke JavaScript methods from C++
+* Expose C++ methods to JavaScript
+* Expose C++ objects to JavaScript
+* Consume JavaScript objects in C++
+* Handle errors with C++ exceptions
+* Create any number of Runtimes and Contexts - simultaneously on multiple threads
 
 ##Examples:
 
