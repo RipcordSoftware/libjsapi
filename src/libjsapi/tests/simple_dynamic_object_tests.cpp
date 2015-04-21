@@ -1,6 +1,8 @@
 #include <gtest/gtest.h>
 
 #include <thread>
+#include <vector>
+#include <string>
 
 #include "../libjsapi.h"
 
@@ -27,7 +29,9 @@ TEST_F(SimpleDynamicObjectTests, test1) {
             value.set(42);
             return true;
         }, 
-        nullptr, obj);
+        nullptr, 
+        nullptr,
+        obj);
     ASSERT_TRUE(obj);
     
     context->Evaluate("var myfunc=function(n){return n.hello;};");    
@@ -52,7 +56,9 @@ TEST_F(SimpleDynamicObjectTests, test2) {
             value.set("world");
             return true;
         }, 
-        nullptr, obj);            
+        nullptr,
+        nullptr, 
+        obj);            
     ASSERT_TRUE(obj);
     
     context->Evaluate("var myfunc=function(n){return n.hello;};");    
@@ -78,7 +84,9 @@ TEST_F(SimpleDynamicObjectTests, test3) {
             value.set(42);
             return true;
         }, 
-        nullptr, obj);
+        nullptr, 
+        nullptr,
+        obj);
     ASSERT_TRUE(obj);
     
     std::stringstream script;
@@ -108,6 +116,7 @@ TEST_F(SimpleDynamicObjectTests, test4) {
             fieldValue.set(value); 
             return true; 
         },
+        nullptr,
         obj);        
     ASSERT_TRUE(obj);
         
@@ -136,6 +145,7 @@ TEST_F(SimpleDynamicObjectTests, test5) {
             fieldValue.set(value); 
             return true; 
         },
+        nullptr,
         obj);
     ASSERT_TRUE(obj);
     
@@ -150,4 +160,93 @@ TEST_F(SimpleDynamicObjectTests, test5) {
     
     ASSERT_TRUE(fieldValue.isString());
     ASSERT_STREQ("world", fieldValue.ToString().c_str());
+}
+
+TEST_F(SimpleDynamicObjectTests, test6) {
+    auto context = rt_.NewContext();    
+    
+    JS::RootedObject obj(*context);
+    rs::jsapi::DynamicObject::Create(
+        *context,
+        nullptr, 
+        nullptr, 
+        [](std::vector<std::string>& props, std::vector<std::pair<std::string, JSNative>>& funcs) {
+            props.push_back("the_answer");
+            props.push_back("pi");
+            props.push_back("hello");
+            return true;
+        },
+        obj);
+    ASSERT_TRUE(obj);
+    
+    context->Evaluate("var myfunc=function(o){var fields = 0; for (var prop in o) { ++fields; } return fields;};");    
+    
+    rs::jsapi::FunctionArguments args(*context);    
+    args.Append(obj);
+    
+    rs::jsapi::Value result(*context);
+    context->Call("myfunc", args, result);
+    
+    ASSERT_TRUE(result.isInt32());
+    ASSERT_FLOAT_EQ(3, result.toInt32());
+}
+
+TEST_F(SimpleDynamicObjectTests, test7) {
+    auto context = rt_.NewContext();    
+    
+    JS::RootedObject obj(*context);
+    rs::jsapi::DynamicObject::Create(
+        *context,
+        nullptr, 
+        nullptr, 
+        [](std::vector<std::string>& props, std::vector<std::pair<std::string, JSNative>>& funcs) {
+            props.push_back("the_answer");
+            props.push_back("pi");
+            funcs.push_back(std::make_pair("square", nullptr));
+            funcs.push_back(std::make_pair("echo", nullptr));
+            return true;
+        },
+        obj);
+    ASSERT_TRUE(obj);
+    
+    context->Evaluate("var myfunc=function(o){var fields = 0; for (var prop in o) { ++fields; } return fields;};");    
+    
+    rs::jsapi::FunctionArguments args(*context);    
+    args.Append(obj);
+    
+    rs::jsapi::Value result(*context);
+    context->Call("myfunc", args, result);
+    
+    ASSERT_TRUE(result.isInt32());
+    ASSERT_FLOAT_EQ(4, result.toInt32());
+}
+
+TEST_F(SimpleDynamicObjectTests, test8) {
+    auto context = rt_.NewContext();    
+    
+    JS::RootedObject obj(*context);
+    rs::jsapi::DynamicObject::Create(
+        *context,
+        nullptr, 
+        nullptr, 
+        [](std::vector<std::string>& props, std::vector<std::pair<std::string, JSNative>>& funcs) {
+            props.push_back("the_answer");
+            props.push_back("pi");
+            funcs.push_back(std::make_pair("square", nullptr));
+            funcs.push_back(std::make_pair("echo", nullptr));
+            return true;
+        },
+        obj);
+    ASSERT_TRUE(obj);
+    
+    context->Evaluate("var myfunc=function(o){var fields = []; for (var prop in o) { fields.push(prop); } return fields.toString();};");    
+    
+    rs::jsapi::FunctionArguments args(*context);    
+    args.Append(obj);
+    
+    rs::jsapi::Value result(*context);
+    context->Call("myfunc", args, result);
+    
+    ASSERT_TRUE(result.isString());
+    ASSERT_STREQ("the_answer,pi,square,echo", result.ToString().c_str());
 }

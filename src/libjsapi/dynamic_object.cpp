@@ -6,15 +6,15 @@
 
 JSClass rs::jsapi::DynamicObject::class_ = { 
     "rs_jsapi_dynamicobject", JSCLASS_HAS_PRIVATE, JS_PropertyStub, JS_DeletePropertyStub,
-    DynamicObject::GetCallback, DynamicObject::SetCallback, JS_EnumerateStub, JS_ResolveStub, 
+    DynamicObject::GetCallback, DynamicObject::SetCallback, DynamicObject::EnumerateCallback, JS_ResolveStub, 
     JS_ConvertStub, DynamicObject::FinalizeCallback 
 };
 
-bool rs::jsapi::DynamicObject::Create(Context& cx, Getter getter, DynamicObject::Setter setter, JS::RootedObject& obj) {
+bool rs::jsapi::DynamicObject::Create(Context& cx, Getter getter, DynamicObject::Setter setter, Enumerator enumerator, JS::RootedObject& obj) {
     obj = JS::RootedObject(cx, JS_NewObject(cx, &class_, JS::NullPtr(), JS::NullPtr()));
     
     if (obj) {
-        auto callbacks = new ClassCallbacks { getter, setter };
+        auto callbacks = new ClassCallbacks { getter, setter, enumerator };
         DynamicObject::SetObjectCallbacks(obj, callbacks);        
     }
     
@@ -76,6 +76,27 @@ bool rs::jsapi::DynamicObject::SetCallback(JSContext* cx, JS::HandleObject obj, 
         vp.setUndefined();
         return true;
     }
+}
+
+bool rs::jsapi::DynamicObject::EnumerateCallback(JSContext* cx, JS::HandleObject obj) {
+    auto status = true;
+    auto callbacks = DynamicObject::GetObjectCallbacks(obj);
+    if (callbacks != nullptr && callbacks->enumerator != nullptr) {
+        std::vector<std::string> props;
+        std::vector<std::pair<std::string, JSNative>> funcs;
+        status = callbacks->enumerator(props, funcs);
+        if (status) {
+            for (auto p : props) {
+                JS_DefineProperty(cx, obj, p.c_str(), JS::NullHandleValue, JSPROP_ENUMERATE, 
+                    DynamicObject::GetCallback, DynamicObject::SetCallback);
+            }
+            
+            for (auto f : funcs) {
+                JS_DefineFunction(cx, obj, f.first.c_str(), f.second, 0, JSPROP_ENUMERATE);
+            }
+        }
+    }
+    return status;
 }
 
 void rs::jsapi::DynamicObject::FinalizeCallback(JSFreeOp* fop, JSObject* obj) {

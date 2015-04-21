@@ -21,7 +21,7 @@ bool rs::jsapi::Object::Create(Context& cx, std::initializer_list<const char*> p
         }
 
         for (auto f : functions) {
-            auto fn = JS_DefineFunction(cx, obj, f.first, f.second, 0, JSPROP_ENUMERATE);
+            JS_DefineFunction(cx, obj, f.first, f.second, 0, JSPROP_ENUMERATE);
         }
 
         auto callbacks = new ClassCallbacks { getter, setter };
