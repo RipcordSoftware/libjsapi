@@ -14,8 +14,21 @@ protected:
     
     virtual void TearDown() {
         
-    }            
+    }
+    
+public:
+    static bool SanityCheckWhatMessage(const char* msg);
 };
+
+bool MultiContextTests::SanityCheckWhatMessage(const char* msg) {
+    while (*msg != '\0') {
+        if (*msg < 0x0d || *msg > 0x7e) {
+            return false;
+        }
+        msg++;
+    }
+    return true;
+}
 
 TEST_F(MultiContextTests, test1) {
     auto context = rt_.NewContext();
@@ -69,6 +82,23 @@ TEST_F(MultiContextTests, test3) {
         ASSERT_THROW({
             rt_.NewContext();
         }, rs::jsapi::RuntimeWrongThreadException);
+    });
+       
+    t.join();
+}
+
+TEST_F(MultiContextTests, test3b) {        
+    std::thread t([]() {  
+        bool thrown = false;
+        try {
+            rt_.NewContext();
+        } catch (const rs::jsapi::RuntimeWrongThreadException& ex) {
+            auto what = ex.what();
+            ASSERT_TRUE(MultiContextTests::SanityCheckWhatMessage(what));
+            thrown = true;
+        }
+        
+        ASSERT_TRUE(thrown);
     });
        
     t.join();

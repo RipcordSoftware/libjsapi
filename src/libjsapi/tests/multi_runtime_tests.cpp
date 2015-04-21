@@ -14,8 +14,21 @@ protected:
     
     virtual void TearDown() {
         
-    }                    
+    }
+    
+public:
+    static bool SanityCheckWhatMessage(const char* msg);
 };
+
+bool MultiRuntimeTests::SanityCheckWhatMessage(const char* msg) {
+    while (*msg != '\0') {
+        if (*msg < 0x0d || *msg > 0x7e) {
+            return false;
+        }
+        msg++;
+    }
+    return true;
+}
 
 TEST_F(MultiRuntimeTests, test1) {
     ASSERT_THROW({
@@ -62,6 +75,25 @@ TEST_F(MultiRuntimeTests, test4) {
         ASSERT_THROW({
             rs::jsapi::Runtime rt3;
         }, rs::jsapi::RuntimeThreadInstanceException);
+    });
+    
+    t.join();
+}
+
+TEST_F(MultiRuntimeTests, test4b) {
+    std::thread t([](){
+        bool thrown = false;
+        rs::jsapi::Runtime rt1;
+    
+        try {
+            rs::jsapi::Runtime rt2;
+        } catch (const rs::jsapi::RuntimeThreadInstanceException& ex) {
+            auto what = ex.what();
+            ASSERT_TRUE(MultiRuntimeTests::SanityCheckWhatMessage(what));
+            thrown = true;
+        }
+        
+        ASSERT_TRUE(thrown);
     });
     
     t.join();
