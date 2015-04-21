@@ -18,11 +18,11 @@ int main() {
     args.Append(5);
     rs::jsapi::Value result(rt);
     rt.Call("square", args, result);
-    std::cout << result.toNumber() << std::endl;
+    std::cout << result << std::endl;
 
     // call the function from JavaScript and return the result
     rt.Evaluate("(function(){return square(9);})();", result);
-    std::cout << result.toNumber() << std::endl;
+    std::cout << result << std::endl;
 
     return 0;
 }

@@ -11,7 +11,7 @@ int main() {
             auto args = JS::CallArgsFromVp(argc, vp);
             if (argc > 0) {
                 rs::jsapi::Value str(cx, args.get(0));
-                std::cout << str.ToString() << std::endl;
+                std::cout << str << std::endl;
             }
             return true;
         });

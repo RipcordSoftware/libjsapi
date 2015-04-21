@@ -62,61 +62,80 @@ void rs::jsapi::Value::setNull() {
     value_.setNull();
 }
 
-std::string rs::jsapi::Value::ToString() {
+std::string rs::jsapi::Value::ToString() const {
     auto str = JS::ToString(cx_, value_);
-    std::vector<char> chars(JS_GetStringLength(str));
-    JS_EncodeStringToBuffer(cx_, str, &chars[0], chars.size());
-    return std::string(&chars[0], chars.size());
+    auto len = JS_GetStringLength(str);
+    if (len <= 64) {
+        auto chars = reinterpret_cast<char*>(alloca(len));
+        JS_EncodeStringToBuffer(cx_, str, chars, len);
+        return std::string(chars, len);
+    } else {
+        std::vector<char> chars(len);
+        JS_EncodeStringToBuffer(cx_, str, &chars[0], len);
+        return std::string(&chars[0], chars.size());
+    }
 }
 
-bool rs::jsapi::Value::isString() { 
+bool rs::jsapi::Value::isString() const { 
     return value_.isString(); 
 }
 
-bool rs::jsapi::Value::isNumber() { 
+bool rs::jsapi::Value::isNumber() const { 
     return value_.isNumber(); 
 }
 
-bool rs::jsapi::Value::isInt32() { 
+bool rs::jsapi::Value::isInt32() const { 
     return value_.isInt32(); 
 }
 
-bool rs::jsapi::Value::isBoolean() { 
+bool rs::jsapi::Value::isBoolean() const { 
     return value_.isBoolean(); 
 }
 
-bool rs::jsapi::Value::isObject() { 
+bool rs::jsapi::Value::isObject() const { 
     return value_.isObject(); 
 }
 
-bool rs::jsapi::Value::isNull() { 
+bool rs::jsapi::Value::isNull() const { 
     return value_.isNull(); 
 }
 
-bool rs::jsapi::Value::isUndefined() { 
+bool rs::jsapi::Value::isUndefined() const { 
     return value_.isUndefined(); 
 }
 
-JSString* rs::jsapi::Value::toString() { 
+JSString* rs::jsapi::Value::toString() const { 
     return value_.toString(); 
 }
 
-double rs::jsapi::Value::toNumber() { 
+double rs::jsapi::Value::toNumber() const { 
     return value_.toNumber(); 
 }
 
-int32_t rs::jsapi::Value::toInt32() { 
+int32_t rs::jsapi::Value::toInt32() const { 
     return value_.toInt32(); 
 }
 
-bool rs::jsapi::Value::toBoolean() { 
+bool rs::jsapi::Value::toBoolean() const { 
     return value_.toBoolean(); 
 }
 
-JSObject* rs::jsapi::Value::toObject() { 
+JSObject* rs::jsapi::Value::toObject() const { 
     return value_.toObjectOrNull(); 
 }
 
 JSContext* rs::jsapi::Value::getContext() { 
     return cx_; 
+}
+
+std::ostream& operator<<(std::ostream& os, const rs::jsapi::Value& value) {
+    if (value.isBoolean()) {
+        return os << value.toBoolean();
+    } else if (value.isInt32()) {
+        return os << value.toInt32();
+    } else if (value.isNumber()) {
+        return os << value.toNumber();
+    } else {
+        return os << value.ToString();
+    }
 }

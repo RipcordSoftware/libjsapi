@@ -2,6 +2,7 @@
 #define RS_JSAPI_VALUE_H
 
 #include <string>
+#include <iostream>
 
 #include <jsapi.h>
 
@@ -40,28 +41,30 @@ public:
     void setUndefined();
     void setNull();
     
-    bool isString();
-    bool isNumber();
-    bool isInt32();
-    bool isBoolean();
-    bool isObject();
-    bool isNull();
-    bool isUndefined();
+    bool isString() const;
+    bool isNumber() const;
+    bool isInt32() const;
+    bool isBoolean() const;
+    bool isObject() const;
+    bool isNull() const;
+    bool isUndefined() const;
     
-    JSString* toString();
-    double toNumber();
-    int32_t toInt32();
-    bool toBoolean();
-    JSObject* toObject();
+    JSString* toString() const;
+    double toNumber() const;
+    int32_t toInt32() const;
+    bool toBoolean() const;
+    JSObject* toObject() const;
 
-    std::string ToString();
+    std::string ToString() const;
 
 protected:
     JSContext* cx_;
     JS::RootedValue value_;    
 };
 
-}}    
+}}
+
+std::ostream& operator<<(std::ostream& os, const rs::jsapi::Value& value);
     
 #endif	/* RS_JSAPI_VALUE_H */
 
