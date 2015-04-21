@@ -29,8 +29,7 @@ int main() {
     rt.Evaluate("(function(){return 42;})();", result);
     
     // output the result to the console
-    auto val = result.toNumber();
-    std::cout << val << std::endl;
+    std::cout << result << std::endl;
     return 0;
 }
 ```
@@ -56,8 +55,7 @@ int main() {
     rt.Evaluate("(function(){return getTheAnswer();})();", result);
     
     // output the result to the console
-    auto val = result.toNumber();
-    std::cout << val << std::endl;
+    std::cout << result << std::endl;
     return 0;
 }
 ```
