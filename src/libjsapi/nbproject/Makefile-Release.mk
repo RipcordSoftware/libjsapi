@@ -58,7 +58,8 @@ TESTFILES= \
 	${TESTDIR}/TestFiles/f2 \
 	${TESTDIR}/TestFiles/f9 \
 	${TESTDIR}/TestFiles/f7 \
-	${TESTDIR}/TestFiles/f1
+	${TESTDIR}/TestFiles/f1 \
+	${TESTDIR}/TestFiles/f10
 
 # C Compiler Flags
 CFLAGS=
@@ -226,6 +227,16 @@ ${TESTDIR}/TestFiles/f1: ${TESTDIR}/tests/simple_script_tests.o ${OBJECTFILES:%.
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc}   -o ${TESTDIR}/TestFiles/f1 $^ ${LDLIBSOPTIONS} -lpthread -ldl `pkg-config --libs zlib`   
 
+${TESTDIR}/TestFiles/f10: ../../externals/installed/lib/libmozjs-31.a
+
+${TESTDIR}/TestFiles/f10: ../../externals/installed/lib/libgtest.a
+
+${TESTDIR}/TestFiles/f10: ../../externals/installed/lib/libgtest_main.a
+
+${TESTDIR}/TestFiles/f10: ${TESTDIR}/tests/simple_value_tests.o ${OBJECTFILES:%.o=%_nomain.o}
+	${MKDIR} -p ${TESTDIR}/TestFiles
+	${LINK.cc}   -o ${TESTDIR}/TestFiles/f10 $^ ${LDLIBSOPTIONS} -lpthread -ldl `pkg-config --libs zlib`   
+
 
 ${TESTDIR}/tests/call_js_function_tests.o: tests/call_js_function_tests.cpp 
 	${MKDIR} -p ${TESTDIR}/tests
@@ -279,6 +290,12 @@ ${TESTDIR}/tests/simple_script_tests.o: tests/simple_script_tests.cpp
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -I../../externals/installed/include/mozjs-31 -I../../externals/installed/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/simple_script_tests.o tests/simple_script_tests.cpp
+
+
+${TESTDIR}/tests/simple_value_tests.o: tests/simple_value_tests.cpp 
+	${MKDIR} -p ${TESTDIR}/tests
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../../externals/installed/include/mozjs-31 -I../../externals/installed/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/simple_value_tests.o tests/simple_value_tests.cpp
 
 
 ${OBJECTDIR}/context_nomain.o: ${OBJECTDIR}/context.o context.cpp 
@@ -411,6 +428,7 @@ ${OBJECTDIR}/value_nomain.o: ${OBJECTDIR}/value.o value.cpp
 	    ${TESTDIR}/TestFiles/f9 || true; \
 	    ${TESTDIR}/TestFiles/f7 || true; \
 	    ${TESTDIR}/TestFiles/f1 || true; \
+	    ${TESTDIR}/TestFiles/f10 || true; \
 	else  \
 	    ./${TEST} || true; \
 	fi

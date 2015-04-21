@@ -1,7 +1,5 @@
 #include <gtest/gtest.h>
 
-#include <thread>
-
 #include "../libjsapi.h"
 
 rs::jsapi::Runtime rt_;
