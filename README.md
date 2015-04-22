@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/RipcordSoftware/libjsapi.svg?branch=master)](https://travis-ci.org/RipcordSoftware/libjsapi)
-[![Coverage Status](https://coveralls.io/repos/RipcordSoftware/libjsapi/badge.svg)](https://coveralls.io/r/RipcordSoftware/libjsapi)
+[![Coverage Status](https://coveralls.io/repos/RipcordSoftware/libjsapi/badge.svg)](https://coveralls.io/r/RipcordSoftware/libjsapi)[![License](http://img.shields.io/:license-mit-blue.svg)]
 
 # libjsapi
 A SpiderMonkey 31 (Mozilla) JSAPI wrapper for C++ 11.
