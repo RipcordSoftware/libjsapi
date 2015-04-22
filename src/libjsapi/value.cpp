@@ -30,8 +30,24 @@ rs::jsapi::Value::Value(JSContext* cx, const JS::HandleValue& value) : Value(cx)
     set(value);
 }
 
+rs::jsapi::Value::Value(JSContext* cx, const JS::RootedObject& value) : Value(cx) {
+    set(value);
+}
+
+rs::jsapi::Value::Value(JSContext* cx, const JS::HandleObject& value) : Value(cx) {
+    set(value);
+}
+
 void rs::jsapi::Value::set(const JS::HandleValue& value) {
     value_.set(value);
+}
+
+void rs::jsapi::Value::set(const JS::RootedObject& value) {
+    value_.setObjectOrNull(value);
+}
+
+void rs::jsapi::Value::set(const JS::HandleObject& value) {
+    value_.setObjectOrNull(value);
 }
 
 void rs::jsapi::Value::set(const char* str) {
@@ -92,7 +108,7 @@ bool rs::jsapi::Value::isBoolean() const {
     return value_.isBoolean(); 
 }
 
-bool rs::jsapi::Value::isObject() const { 
+bool rs::jsapi::Value::isObject() const {
     return value_.isObject(); 
 }
 
@@ -102,6 +118,10 @@ bool rs::jsapi::Value::isNull() const {
 
 bool rs::jsapi::Value::isUndefined() const { 
     return value_.isUndefined(); 
+}
+
+bool rs::jsapi::Value::isArray() const {     
+    return value_.isObject() && JS_IsArrayObject(cx_, value_);
 }
 
 JSString* rs::jsapi::Value::toString() const { 

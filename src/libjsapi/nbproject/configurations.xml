@@ -5,6 +5,7 @@
                    displayName="Header Files"
                    projectFiles="true">
       <itemPath>context.h</itemPath>
+      <itemPath>dynamic_array.h</itemPath>
       <itemPath>dynamic_object.h</itemPath>
       <itemPath>exceptions.h</itemPath>
       <itemPath>function_arguments.h</itemPath>
@@ -23,6 +24,7 @@
                    displayName="Source Files"
                    projectFiles="true">
       <itemPath>context.cpp</itemPath>
+      <itemPath>dynamic_array.cpp</itemPath>
       <itemPath>dynamic_object.cpp</itemPath>
       <itemPath>function_arguments.cpp</itemPath>
       <itemPath>global.cpp</itemPath>
@@ -71,6 +73,12 @@
                      projectFiles="true"
                      kind="TEST">
         <itemPath>tests/script_exception_tests.cpp</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f11"
+                     displayName="Simple Dynamic Array Tests"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/simple_dynamic_array_tests.cpp</itemPath>
       </logicalFolder>
       <logicalFolder name="f9"
                      displayName="Simple Dynamic Object Tests"
@@ -128,6 +136,10 @@
       </item>
       <item path="context.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="dynamic_array.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="dynamic_array.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="dynamic_object.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="dynamic_object.h" ex="false" tool="3" flavor2="0">
@@ -179,6 +191,21 @@
         </ccTool>
         <linkerTool>
           <output>${TESTDIR}/TestFiles/f10</output>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f11">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f11</output>
         </linkerTool>
       </folder>
       <folder path="TestFiles/f2">
@@ -339,6 +366,11 @@
       <item path="tests/multi_runtime_tests.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/script_exception_tests.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/simple_dynamic_array_tests.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
       </item>
       <item path="tests/simple_dynamic_object_tests.cpp"
             ex="false"
@@ -387,6 +419,10 @@
       </item>
       <item path="context.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="dynamic_array.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="dynamic_array.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="dynamic_object.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="dynamic_object.h" ex="false" tool="3" flavor2="0">
@@ -436,6 +472,21 @@
         </ccTool>
         <linkerTool>
           <output>${TESTDIR}/TestFiles/f10</output>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f11">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f11</output>
         </linkerTool>
       </folder>
       <folder path="TestFiles/f2">
@@ -596,6 +647,11 @@
       <item path="tests/multi_runtime_tests.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/script_exception_tests.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/simple_dynamic_array_tests.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
       </item>
       <item path="tests/simple_dynamic_object_tests.cpp"
             ex="false"

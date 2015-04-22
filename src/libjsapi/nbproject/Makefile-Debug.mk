@@ -36,6 +36,7 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 # Object Files
 OBJECTFILES= \
 	${OBJECTDIR}/context.o \
+	${OBJECTDIR}/dynamic_array.o \
 	${OBJECTDIR}/dynamic_object.o \
 	${OBJECTDIR}/function_arguments.o \
 	${OBJECTDIR}/global.o \
@@ -56,6 +57,7 @@ TESTFILES= \
 	${TESTDIR}/TestFiles/f3 \
 	${TESTDIR}/TestFiles/f4 \
 	${TESTDIR}/TestFiles/f2 \
+	${TESTDIR}/TestFiles/f11 \
 	${TESTDIR}/TestFiles/f9 \
 	${TESTDIR}/TestFiles/f7 \
 	${TESTDIR}/TestFiles/f1 \
@@ -91,6 +93,11 @@ ${OBJECTDIR}/context.o: context.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs-31 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/context.o context.cpp
+
+${OBJECTDIR}/dynamic_array.o: dynamic_array.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs-31 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/dynamic_array.o dynamic_array.cpp
 
 ${OBJECTDIR}/dynamic_object.o: dynamic_object.cpp 
 	${MKDIR} -p ${OBJECTDIR}
@@ -197,6 +204,16 @@ ${TESTDIR}/TestFiles/f2: ${TESTDIR}/tests/script_exception_tests.o ${OBJECTFILES
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc} --coverage  -o ${TESTDIR}/TestFiles/f2 $^ ${LDLIBSOPTIONS} -lpthread -ldl `pkg-config --libs zlib`   
 
+${TESTDIR}/TestFiles/f11: ../../externals/installed/lib/libmozjs-31.a
+
+${TESTDIR}/TestFiles/f11: ../../externals/installed/lib/libgtest.a
+
+${TESTDIR}/TestFiles/f11: ../../externals/installed/lib/libgtest_main.a
+
+${TESTDIR}/TestFiles/f11: ${TESTDIR}/tests/simple_dynamic_array_tests.o ${OBJECTFILES:%.o=%_nomain.o}
+	${MKDIR} -p ${TESTDIR}/TestFiles
+	${LINK.cc} --coverage  -o ${TESTDIR}/TestFiles/f11 $^ ${LDLIBSOPTIONS} -lpthread -ldl `pkg-config --libs zlib`   
+
 ${TESTDIR}/TestFiles/f9: ../../externals/installed/lib/libmozjs-31.a
 
 ${TESTDIR}/TestFiles/f9: ../../externals/installed/lib/libgtest.a
@@ -274,6 +291,12 @@ ${TESTDIR}/tests/script_exception_tests.o: tests/script_exception_tests.cpp
 	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs-31 -I../../externals/installed/include -I. -std=c++11 --coverage -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/script_exception_tests.o tests/script_exception_tests.cpp
 
 
+${TESTDIR}/tests/simple_dynamic_array_tests.o: tests/simple_dynamic_array_tests.cpp 
+	${MKDIR} -p ${TESTDIR}/tests
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs-31 -I../../externals/installed/include -I. -std=c++11 --coverage -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/simple_dynamic_array_tests.o tests/simple_dynamic_array_tests.cpp
+
+
 ${TESTDIR}/tests/simple_dynamic_object_tests.o: tests/simple_dynamic_object_tests.cpp 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
@@ -309,6 +332,19 @@ ${OBJECTDIR}/context_nomain.o: ${OBJECTDIR}/context.o context.cpp
 	    $(COMPILE.cc) -g -I../../externals/installed/include/mozjs-31 -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/context_nomain.o context.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/context.o ${OBJECTDIR}/context_nomain.o;\
+	fi
+
+${OBJECTDIR}/dynamic_array_nomain.o: ${OBJECTDIR}/dynamic_array.o dynamic_array.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/dynamic_array.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -g -I../../externals/installed/include/mozjs-31 -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/dynamic_array_nomain.o dynamic_array.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/dynamic_array.o ${OBJECTDIR}/dynamic_array_nomain.o;\
 	fi
 
 ${OBJECTDIR}/dynamic_object_nomain.o: ${OBJECTDIR}/dynamic_object.o dynamic_object.cpp 
@@ -425,6 +461,7 @@ ${OBJECTDIR}/value_nomain.o: ${OBJECTDIR}/value.o value.cpp
 	    ${TESTDIR}/TestFiles/f3 || true; \
 	    ${TESTDIR}/TestFiles/f4 || true; \
 	    ${TESTDIR}/TestFiles/f2 || true; \
+	    ${TESTDIR}/TestFiles/f11 || true; \
 	    ${TESTDIR}/TestFiles/f9 || true; \
 	    ${TESTDIR}/TestFiles/f7 || true; \
 	    ${TESTDIR}/TestFiles/f1 || true; \

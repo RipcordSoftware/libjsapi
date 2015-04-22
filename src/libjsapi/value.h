@@ -21,6 +21,8 @@ public:
     Value(JSContext* cx, bool value);
     Value(JSContext* cx, double value);
     Value(JSContext* cx, const JS::HandleValue& obj);
+    Value(JSContext* cx, const JS::HandleObject& obj);
+    Value(JSContext* cx, const JS::RootedObject& obj);
     
     Value(const Value&) = delete;
     Value& operator=(const Value&) = delete;    
@@ -38,6 +40,8 @@ public:
     void set(bool value);
     void set(double value);
     void set(const JS::HandleValue& value);
+    void set(const JS::HandleObject& value);
+    void set(const JS::RootedObject& value);
     void setUndefined();
     void setNull();
     
@@ -48,6 +52,7 @@ public:
     bool isObject() const;
     bool isNull() const;
     bool isUndefined() const;
+    bool isArray() const;
     
     JSString* toString() const;
     double toNumber() const;

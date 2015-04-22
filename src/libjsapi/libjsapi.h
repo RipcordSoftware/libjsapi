@@ -8,6 +8,7 @@
 #include "global.h"
 #include "object.h"
 #include "dynamic_object.h"
+#include "dynamic_array.h"
 #include "function_arguments.h"
 #include "exceptions.h"
 
