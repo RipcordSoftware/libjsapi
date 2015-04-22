@@ -7,31 +7,33 @@
 JSClass rs::jsapi::Object::class_ = { 
     "rs_jsapi_object", JSCLASS_HAS_PRIVATE, JS_PropertyStub, JS_DeletePropertyStub,
     JS_PropertyStub, JS_StrictPropertyStub, JS_EnumerateStub, JS_ResolveStub, 
-    JS_ConvertStub, Object::FinalizeCallback 
+    JS_ConvertStub, Object::Finalize 
 };
 
 bool rs::jsapi::Object::Create(Context& cx, std::initializer_list<const char*> properties, 
-        Getter getter, Setter setter, std::initializer_list<Function> functions, JS::RootedObject& obj) {
-    obj = JS::RootedObject(cx, JS_NewObject(cx, &class_, JS::NullPtr(), JS::NullPtr()));    
+        GetCallback getter, SetCallback setter, std::initializer_list<Function> functions, Value& obj) {
+    JS::RootedObject newObj(cx, JS_NewObject(cx, &class_, JS::NullPtr(), JS::NullPtr()));    
     
-    if (obj) {
+    if (newObj) {
         for (auto p : properties) {
-            JS_DefineProperty(cx, obj, p, JS::NullHandleValue, JSPROP_ENUMERATE, 
-                Object::GetCallback, Object::SetCallback);
+            JS_DefineProperty(cx, newObj, p, JS::NullHandleValue, JSPROP_ENUMERATE, 
+                Object::Get, Object::Set);
         }
 
         for (auto f : functions) {
-            JS_DefineFunction(cx, obj, f.first, f.second, 0, JSPROP_ENUMERATE);
+            JS_DefineFunction(cx, newObj, f.first, f.second, 0, JSPROP_ENUMERATE);
         }
 
         auto callbacks = new ClassCallbacks { getter, setter };
-        Object::SetObjectCallbacks(obj, callbacks);
+        Object::SetObjectCallbacks(newObj, callbacks);
+
+        obj.set(newObj);
     }
     
-    return obj;
+    return newObj;
 }
 
-bool rs::jsapi::Object::GetCallback(JSContext* cx, JS::HandleObject obj, JS::HandleId id, JS::MutableHandleValue vp) {
+bool rs::jsapi::Object::Get(JSContext* cx, JS::HandleObject obj, JS::HandleId id, JS::MutableHandleValue vp) {
     auto callbacks = Object::GetObjectCallbacks(obj);    
     if (callbacks != nullptr && callbacks->getter != nullptr) {
         Value value(cx, vp);
@@ -62,7 +64,7 @@ bool rs::jsapi::Object::GetCallback(JSContext* cx, JS::HandleObject obj, JS::Han
     }
 }
 
-bool rs::jsapi::Object::SetCallback(JSContext* cx, JS::HandleObject obj, JS::HandleId id, bool strict, JS::MutableHandleValue vp) {
+bool rs::jsapi::Object::Set(JSContext* cx, JS::HandleObject obj, JS::HandleId id, bool strict, JS::MutableHandleValue vp) {
     auto callbacks = Object::GetObjectCallbacks(obj);
     if (callbacks != nullptr && callbacks->setter != nullptr) {
         Value value(cx, vp);
@@ -87,7 +89,7 @@ bool rs::jsapi::Object::SetCallback(JSContext* cx, JS::HandleObject obj, JS::Han
     }
 }
 
-void rs::jsapi::Object::FinalizeCallback(JSFreeOp* fop, JSObject* obj) {
+void rs::jsapi::Object::Finalize(JSFreeOp* fop, JSObject* obj) {
     delete GetObjectCallbacks(obj);
     SetObjectCallbacks(obj, nullptr);
 }

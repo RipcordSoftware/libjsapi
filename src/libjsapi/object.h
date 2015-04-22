@@ -14,8 +14,8 @@ class Value;
 
 class Object final {
 public:
-    typedef std::function<bool(const char* name, Value& value)> Getter;
-    typedef std::function<bool(const char* name, const Value& value)> Setter;
+    typedef std::function<bool(const char* name, Value& value)> GetCallback;
+    typedef std::function<bool(const char* name, const Value& value)> SetCallback;
     typedef std::pair<const char*, JSNative> Function;
     
     Object(Context& cx) = delete;
@@ -23,16 +23,16 @@ public:
     
     static bool Create(Context& cx, 
         std::initializer_list<const char*> properties,
-        Getter getter, Setter setter,
+        GetCallback getter, SetCallback setter,
         std::initializer_list<Function> functions,
-        JS::RootedObject& obj);
+        Value& obj);
     
 private:
-    struct ClassCallbacks { Getter getter; Setter setter; };
+    struct ClassCallbacks { GetCallback getter; SetCallback setter; };
     
-    static bool GetCallback(JSContext*, JS::HandleObject, JS::HandleId, JS::MutableHandleValue);
-    static bool SetCallback(JSContext*, JS::HandleObject, JS::HandleId, bool, JS::MutableHandleValue);
-    static void FinalizeCallback(JSFreeOp* fop, JSObject* obj);
+    static bool Get(JSContext*, JS::HandleObject, JS::HandleId, JS::MutableHandleValue);
+    static bool Set(JSContext*, JS::HandleObject, JS::HandleId, bool, JS::MutableHandleValue);
+    static void Finalize(JSFreeOp* fop, JSObject* obj);
 
     static ClassCallbacks* GetObjectCallbacks(JSObject* obj);
     static void SetObjectCallbacks(JSObject* obj, ClassCallbacks* callbacks);

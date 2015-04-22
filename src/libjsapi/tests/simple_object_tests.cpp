@@ -22,17 +22,17 @@ protected:
 TEST_F(SimpleObjectTests, test1) {
     auto context = rt_.NewContext();
     
-    JS::RootedObject obj(*context);
-    rs::jsapi::Object::Create(*context, {}, rs::jsapi::Object::Getter(), rs::jsapi::Object::Setter(), {}, obj);
-    ASSERT_TRUE(obj);
+    rs::jsapi::Value obj(*context);
+    rs::jsapi::Object::Create(*context, {}, rs::jsapi::Object::GetCallback(), rs::jsapi::Object::SetCallback(), {}, obj);
+    ASSERT_TRUE(!!obj);
 }
 
 TEST_F(SimpleObjectTests, test2) {
     auto context = rt_.NewContext();
     
-    JS::RootedObject obj(*context);
-    rs::jsapi::Object::Create(*context, {"hello"}, rs::jsapi::Object::Getter(), rs::jsapi::Object::Setter(), {}, obj);
-    ASSERT_TRUE(obj);
+    rs::jsapi::Value obj(*context);
+    rs::jsapi::Object::Create(*context, {"hello"}, rs::jsapi::Object::GetCallback(), rs::jsapi::Object::SetCallback(), {}, obj);
+    ASSERT_TRUE(!!obj);
     
     JS::Rooted<JSPropertyDescriptor> desc(*context);
     JS::MutableHandle<JSPropertyDescriptor> descHandle(&desc);
@@ -43,9 +43,9 @@ TEST_F(SimpleObjectTests, test2) {
 TEST_F(SimpleObjectTests, test3) {
     auto context = rt_.NewContext();
     
-    JS::RootedObject obj(*context);
-    rs::jsapi::Object::Create(*context, {"hello", "pi", "lorem", "the_answer"}, rs::jsapi::Object::Getter(), rs::jsapi::Object::Setter(), {}, obj);
-    ASSERT_TRUE(obj);
+    rs::jsapi::Value obj(*context);
+    rs::jsapi::Object::Create(*context, {"hello", "pi", "lorem", "the_answer"}, rs::jsapi::Object::GetCallback(), rs::jsapi::Object::SetCallback(), {}, obj);
+    ASSERT_TRUE(!!obj);
     
     JS::Rooted<JSPropertyDescriptor> desc(*context);
     JS::MutableHandle<JSPropertyDescriptor> descHandle(&desc);
@@ -65,7 +65,7 @@ TEST_F(SimpleObjectTests, test3) {
 TEST_F(SimpleObjectTests, test4) {
     auto context = rt_.NewContext();
     
-    JS::RootedObject obj(*context);
+    rs::jsapi::Value obj(*context);
     rs::jsapi::Object::Create(*context, 
         {"hello", "pi", "lorem", "the_answer"}, 
         [](const char* name, rs::jsapi::Value& value) {
@@ -85,7 +85,7 @@ TEST_F(SimpleObjectTests, test4) {
         nullptr, 
         {}, 
         obj);
-    ASSERT_TRUE(obj);
+    ASSERT_TRUE(!!obj);
     
     rs::jsapi::Value value(*context);
     ASSERT_TRUE(JS_GetProperty(*context, obj, "hello", value));
@@ -111,14 +111,14 @@ TEST_F(SimpleObjectTests, test4) {
 TEST_F(SimpleObjectTests, test5) {
     auto context = rt_.NewContext();
     
-    JS::RootedObject obj(*context);
+    rs::jsapi::Value obj(*context);
     rs::jsapi::Object::Create(*context, 
         {"hello", "pi", "lorem", "the_answer"}, 
         nullptr, 
         nullptr, 
         {}, 
         obj);
-    ASSERT_TRUE(obj);
+    ASSERT_TRUE(!!obj);
     
     rs::jsapi::Value value(*context);
     ASSERT_TRUE(JS_GetProperty(*context, obj, "hello", value));
@@ -140,14 +140,14 @@ TEST_F(SimpleObjectTests, test5) {
 TEST_F(SimpleObjectTests, test5b) {
     auto context = rt_.NewContext();
     
-    JS::RootedObject obj(*context);
+    rs::jsapi::Value obj(*context);
     rs::jsapi::Object::Create(*context, 
         {"hello", "pi", "lorem", "the_answer"}, 
         nullptr, 
         nullptr, 
         {}, 
         obj);
-    ASSERT_TRUE(obj);
+    ASSERT_TRUE(!!obj);
     
     ASSERT_TRUE(JS_SetProperty(*context, obj, "hello", rs::jsapi::Value(rt_, "world")));
     ASSERT_TRUE(JS_SetProperty(*context, obj, "pi", rs::jsapi::Value(rt_, 3.14159)));
@@ -160,14 +160,14 @@ TEST_F(SimpleObjectTests, test6) {
     
     std::string longFieldName(384, '1');
     
-    JS::RootedObject obj(*context);
+    rs::jsapi::Value obj(*context);
     rs::jsapi::Object::Create(*context, 
         { longFieldName.c_str() },
         [](const char* name, rs::jsapi::Value& value) { value.set(42); return true; },
         nullptr, 
         {}, 
         obj);
-    ASSERT_TRUE(obj);
+    ASSERT_TRUE(!!obj);
     
     rs::jsapi::Value value(*context);
     ASSERT_TRUE(JS_GetProperty(*context, obj, longFieldName.c_str(), value));
@@ -178,7 +178,7 @@ TEST_F(SimpleObjectTests, test6) {
 TEST_F(SimpleObjectTests, test7) {
     auto context = rt_.NewContext();
     
-    JS::RootedObject obj(*context);
+    rs::jsapi::Value obj(*context);
     rs::jsapi::Object::Create(*context, { "the_answer" }, 
         [](const char* name, rs::jsapi::Value& value) { value.set(42); return true; },
         nullptr,
@@ -200,7 +200,7 @@ TEST_F(SimpleObjectTests, test7) {
 TEST_F(SimpleObjectTests, test8) {
     auto context = rt_.NewContext();
     
-    JS::RootedObject obj(*context);
+    rs::jsapi::Value obj(*context);
     rs::jsapi::Object::Create(*context, { "hello" }, 
         [](const char* name, rs::jsapi::Value& value) { value.set("world"); return true; },
         nullptr,
@@ -222,14 +222,14 @@ TEST_F(SimpleObjectTests, test8) {
 TEST_F(SimpleObjectTests, test9) {
     auto context = rt_.NewContext();
     
-    JS::RootedObject obj(*context);
+    rs::jsapi::Value obj(*context);
     rs::jsapi::Object::Create(*context, 
         {},
         nullptr,
         nullptr, 
         { std::make_pair("myfunc", [](JSContext* cx, unsigned argc, JS::Value* vp){ return true; })}, 
         obj);
-    ASSERT_TRUE(obj);
+    ASSERT_TRUE(!!obj);
     
     JS::Rooted<JSPropertyDescriptor> desc(*context);
     JS::MutableHandle<JSPropertyDescriptor> descHandle(&desc);
@@ -241,7 +241,7 @@ TEST_F(SimpleObjectTests, test9) {
 TEST_F(SimpleObjectTests, test10) {
     auto context = rt_.NewContext();
     
-    JS::RootedObject obj(*context);
+    rs::jsapi::Value obj(*context);
     rs::jsapi::Object::Create(*context, 
         {},
         nullptr,
@@ -252,7 +252,7 @@ TEST_F(SimpleObjectTests, test10) {
             return true; 
         })}, 
         obj);
-    ASSERT_TRUE(obj);
+    ASSERT_TRUE(!!obj);
     
     rs::jsapi::FunctionArguments args(*context);
     rs::jsapi::Value result(*context);
@@ -264,7 +264,7 @@ TEST_F(SimpleObjectTests, test10) {
 TEST_F(SimpleObjectTests, test11) {
     auto context = rt_.NewContext();
     
-    JS::RootedObject obj(*context);
+    rs::jsapi::Value obj(*context);
     rs::jsapi::Object::Create(*context, 
         {},
         nullptr,
@@ -277,7 +277,7 @@ TEST_F(SimpleObjectTests, test11) {
             })
         },
         obj);
-    ASSERT_TRUE(obj);
+    ASSERT_TRUE(!!obj);
       
     context->Evaluate("var myfunc = function(o) { return o.myfunc(); }");
     
@@ -295,7 +295,7 @@ TEST_F(SimpleObjectTests, test13) {
     
     rs::jsapi::Value fieldValue(*context);
     
-    JS::RootedObject obj(*context);
+    rs::jsapi::Value obj(*context);
     rs::jsapi::Object::Create(*context, { "hello" },         
         nullptr,
         [&](const char* name, const rs::jsapi::Value& value) { 
@@ -322,7 +322,7 @@ TEST_F(SimpleObjectTests, test14) {
     std::string longFieldName(384, '1');
     rs::jsapi::Value fieldValue(*context);
     
-    JS::RootedObject obj(*context);
+    rs::jsapi::Value obj(*context);
     rs::jsapi::Object::Create(*context, { longFieldName.c_str() },         
         nullptr,
         [&](const char* name, const rs::jsapi::Value& value) { 
@@ -348,14 +348,14 @@ TEST_F(SimpleObjectTests, test14) {
 TEST_F(SimpleObjectTests, test15) {
     auto context = rt_.NewContext();
     
-    JS::RootedObject obj(*context);
+    rs::jsapi::Value obj(*context);
     rs::jsapi::Object::Create(*context, 
         {"hello", "pi", "lorem", "the_answer"}, 
         nullptr, 
         nullptr, 
         {}, 
         obj);
-    ASSERT_TRUE(obj);
+    ASSERT_TRUE(!!obj);
     
     context->Evaluate("var myfunc = function(o){ var arr=[]; for (var prop in o) { arr.push(prop); } return arr.toString(); };");
     
