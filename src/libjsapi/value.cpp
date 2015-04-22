@@ -45,6 +45,11 @@ rs::jsapi::Value::Value(JSContext* cx, const JS::RootedObject& value) : cx_(cx),
     set(value);
 }
 
+rs::jsapi::Value::Value(JSContext* cx, JSObject* value) : cx_(cx), isObject_(true) {
+    new (&object_) JS::RootedObject(cx);
+    set(value);
+}
+
 rs::jsapi::Value::Value(JSContext* cx, const JS::HandleObject& value) : cx_(cx), isObject_(true) {
     new (&object_) JS::RootedObject(cx);
     set(value);
@@ -65,6 +70,11 @@ void rs::jsapi::Value::set(const JS::RootedObject& value) {
 }
 
 void rs::jsapi::Value::set(const JS::HandleObject& value) {
+    InitObjectRef();
+    object_.set(value);
+}
+
+void rs::jsapi::Value::set(JSObject* value) {
     InitObjectRef();
     object_.set(value);
 }
@@ -195,10 +205,7 @@ bool rs::jsapi::Value::toBoolean() const {
 }
 
 JSObject* rs::jsapi::Value::toObject() const { 
-    if (!isObject_) {
-        throw ValueCastException();
-    }
-
+    ToObjectRef();
     return object_.get();
 }
 

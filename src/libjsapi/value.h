@@ -23,6 +23,7 @@ public:
     Value(JSContext* cx, const JS::HandleValue& obj);
     Value(JSContext* cx, const JS::HandleObject& obj);
     Value(JSContext* cx, const JS::RootedObject& obj);
+    Value(JSContext* cx, JSObject* obj);
 
     ~Value();    
     
@@ -54,6 +55,7 @@ public:
     void set(const JS::HandleValue& value);
     void set(const JS::HandleObject& value);
     void set(const JS::RootedObject& value);
+    void set(JSObject* value);
     void set(const Value& value);
     void setUndefined();
     void setNull();

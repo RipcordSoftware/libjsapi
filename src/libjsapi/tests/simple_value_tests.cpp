@@ -17,7 +17,19 @@ protected:
     virtual void TearDown() {
         
     }    
+public:
+    static bool SanityCheckWhatMessage(const char* msg);
 };
+
+bool SimpleValueTests::SanityCheckWhatMessage(const char* msg) {
+    while (*msg != '\0') {
+        if (*msg < 0x0d || *msg > 0x7e) {
+            return false;
+        }
+        msg++;
+    }
+    return true;
+}
 
 TEST_F(SimpleValueTests, test1) {
     rs::jsapi::Value value(rt_);
@@ -192,10 +204,14 @@ TEST_F(SimpleValueTests, test16) {
 }
 
 TEST_F(SimpleValueTests, test17) {
-    JS::RootedObject obj(rt_, JS_NewObject(rt_, nullptr, JS::NullPtr(), JS::NullPtr()));
-    
-    rs::jsapi::Value value(rt_, obj);
+    rs::jsapi::Value value(rt_, JS_NewObject(rt_, nullptr, JS::NullPtr(), JS::NullPtr()));
     ASSERT_TRUE(value.isObject());
+    ASSERT_STREQ("[object Object]", value.ToString().c_str());
+    
+    const JS::HandleObject& objRef = value;
+    rs::jsapi::Value value2(rt_, objRef);
+    ASSERT_TRUE(value2.isObject());
+    ASSERT_STREQ("[object Object]", value2.ToString().c_str());
 }
 
 TEST_F(SimpleValueTests, test18) {
@@ -203,6 +219,7 @@ TEST_F(SimpleValueTests, test18) {
     
     rs::jsapi::Value value(rt_, obj);
     ASSERT_TRUE(value.isArray());
+    ASSERT_STREQ("", value.ToString().c_str());
 }
 
 TEST_F(SimpleValueTests, test19) {
@@ -247,4 +264,77 @@ TEST_F(SimpleValueTests, test23) {
     value.set(obj);
     ASSERT_TRUE(value.isObject());
     ASSERT_FALSE(value.isNumber());
+}
+
+TEST_F(SimpleValueTests, test24) {
+    rs::jsapi::Value obj(rt_, JS_NewObject(rt_, nullptr, JS::NullPtr(), JS::NullPtr()));
+        
+    ASSERT_THROW({
+        obj.toNumber();
+    }, rs::jsapi::ValueCastException);
+    
+    ASSERT_THROW({
+        obj.toString();
+    }, rs::jsapi::ValueCastException);
+    
+    ASSERT_THROW({
+        obj.toBoolean();
+    }, rs::jsapi::ValueCastException);
+    
+    ASSERT_THROW({
+        obj.toInt32();
+    }, rs::jsapi::ValueCastException);
+}
+
+TEST_F(SimpleValueTests, test25) {
+    rs::jsapi::Value value(rt_, 42);
+        
+    ASSERT_THROW({
+        value.toObject();
+    }, rs::jsapi::ValueCastException);
+    
+    ASSERT_THROW({
+        rs::jsapi::Value result(rt_);
+       JS_GetProperty(rt_, value, "test", result);
+    }, rs::jsapi::ValueCastException);
+}
+
+TEST_F(SimpleValueTests, test26) {
+    rs::jsapi::Value obj(rt_, JS_NewObject(rt_, nullptr, JS::NullPtr(), JS::NullPtr()));
+    
+    ASSERT_TRUE(obj.isObject());
+    ASSERT_TRUE(obj.toObject() != nullptr);    
+
+    JS::RootedValue rv(rt_, obj);
+    ASSERT_TRUE(rv.isObject());
+    
+    ASSERT_TRUE(obj.isObject());
+    ASSERT_TRUE(obj.toObject() != nullptr);    
+}
+
+TEST_F(SimpleValueTests, test27) {
+    rs::jsapi::Value obj(rt_, JS_NewArrayObject(rt_, 0));
+    
+    ASSERT_TRUE(obj.isArray());
+    ASSERT_TRUE(obj.toObject() != nullptr);    
+
+    JS::RootedValue rv(rt_, obj);
+    ASSERT_TRUE(rv.isObject());
+    
+    ASSERT_TRUE(obj.isArray());
+    ASSERT_TRUE(obj.toObject() != nullptr);    
+}
+
+TEST_F(SimpleValueTests, test28) {
+    bool thrown = false;
+    rs::jsapi::Value obj(rt_, 42);
+    
+    try {
+        obj.toObject();
+    } catch (const rs::jsapi::ValueCastException& ex) {
+        SanityCheckWhatMessage(ex.what());
+        thrown = true;
+    }
+    
+    ASSERT_TRUE(thrown);
 }
