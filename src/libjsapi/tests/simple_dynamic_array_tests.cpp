@@ -111,3 +111,23 @@ TEST_F(SimpleDynamicArrayTests, test4) {
         ASSERT_EQ(i, result.toInt32());
     }
 }
+
+TEST_F(SimpleDynamicArrayTests, test5) {    
+    auto count = 0;
+    
+    if (true) {
+        auto context = rt_.NewContext();
+        
+        rs::jsapi::Value obj(*context);
+        rs::jsapi::DynamicArray::Create(
+            *context, 
+            nullptr, 
+            nullptr, 
+            nullptr,
+            [&]() { ++count; },
+            obj);
+        ASSERT_TRUE(!!obj);
+    }
+    
+    ASSERT_EQ(1, count);
+}

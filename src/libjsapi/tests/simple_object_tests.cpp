@@ -380,3 +380,23 @@ TEST_F(SimpleObjectTests, test14) {
     ASSERT_TRUE(result.isString());
     ASSERT_STREQ("hello,pi,lorem,the_answer", result.ToString().c_str());    
 }
+
+TEST_F(SimpleObjectTests, test15) {    
+    auto count = 0;
+    
+    if (true) {
+        auto context = rt_.NewContext();
+        
+        rs::jsapi::Value obj(*context);
+        rs::jsapi::Object::Create(*context, 
+            {}, 
+            nullptr, 
+            nullptr, 
+            {},
+            [&]() { ++count; },
+            obj);
+        ASSERT_TRUE(!!obj);
+    }
+    
+    ASSERT_EQ(1, count);
+}

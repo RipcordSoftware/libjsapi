@@ -254,3 +254,23 @@ TEST_F(SimpleDynamicObjectTests, test8) {
     ASSERT_TRUE(result.isString());
     ASSERT_STREQ("the_answer,pi,square,echo", result.ToString().c_str());
 }
+
+TEST_F(SimpleDynamicObjectTests, test9) {    
+    auto count = 0;
+    
+    if (true) {
+        auto context = rt_.NewContext();
+        
+        rs::jsapi::Value obj(*context);
+        rs::jsapi::DynamicObject::Create(
+            *context, 
+            nullptr, 
+            nullptr, 
+            nullptr,
+            [&]() { ++count; },
+            obj);
+        ASSERT_TRUE(!!obj);
+    }
+    
+    ASSERT_EQ(1, count);
+}
