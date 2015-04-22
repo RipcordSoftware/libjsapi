@@ -6,22 +6,24 @@
 
 JSClass rs::jsapi::DynamicObject::class_ = { 
     "rs_jsapi_dynamicobject", JSCLASS_HAS_PRIVATE, JS_PropertyStub, JS_DeletePropertyStub,
-    DynamicObject::GetCallback, DynamicObject::SetCallback, DynamicObject::EnumerateCallback, JS_ResolveStub, 
-    JS_ConvertStub, DynamicObject::FinalizeCallback 
+    DynamicObject::Get, DynamicObject::Set, DynamicObject::Enumerate, JS_ResolveStub, 
+    JS_ConvertStub, DynamicObject::Finalize 
 };
 
-bool rs::jsapi::DynamicObject::Create(Context& cx, Getter getter, DynamicObject::Setter setter, Enumerator enumerator, JS::RootedObject& obj) {
-    obj = JS::RootedObject(cx, JS_NewObject(cx, &class_, JS::NullPtr(), JS::NullPtr()));
+bool rs::jsapi::DynamicObject::Create(Context& cx, GetCallback getter, DynamicObject::SetCallback setter, Enumerator enumerator, Value& obj) {
+    JS::RootedObject newObj(cx, JS_NewObject(cx, &class_, JS::NullPtr(), JS::NullPtr()));
     
-    if (obj) {
+    if (newObj) {
         auto callbacks = new ClassCallbacks { getter, setter, enumerator };
-        DynamicObject::SetObjectCallbacks(obj, callbacks);        
+        DynamicObject::SetObjectCallbacks(newObj, callbacks);
+        
+        obj.set(newObj);
     }
     
-    return obj;
+    return newObj;
 }
 
-bool rs::jsapi::DynamicObject::GetCallback(JSContext* cx, JS::HandleObject obj, JS::HandleId id, JS::MutableHandleValue vp) {
+bool rs::jsapi::DynamicObject::Get(JSContext* cx, JS::HandleObject obj, JS::HandleId id, JS::MutableHandleValue vp) {
     auto callbacks = DynamicObject::GetObjectCallbacks(obj);
     
     if (callbacks != nullptr && callbacks->getter != nullptr) {
@@ -52,7 +54,7 @@ bool rs::jsapi::DynamicObject::GetCallback(JSContext* cx, JS::HandleObject obj, 
     }
 }
 
-bool rs::jsapi::DynamicObject::SetCallback(JSContext* cx, JS::HandleObject obj, JS::HandleId id, bool strict, JS::MutableHandleValue vp) {
+bool rs::jsapi::DynamicObject::Set(JSContext* cx, JS::HandleObject obj, JS::HandleId id, bool strict, JS::MutableHandleValue vp) {
     auto callbacks = DynamicObject::GetObjectCallbacks(obj);
     
     if (callbacks != nullptr && callbacks->setter != nullptr) {
@@ -78,7 +80,7 @@ bool rs::jsapi::DynamicObject::SetCallback(JSContext* cx, JS::HandleObject obj, 
     }
 }
 
-bool rs::jsapi::DynamicObject::EnumerateCallback(JSContext* cx, JS::HandleObject obj) {
+bool rs::jsapi::DynamicObject::Enumerate(JSContext* cx, JS::HandleObject obj) {
     auto status = true;
     auto callbacks = DynamicObject::GetObjectCallbacks(obj);
     if (callbacks != nullptr && callbacks->enumerator != nullptr) {
@@ -88,7 +90,7 @@ bool rs::jsapi::DynamicObject::EnumerateCallback(JSContext* cx, JS::HandleObject
         if (status) {
             for (auto p : props) {
                 JS_DefineProperty(cx, obj, p.c_str(), JS::NullHandleValue, JSPROP_ENUMERATE, 
-                    DynamicObject::GetCallback, DynamicObject::SetCallback);
+                    DynamicObject::Get, DynamicObject::Set);
             }
             
             for (auto f : funcs) {
@@ -99,7 +101,7 @@ bool rs::jsapi::DynamicObject::EnumerateCallback(JSContext* cx, JS::HandleObject
     return status;
 }
 
-void rs::jsapi::DynamicObject::FinalizeCallback(JSFreeOp* fop, JSObject* obj) {
+void rs::jsapi::DynamicObject::Finalize(JSFreeOp* fop, JSObject* obj) {
     delete GetObjectCallbacks(obj);
     SetObjectCallbacks(obj, nullptr);
 }

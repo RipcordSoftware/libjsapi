@@ -1,9 +1,5 @@
 #include <gtest/gtest.h>
 
-#include <thread>
-#include <vector>
-#include <string>
-
 #include "../libjsapi.h"
 
 rs::jsapi::Runtime rt_;
@@ -22,7 +18,7 @@ protected:
 TEST_F(SimpleDynamicObjectTests, test1) {
     auto context = rt_.NewContext();    
     
-    JS::RootedObject obj(*context);
+    rs::jsapi::Value obj(*context);
     rs::jsapi::DynamicObject::Create(
         *context,
         [](const char* name, rs::jsapi::Value& value) {            
@@ -32,7 +28,7 @@ TEST_F(SimpleDynamicObjectTests, test1) {
         nullptr, 
         nullptr,
         obj);
-    ASSERT_TRUE(obj);
+    ASSERT_TRUE(!!obj);
     
     context->Evaluate("var myfunc=function(n){return n.hello;};");    
     
@@ -49,7 +45,7 @@ TEST_F(SimpleDynamicObjectTests, test1) {
 TEST_F(SimpleDynamicObjectTests, test2) {
     auto context = rt_.NewContext();    
     
-    JS::RootedObject obj(*context);
+    rs::jsapi::Value obj(*context);
     rs::jsapi::DynamicObject::Create(
         *context,
         [](const char* name, rs::jsapi::Value& value) {            
@@ -59,7 +55,7 @@ TEST_F(SimpleDynamicObjectTests, test2) {
         nullptr,
         nullptr, 
         obj);            
-    ASSERT_TRUE(obj);
+    ASSERT_TRUE(!!obj);
     
     context->Evaluate("var myfunc=function(n){return n.hello;};");    
     
@@ -77,7 +73,7 @@ TEST_F(SimpleDynamicObjectTests, test3) {
     std::string longFieldName(384, '1');
     auto context = rt_.NewContext();    
     
-    JS::RootedObject obj(*context);
+    rs::jsapi::Value obj(*context);
     rs::jsapi::DynamicObject::Create(
         *context,
         [](const char* name, rs::jsapi::Value& value) {            
@@ -87,7 +83,7 @@ TEST_F(SimpleDynamicObjectTests, test3) {
         nullptr, 
         nullptr,
         obj);
-    ASSERT_TRUE(obj);
+    ASSERT_TRUE(!!obj);
     
     std::stringstream script;
     script << "var myfunc=function(o){ return o['" << longFieldName << "'];};";
@@ -108,7 +104,7 @@ TEST_F(SimpleDynamicObjectTests, test4) {
     
     auto context = rt_.NewContext();    
     
-    JS::RootedObject obj(*context);
+    rs::jsapi::Value obj(*context);
     rs::jsapi::DynamicObject::Create(
         *context,
         nullptr, 
@@ -118,7 +114,7 @@ TEST_F(SimpleDynamicObjectTests, test4) {
         },
         nullptr,
         obj);        
-    ASSERT_TRUE(obj);
+    ASSERT_TRUE(!!obj);
         
     rt_.Evaluate("var myfunc=function(o){ o.test = 'world';};");
     
@@ -137,7 +133,7 @@ TEST_F(SimpleDynamicObjectTests, test5) {
     
     auto context = rt_.NewContext();    
     
-    JS::RootedObject obj(*context);
+    rs::jsapi::Value obj(*context);
     rs::jsapi::DynamicObject::Create(
         *context,
         nullptr, 
@@ -147,7 +143,7 @@ TEST_F(SimpleDynamicObjectTests, test5) {
         },
         nullptr,
         obj);
-    ASSERT_TRUE(obj);
+    ASSERT_TRUE(!!obj);
     
     std::stringstream script;
     script << "var myfunc=function(o){ o['" << longFieldName << "'] = 'world';};";
@@ -165,7 +161,7 @@ TEST_F(SimpleDynamicObjectTests, test5) {
 TEST_F(SimpleDynamicObjectTests, test6) {
     auto context = rt_.NewContext();    
     
-    JS::RootedObject obj(*context);
+    rs::jsapi::Value obj(*context);
     rs::jsapi::DynamicObject::Create(
         *context,
         nullptr, 
@@ -177,7 +173,7 @@ TEST_F(SimpleDynamicObjectTests, test6) {
             return true;
         },
         obj);
-    ASSERT_TRUE(obj);
+    ASSERT_TRUE(!!obj);
     
     context->Evaluate("var myfunc=function(o){var fields = 0; for (var prop in o) { ++fields; } return fields;};");    
     
@@ -194,7 +190,7 @@ TEST_F(SimpleDynamicObjectTests, test6) {
 TEST_F(SimpleDynamicObjectTests, test7) {
     auto context = rt_.NewContext();    
     
-    JS::RootedObject obj(*context);
+    rs::jsapi::Value obj(*context);
     rs::jsapi::DynamicObject::Create(
         *context,
         nullptr, 
@@ -207,7 +203,7 @@ TEST_F(SimpleDynamicObjectTests, test7) {
             return true;
         },
         obj);
-    ASSERT_TRUE(obj);
+    ASSERT_TRUE(!!obj);
     
     context->Evaluate("var myfunc=function(o){var fields = 0; for (var prop in o) { ++fields; } return fields;};");    
     
@@ -224,7 +220,7 @@ TEST_F(SimpleDynamicObjectTests, test7) {
 TEST_F(SimpleDynamicObjectTests, test8) {
     auto context = rt_.NewContext();    
     
-    JS::RootedObject obj(*context);
+    rs::jsapi::Value obj(*context);
     rs::jsapi::DynamicObject::Create(
         *context,
         nullptr, 
@@ -237,7 +233,7 @@ TEST_F(SimpleDynamicObjectTests, test8) {
             return true;
         },
         obj);
-    ASSERT_TRUE(obj);
+    ASSERT_TRUE(!!obj);
     
     context->Evaluate("var myfunc=function(o){var fields = []; for (var prop in o) { fields.push(prop); } return fields.toString();};");    
     
