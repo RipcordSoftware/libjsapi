@@ -46,3 +46,4 @@ coverage/*
 # ignore the example output files
 examples/helloworld
 examples/square
+examples/object
