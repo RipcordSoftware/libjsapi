@@ -10,11 +10,11 @@ JSClass rs::jsapi::DynamicObject::class_ = {
     JS_ConvertStub, DynamicObject::Finalize 
 };
 
-bool rs::jsapi::DynamicObject::Create(Context& cx, GetCallback getter, DynamicObject::SetCallback setter, Enumerator enumerator, Value& obj) {
+bool rs::jsapi::DynamicObject::Create(Context& cx, GetCallback getter, DynamicObject::SetCallback setter, EnumeratorCallback enumerator, FinalizeCallback finalize, Value& obj) {
     JS::RootedObject newObj(cx, JS_NewObject(cx, &class_, JS::NullPtr(), JS::NullPtr()));
     
     if (newObj) {
-        auto callbacks = new ClassCallbacks { getter, setter, enumerator };
+        auto callbacks = new ClassCallbacks { getter, setter, enumerator, finalize };
         DynamicObject::SetObjectCallbacks(newObj, callbacks);
         
         obj.set(newObj);
@@ -102,8 +102,13 @@ bool rs::jsapi::DynamicObject::Enumerate(JSContext* cx, JS::HandleObject obj) {
 }
 
 void rs::jsapi::DynamicObject::Finalize(JSFreeOp* fop, JSObject* obj) {
-    delete GetObjectCallbacks(obj);
+    auto callbacks = DynamicObject::GetObjectCallbacks(obj);
+    if (callbacks != nullptr && callbacks->finalize != nullptr) {
+        callbacks->finalize();
+    }
+    
     SetObjectCallbacks(obj, nullptr);
+    delete callbacks;    
 }
 
 rs::jsapi::DynamicObject::ClassCallbacks* rs::jsapi::DynamicObject::GetObjectCallbacks(JSObject* obj) {

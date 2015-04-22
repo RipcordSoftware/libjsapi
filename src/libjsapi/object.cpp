@@ -11,7 +11,7 @@ JSClass rs::jsapi::Object::class_ = {
 };
 
 bool rs::jsapi::Object::Create(Context& cx, std::initializer_list<const char*> properties, 
-        GetCallback getter, SetCallback setter, std::initializer_list<Function> functions, Value& obj) {
+        GetCallback getter, SetCallback setter, std::initializer_list<Function> functions, FinalizeCallback finalizer, Value& obj) {
     JS::RootedObject newObj(cx, JS_NewObject(cx, &class_, JS::NullPtr(), JS::NullPtr()));    
     
     if (newObj) {
@@ -24,7 +24,7 @@ bool rs::jsapi::Object::Create(Context& cx, std::initializer_list<const char*> p
             JS_DefineFunction(cx, newObj, f.first, f.second, 0, JSPROP_ENUMERATE);
         }
 
-        auto callbacks = new ClassCallbacks { getter, setter };
+        auto callbacks = new ClassCallbacks { getter, setter, finalizer };
         Object::SetObjectCallbacks(newObj, callbacks);
 
         obj.set(newObj);
@@ -90,8 +90,13 @@ bool rs::jsapi::Object::Set(JSContext* cx, JS::HandleObject obj, JS::HandleId id
 }
 
 void rs::jsapi::Object::Finalize(JSFreeOp* fop, JSObject* obj) {
-    delete GetObjectCallbacks(obj);
+    auto callbacks = Object::GetObjectCallbacks(obj);
+    if (callbacks != nullptr && callbacks->finalizer != nullptr) {
+        callbacks->finalizer();
+    }
+    
     SetObjectCallbacks(obj, nullptr);
+    delete callbacks;    
 }
 
 rs::jsapi::Object::ClassCallbacks* rs::jsapi::Object::GetObjectCallbacks(JSObject* obj) {

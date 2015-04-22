@@ -18,11 +18,12 @@ public:
     typedef std::function<bool(int index, Value& value)> GetCallback;
     typedef std::function<bool(int index, const Value& value)> SetCallback;
     typedef std::function<int()> LengthCallback;
+    typedef std::function<void()> FinalizeCallback;
     
-    static bool Create(Context& cx, GetCallback getter, SetCallback setter, LengthCallback length, Value& array);
+    static bool Create(Context& cx, GetCallback getter, SetCallback setter, LengthCallback length, FinalizeCallback finalize, Value& array);
     
 private:
-    struct ClassCallbacks { GetCallback getter; SetCallback setter; LengthCallback length; };
+    struct ClassCallbacks { GetCallback getter; SetCallback setter; LengthCallback length; FinalizeCallback finalize; };
     
     static bool Get(JSContext*, JS::HandleObject, JS::HandleId, JS::MutableHandleValue);
     static bool Set(JSContext*, JS::HandleObject, JS::HandleId, bool, JS::MutableHandleValue);

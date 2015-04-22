@@ -23,7 +23,7 @@ TEST_F(SimpleObjectTests, test1) {
     auto context = rt_.NewContext();
     
     rs::jsapi::Value obj(*context);
-    rs::jsapi::Object::Create(*context, {}, rs::jsapi::Object::GetCallback(), rs::jsapi::Object::SetCallback(), {}, obj);
+    rs::jsapi::Object::Create(*context, {}, rs::jsapi::Object::GetCallback(), rs::jsapi::Object::SetCallback(), {}, nullptr, obj);
     ASSERT_TRUE(!!obj);
 }
 
@@ -31,7 +31,7 @@ TEST_F(SimpleObjectTests, test2) {
     auto context = rt_.NewContext();
     
     rs::jsapi::Value obj(*context);
-    rs::jsapi::Object::Create(*context, {"hello"}, rs::jsapi::Object::GetCallback(), rs::jsapi::Object::SetCallback(), {}, obj);
+    rs::jsapi::Object::Create(*context, {"hello"}, rs::jsapi::Object::GetCallback(), rs::jsapi::Object::SetCallback(), {}, nullptr, obj);
     ASSERT_TRUE(!!obj);
     
     JS::Rooted<JSPropertyDescriptor> desc(*context);
@@ -44,7 +44,7 @@ TEST_F(SimpleObjectTests, test3) {
     auto context = rt_.NewContext();
     
     rs::jsapi::Value obj(*context);
-    rs::jsapi::Object::Create(*context, {"hello", "pi", "lorem", "the_answer"}, rs::jsapi::Object::GetCallback(), rs::jsapi::Object::SetCallback(), {}, obj);
+    rs::jsapi::Object::Create(*context, {"hello", "pi", "lorem", "the_answer"}, rs::jsapi::Object::GetCallback(), rs::jsapi::Object::SetCallback(), {}, nullptr, obj);
     ASSERT_TRUE(!!obj);
     
     JS::Rooted<JSPropertyDescriptor> desc(*context);
@@ -83,7 +83,8 @@ TEST_F(SimpleObjectTests, test4) {
             return true;
         }, 
         nullptr, 
-        {}, 
+        {},
+        nullptr, 
         obj);
     ASSERT_TRUE(!!obj);
     
@@ -116,7 +117,8 @@ TEST_F(SimpleObjectTests, test5) {
         {"hello", "pi", "lorem", "the_answer"}, 
         nullptr, 
         nullptr, 
-        {}, 
+        {},
+        nullptr, 
         obj);
     ASSERT_TRUE(!!obj);
     
@@ -146,6 +148,7 @@ TEST_F(SimpleObjectTests, test5b) {
         nullptr, 
         nullptr, 
         {}, 
+        nullptr, 
         obj);
     ASSERT_TRUE(!!obj);
     
@@ -166,6 +169,7 @@ TEST_F(SimpleObjectTests, test6) {
         [](const char* name, rs::jsapi::Value& value) { value.set(42); return true; },
         nullptr, 
         {}, 
+        nullptr, 
         obj);
     ASSERT_TRUE(!!obj);
     
@@ -183,6 +187,7 @@ TEST_F(SimpleObjectTests, test7) {
         [](const char* name, rs::jsapi::Value& value) { value.set(42); return true; },
         nullptr,
         {},
+        nullptr, 
         obj);
            
     context->Evaluate("var myfunc=function(n){return n.the_answer;};");
@@ -205,6 +210,7 @@ TEST_F(SimpleObjectTests, test8) {
         [](const char* name, rs::jsapi::Value& value) { value.set("world"); return true; },
         nullptr,
         {},
+        nullptr, 
         obj);
         
     context->Evaluate("var myfunc=function(n){return n.hello;};");
@@ -228,6 +234,7 @@ TEST_F(SimpleObjectTests, test9) {
         nullptr,
         nullptr, 
         { std::make_pair("myfunc", [](JSContext* cx, unsigned argc, JS::Value* vp){ return true; })}, 
+        nullptr, 
         obj);
     ASSERT_TRUE(!!obj);
     
@@ -251,6 +258,7 @@ TEST_F(SimpleObjectTests, test10) {
             args.rval().setInt32(42);
             return true; 
         })}, 
+        nullptr, 
         obj);
     ASSERT_TRUE(!!obj);
     
@@ -276,6 +284,7 @@ TEST_F(SimpleObjectTests, test11) {
                 return true;
             })
         },
+        nullptr, 
         obj);
     ASSERT_TRUE(!!obj);
       
@@ -290,7 +299,7 @@ TEST_F(SimpleObjectTests, test11) {
     ASSERT_EQ(42, result.toInt32());
 }
 
-TEST_F(SimpleObjectTests, test13) {
+TEST_F(SimpleObjectTests, test12) {
     auto context = rt_.NewContext();
     
     rs::jsapi::Value fieldValue(*context);
@@ -303,6 +312,7 @@ TEST_F(SimpleObjectTests, test13) {
             return true; 
         },
         {},
+        nullptr, 
         obj);
         
     context->Evaluate("var myfunc=function(o){ o.hello = 'world';};");    
@@ -316,7 +326,7 @@ TEST_F(SimpleObjectTests, test13) {
     ASSERT_STREQ("world", fieldValue.ToString().c_str());    
 }
 
-TEST_F(SimpleObjectTests, test14) {
+TEST_F(SimpleObjectTests, test13) {
     auto context = rt_.NewContext();
     
     std::string longFieldName(384, '1');
@@ -330,6 +340,7 @@ TEST_F(SimpleObjectTests, test14) {
             return true; 
         },
         {},
+        nullptr, 
         obj);
         
     std::stringstream script;
@@ -345,7 +356,7 @@ TEST_F(SimpleObjectTests, test14) {
     ASSERT_STREQ("world", fieldValue.ToString().c_str());    
 }
 
-TEST_F(SimpleObjectTests, test15) {
+TEST_F(SimpleObjectTests, test14) {
     auto context = rt_.NewContext();
     
     rs::jsapi::Value obj(*context);
@@ -353,7 +364,8 @@ TEST_F(SimpleObjectTests, test15) {
         {"hello", "pi", "lorem", "the_answer"}, 
         nullptr, 
         nullptr, 
-        {}, 
+        {},
+        nullptr,
         obj);
     ASSERT_TRUE(!!obj);
     

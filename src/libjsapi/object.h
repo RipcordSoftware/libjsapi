@@ -16,6 +16,7 @@ class Object final {
 public:
     typedef std::function<bool(const char* name, Value& value)> GetCallback;
     typedef std::function<bool(const char* name, const Value& value)> SetCallback;
+    typedef std::function<void()> FinalizeCallback;
     typedef std::pair<const char*, JSNative> Function;
     
     Object(Context& cx) = delete;
@@ -25,10 +26,11 @@ public:
         std::initializer_list<const char*> properties,
         GetCallback getter, SetCallback setter,
         std::initializer_list<Function> functions,
+        FinalizeCallback finalizer,
         Value& obj);
     
 private:
-    struct ClassCallbacks { GetCallback getter; SetCallback setter; };
+    struct ClassCallbacks { GetCallback getter; SetCallback setter; FinalizeCallback finalizer; };
     
     static bool Get(JSContext*, JS::HandleObject, JS::HandleId, JS::MutableHandleValue);
     static bool Set(JSContext*, JS::HandleObject, JS::HandleId, bool, JS::MutableHandleValue);

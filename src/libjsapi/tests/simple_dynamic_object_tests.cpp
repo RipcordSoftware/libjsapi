@@ -27,6 +27,7 @@ TEST_F(SimpleDynamicObjectTests, test1) {
         }, 
         nullptr, 
         nullptr,
+        nullptr,
         obj);
     ASSERT_TRUE(!!obj);
     
@@ -54,6 +55,7 @@ TEST_F(SimpleDynamicObjectTests, test2) {
         }, 
         nullptr,
         nullptr, 
+        nullptr,
         obj);            
     ASSERT_TRUE(!!obj);
     
@@ -81,6 +83,7 @@ TEST_F(SimpleDynamicObjectTests, test3) {
             return true;
         }, 
         nullptr, 
+        nullptr,
         nullptr,
         obj);
     ASSERT_TRUE(!!obj);
@@ -113,6 +116,7 @@ TEST_F(SimpleDynamicObjectTests, test4) {
             return true; 
         },
         nullptr,
+        nullptr,
         obj);        
     ASSERT_TRUE(!!obj);
         
@@ -141,6 +145,7 @@ TEST_F(SimpleDynamicObjectTests, test5) {
             fieldValue.set(value); 
             return true; 
         },
+        nullptr,
         nullptr,
         obj);
     ASSERT_TRUE(!!obj);
@@ -172,6 +177,7 @@ TEST_F(SimpleDynamicObjectTests, test6) {
             props.push_back("hello");
             return true;
         },
+        nullptr,
         obj);
     ASSERT_TRUE(!!obj);
     
@@ -202,6 +208,7 @@ TEST_F(SimpleDynamicObjectTests, test7) {
             funcs.push_back(std::make_pair("echo", nullptr));
             return true;
         },
+        nullptr,
         obj);
     ASSERT_TRUE(!!obj);
     
@@ -232,6 +239,7 @@ TEST_F(SimpleDynamicObjectTests, test8) {
             funcs.push_back(std::make_pair("echo", nullptr));
             return true;
         },
+        nullptr,
         obj);
     ASSERT_TRUE(!!obj);
     

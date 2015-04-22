@@ -10,13 +10,13 @@ JSClass rs::jsapi::DynamicArray::class_ = {
     JS_ConvertStub, DynamicArray::Finalize
 };
 
-bool rs::jsapi::DynamicArray::Create(Context& cx, GetCallback getter, SetCallback setter, LengthCallback length, Value& array) {
+bool rs::jsapi::DynamicArray::Create(Context& cx, GetCallback getter, SetCallback setter, LengthCallback length, FinalizeCallback finalize, Value& array) {
     JS::RootedObject obj(cx, JS_NewObject(cx, &class_, JS::NullPtr(), JS::NullPtr()));
     
     if (obj) {
         JS_DefineProperty(cx, obj, "length", 0, JSPROP_ENUMERATE | JSPROP_READONLY, DynamicArray::Length, nullptr);
         
-        auto callbacks = new ClassCallbacks { getter, setter, length };
+        auto callbacks = new ClassCallbacks { getter, setter, length, finalize };
         DynamicArray::SetObjectCallbacks(obj, callbacks);
         
         array.set(obj);
@@ -57,8 +57,13 @@ bool rs::jsapi::DynamicArray::Set(JSContext* cx, JS::HandleObject obj, JS::Handl
 }
 
 void rs::jsapi::DynamicArray::Finalize(JSFreeOp* fop, JSObject* obj) {
-    delete GetObjectCallbacks(obj);
+    auto callbacks = GetObjectCallbacks(obj);
+    if (callbacks != nullptr && callbacks->finalize != nullptr) {
+        callbacks->finalize();
+    }
+    
     SetObjectCallbacks(obj, nullptr);
+    delete callbacks;    
 }
 
 bool rs::jsapi::DynamicArray::Length(JSContext* cx, JS::HandleObject obj, JS::HandleId id, JS::MutableHandleValue vp) {    

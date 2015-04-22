@@ -23,6 +23,7 @@ TEST_F(SimpleDynamicArrayTests, test1) {
         [](int index, rs::jsapi::Value& value) { value.set(42); return true; },
         nullptr,
         []() { return 1; },
+        nullptr,
         array);
     ASSERT_TRUE(!!array);
     
@@ -43,6 +44,7 @@ TEST_F(SimpleDynamicArrayTests, test2) {
         [](int index, rs::jsapi::Value& value) { value.set(index); return true; },
         nullptr,
         []() { return 10; },
+        nullptr,
         array);
     ASSERT_TRUE(!!array);
     
@@ -65,6 +67,7 @@ TEST_F(SimpleDynamicArrayTests, test3) {
         [](int index, rs::jsapi::Value& value) { value.set(index); return true; },
         nullptr,
         []() { return 10; },
+        nullptr,
         array);
     ASSERT_TRUE(!!array);
     
@@ -94,6 +97,7 @@ TEST_F(SimpleDynamicArrayTests, test4) {
             [](int index, rs::jsapi::Value& value) { value.set(index); return true; },
             nullptr,
             [&]() { return i; },
+            nullptr,
             array);
         ASSERT_TRUE(!!array);
 
