@@ -23,14 +23,26 @@ public:
     Value(JSContext* cx, const JS::HandleValue& obj);
     Value(JSContext* cx, const JS::HandleObject& obj);
     Value(JSContext* cx, const JS::RootedObject& obj);
+
+    ~Value();    
     
     Value(const Value&) = delete;
-    Value& operator=(const Value&) = delete;    
+    Value& operator=(const Value& rhs) {
+        cx_ = rhs.cx_;
+        if (rhs.isObject_) {
+            set(rhs.object_);
+        } else {
+            set(rhs.value_);
+        }
+    }
     
-    operator const JS::Value&() const { return value_.get(); }
-    operator const JS::HandleValue() const { return value_; }
-    operator JS::MutableHandleValue() { return &value_; }
-    operator JSContext*() { return cx_; }
+    operator const JS::Value&() const { ToValueRef(); return value_.get(); }
+    operator const JS::HandleValue() const { ToValueRef(); return value_; }
+    operator const JS::HandleObject() const { ToObjectRef(); return object_; }
+    operator JS::MutableHandleValue() { InitValueRef(); return &value_; }
+    operator JS::MutableHandleObject() { InitObjectRef(); return &object_; }
+    
+    bool operator !() const { return isObject() ? toObject() == nullptr : false; }
     
     JSContext* getContext();
     
@@ -42,6 +54,7 @@ public:
     void set(const JS::HandleValue& value);
     void set(const JS::HandleObject& value);
     void set(const JS::RootedObject& value);
+    void set(const Value& value);
     void setUndefined();
     void setNull();
     
@@ -64,7 +77,16 @@ public:
 
 protected:
     JSContext* cx_;
-    JS::RootedValue value_;    
+    mutable bool isObject_;
+    union {
+        mutable JS::RootedValue value_;
+        mutable JS::RootedObject object_;
+    };
+    
+    void InitValueRef() const;
+    void InitObjectRef() const;
+    void ToValueRef() const;
+    void ToObjectRef() const;
 };
 
 }}

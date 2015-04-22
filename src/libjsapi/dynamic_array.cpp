@@ -10,14 +10,16 @@ JSClass rs::jsapi::DynamicArray::class_ = {
     JS_ConvertStub, DynamicArray::Finalize
 };
 
-bool rs::jsapi::DynamicArray::Create(Context& cx, GetCallback getter, SetCallback setter, LengthCallback length, JS::RootedObject& obj) {
-    obj = JS::RootedObject(cx, JS_NewObject(cx, &class_, JS::NullPtr(), JS::NullPtr()));
+bool rs::jsapi::DynamicArray::Create(Context& cx, GetCallback getter, SetCallback setter, LengthCallback length, Value& array) {
+    JS::RootedObject obj(cx, JS_NewObject(cx, &class_, JS::NullPtr(), JS::NullPtr()));
     
     if (obj) {
         JS_DefineProperty(cx, obj, "length", 0, JSPROP_ENUMERATE | JSPROP_READONLY, DynamicArray::Length, nullptr);
         
         auto callbacks = new ClassCallbacks { getter, setter, length };
         DynamicArray::SetObjectCallbacks(obj, callbacks);
+        
+        array.set(obj);
     }
     
     return obj;

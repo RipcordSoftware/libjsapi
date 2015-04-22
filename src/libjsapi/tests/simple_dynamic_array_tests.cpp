@@ -18,13 +18,13 @@ protected:
 TEST_F(SimpleDynamicArrayTests, test1) {
     auto context = rt_.NewContext();
     
-    JS::RootedObject array(*context);    
+    rs::jsapi::Value array(*context);    
     rs::jsapi::DynamicArray::Create(*context,
         [](int index, rs::jsapi::Value& value) { value.set(42); return true; },
         nullptr,
         []() { return 1; },
         array);
-    ASSERT_TRUE(array);
+    ASSERT_TRUE(!!array);
     
     rs::jsapi::Value value(*context);
     ASSERT_TRUE(JS_GetElement(*context, array, 0, value));
@@ -38,13 +38,13 @@ TEST_F(SimpleDynamicArrayTests, test1) {
 TEST_F(SimpleDynamicArrayTests, test2) {
     auto context = rt_.NewContext();
     
-    JS::RootedObject array(*context);    
+    rs::jsapi::Value array(*context);    
     rs::jsapi::DynamicArray::Create(*context,
         [](int index, rs::jsapi::Value& value) { value.set(index); return true; },
         nullptr,
         []() { return 10; },
         array);
-    ASSERT_TRUE(array);
+    ASSERT_TRUE(!!array);
     
     uint32_t length = -1;
     ASSERT_TRUE(JS_GetArrayLength(*context, array, &length));
@@ -60,13 +60,13 @@ TEST_F(SimpleDynamicArrayTests, test2) {
 TEST_F(SimpleDynamicArrayTests, test3) {
     auto context = rt_.NewContext();
     
-    JS::RootedObject array(*context);    
+    rs::jsapi::Value array(*context);    
     rs::jsapi::DynamicArray::Create(*context,
         [](int index, rs::jsapi::Value& value) { value.set(index); return true; },
         nullptr,
         []() { return 10; },
         array);
-    ASSERT_TRUE(array);
+    ASSERT_TRUE(!!array);
     
     rt_.Evaluate("var myfunc = function(arr, n) { return arr[n]; };");
    
@@ -85,7 +85,7 @@ TEST_F(SimpleDynamicArrayTests, test3) {
 
 TEST_F(SimpleDynamicArrayTests, test4) {
     auto context = rt_.NewContext();    
-    JS::RootedObject array(*context);
+    rs::jsapi::Value array(*context);
     
     context->Evaluate("var myfunc = function(arr) { return arr.length; };");
     
@@ -95,7 +95,7 @@ TEST_F(SimpleDynamicArrayTests, test4) {
             nullptr,
             [&]() { return i; },
             array);
-        ASSERT_TRUE(array);
+        ASSERT_TRUE(!!array);
 
         rs::jsapi::FunctionArguments args(*context);
         args.Append(array);

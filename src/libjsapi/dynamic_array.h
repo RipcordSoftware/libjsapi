@@ -19,7 +19,7 @@ public:
     typedef std::function<bool(int index, const Value& value)> SetCallback;
     typedef std::function<int()> LengthCallback;
     
-    static bool Create(Context& cx, GetCallback getter, SetCallback setter, LengthCallback length, JS::RootedObject& obj);
+    static bool Create(Context& cx, GetCallback getter, SetCallback setter, LengthCallback length, Value& array);
     
 private:
     struct ClassCallbacks { GetCallback getter; SetCallback setter; LengthCallback length; };

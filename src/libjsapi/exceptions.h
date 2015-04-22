@@ -60,6 +60,13 @@ public:
     const unsigned errorNumber;
     const int16_t exnType;
 };
+
+class ValueCastException : public Exception {
+public:
+    virtual const char* what() const noexcept override {
+        return "Invalid object or value cast";
+    }    
+};
     
 }}
     

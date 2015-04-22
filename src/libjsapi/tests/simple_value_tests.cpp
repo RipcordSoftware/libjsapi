@@ -135,7 +135,7 @@ TEST_F(SimpleValueTests, test10) {
     
     std::stringstream ss;
     ss << value;        
-    ASSERT_STREQ("1", ss.str().c_str());
+    ASSERT_STREQ("true", ss.str().c_str());
 }
 
 TEST_F(SimpleValueTests, test11) {
@@ -143,7 +143,7 @@ TEST_F(SimpleValueTests, test11) {
     
     std::stringstream ss;
     ss << value;        
-    ASSERT_STREQ("0", ss.str().c_str());
+    ASSERT_STREQ("false", ss.str().c_str());
 }
 
 TEST_F(SimpleValueTests, test12) {
@@ -182,4 +182,69 @@ TEST_F(SimpleValueTests, test15) {
     JS_EncodeStringToBuffer(rt_, rv, &buffer[0], len);
     std::string str(&buffer[0], len);
     ASSERT_STREQ("hello world", str.c_str());
+}
+
+TEST_F(SimpleValueTests, test16) {
+    JS::RootedObject obj(rt_);
+    
+    rs::jsapi::Value value(rt_, obj);
+    ASSERT_TRUE(value.isObject());
+}
+
+TEST_F(SimpleValueTests, test17) {
+    JS::RootedObject obj(rt_, JS_NewObject(rt_, nullptr, JS::NullPtr(), JS::NullPtr()));
+    
+    rs::jsapi::Value value(rt_, obj);
+    ASSERT_TRUE(value.isObject());
+}
+
+TEST_F(SimpleValueTests, test18) {
+    JS::RootedObject obj(rt_, JS_NewArrayObject(rt_, 0));
+    
+    rs::jsapi::Value value(rt_, obj);
+    ASSERT_TRUE(value.isArray());
+}
+
+TEST_F(SimpleValueTests, test19) {
+    rs::jsapi::Value value(rt_);
+    
+    JS::RootedObject obj(rt_);
+    value.set(obj);
+    ASSERT_TRUE(value.isObject());
+}
+
+TEST_F(SimpleValueTests, test20) {
+    rs::jsapi::Value value(rt_, 42);
+    
+    JS::RootedObject obj(rt_);
+    value.set(obj);
+    ASSERT_TRUE(value.isObject());
+    ASSERT_FALSE(value.isNumber());
+}
+
+TEST_F(SimpleValueTests, test21) {
+    rs::jsapi::Value value(rt_, "hello world");
+    
+    JS::RootedObject obj(rt_);
+    value.set(obj);
+    ASSERT_TRUE(value.isObject());
+    ASSERT_FALSE(value.isString());
+}
+
+TEST_F(SimpleValueTests, test22) {
+    rs::jsapi::Value value(rt_, true);
+    
+    JS::RootedObject obj(rt_);
+    value.set(obj);
+    ASSERT_TRUE(value.isObject());
+    ASSERT_FALSE(value.isBoolean());
+}
+
+TEST_F(SimpleValueTests, test23) {
+    rs::jsapi::Value value(rt_, 3.14159);
+    
+    JS::RootedObject obj(rt_);
+    value.set(obj);
+    ASSERT_TRUE(value.isObject());
+    ASSERT_FALSE(value.isNumber());
 }
