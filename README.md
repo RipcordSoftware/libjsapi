@@ -103,4 +103,4 @@ $ cd examples
 $ ./build.sh
 ```
 
-You can then run the examples.
+If building is slow on your system then you can speed it up by stripping the debugging information from the mozjs library by running `./strip_mozjs.sh`.
