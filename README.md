@@ -96,3 +96,11 @@ To create a valgrind report:
 ```bash
 $ ./grind.sh
 ```
+
+You will find examples in the `examples` directory. You can build these after building libjsapi by running:
+```bash
+$ cd examples
+$ ./build.sh
+```
+
+You can then run the examples.
