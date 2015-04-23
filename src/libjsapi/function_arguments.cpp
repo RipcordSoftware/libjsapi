@@ -44,3 +44,15 @@ void rs::jsapi::FunctionArguments::Clear() {
 bool rs::jsapi::FunctionArguments::Empty() {
     return args_.empty();
 }
+
+int rs::jsapi::FunctionArguments::getLength() {
+    return args_.length();
+}
+
+JS::Value& rs::jsapi::FunctionArguments::operator [](int index) {
+    if (index < 0 || index >= args_.length()) {
+        throw FunctionArgumentsIndexException();
+    }
+    
+    return args_[index]; 
+}

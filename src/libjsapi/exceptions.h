@@ -67,6 +67,13 @@ public:
         return "Invalid object or value cast";
     }    
 };
+
+class FunctionArgumentsIndexException : public Exception {
+public:
+    virtual const char* what() const noexcept override {
+        return "The FunctionArguments index value was invalid";
+    }    
+};
     
 }}
     

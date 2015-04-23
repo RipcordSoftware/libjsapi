@@ -47,3 +47,4 @@ coverage/*
 examples/helloworld
 examples/square
 examples/object
+examples/dynamicobject

@@ -24,9 +24,11 @@ public:
     
     void Clear();
     bool Empty();
+    int getLength();
     
     operator const JS::AutoValueVector&() const { return args_; }
     operator const JS::HandleValueArray() const { return args_; }
+    JS::Value& operator [](int index);
     
 private:
     Context& cx_;
