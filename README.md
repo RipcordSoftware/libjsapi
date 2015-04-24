@@ -82,6 +82,8 @@ To build type:
 $ make
 ```
 
+The first `libjsapi` build may take a long time to complete since it will invoke a build of SpiderMonkey and GoogleTest. Subsequent builds do not require this step and will be much faster.
+
 To build tests with coverage:
 ```bash
 $ make test
