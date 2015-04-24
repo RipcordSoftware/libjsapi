@@ -5,8 +5,8 @@
 # libjsapi
 A SpiderMonkey 31 (Mozilla) JSAPI wrapper for C++ 11.
 
-The JSAPI interface to the SpiderMonkey JavaScript VM is difficult to integrate into 
-applications without an intermediate abstraction layer managing object creation and 
+The JSAPI interface to the SpiderMonkey JavaScript VM can be difficult to integrate into 
+applications without an intermediate abstraction layer managing object creation, object lifetimes and 
 type mapping. This library is an attempt to hide the complexity of dealing with SpiderMonkey
 from modern C++ 11 applications. 
 
