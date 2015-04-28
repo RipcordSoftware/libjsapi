@@ -7,12 +7,14 @@ namespace rs {
 namespace jsapi {
     
 class Context;
+class Value;
 
 class Global final {
 public:
     Global() = delete;
     Global(const Global& orig) = delete;
     
+    static bool DefineProperty(Context& cx, const char* name, const Value& value, unsigned attrs = JSPROP_ENUMERATE);
     static bool DefineProperty(Context& cx, const char* name, JSNative getter, JSNative setter, unsigned attrs = JSPROP_ENUMERATE);
     static bool DefineFunction(Context& cx, const char* name, JSNative func, unsigned attrs = JSPROP_ENUMERATE);
     

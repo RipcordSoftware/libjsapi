@@ -46,6 +46,8 @@ public:
     bool operator !() const { return isObject() ? toObject() == nullptr : false; }
     
     JSContext* getContext();
+    const JS::HandleValue getHandleValue() const { ToValueRef(); return value_; }
+    const JS::HandleObject getHandleObject() const { ToObjectRef(); return object_; }
     
     void set(const char* str);
     void set(const std::string& str);
