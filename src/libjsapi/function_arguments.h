@@ -1,6 +1,8 @@
 #ifndef RS_JSAPI_FUNCTION_ARGUMENTS_H
 #define	RS_JSAPI_FUNCTION_ARGUMENTS_H
 
+#include <string>
+
 #include <jsapi.h>
 
 namespace rs {
@@ -18,6 +20,7 @@ public:
     bool Append(unsigned value);
     bool Append(double value);
     bool Append(const char* value);
+    bool Append(const std::string& value);
     bool Append(bool value);
     bool Append(Value& value);
     bool Append(const JS::RootedObject& obj);

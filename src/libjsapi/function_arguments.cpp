@@ -25,6 +25,10 @@ bool rs::jsapi::FunctionArguments::Append(const char* value) {
     return args_.append(strValue);    
 }
 
+bool rs::jsapi::FunctionArguments::Append(const std::string& value) {
+    return Append(value.c_str());
+}
+
 bool rs::jsapi::FunctionArguments::Append(bool value) {
     return args_.append(JS::BooleanValue(value));
 }

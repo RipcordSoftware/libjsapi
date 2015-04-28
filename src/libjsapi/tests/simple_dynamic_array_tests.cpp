@@ -131,3 +131,56 @@ TEST_F(SimpleDynamicArrayTests, test5) {
     
     ASSERT_EQ(1, count);
 }
+
+TEST_F(SimpleDynamicArrayTests, test6) {
+    auto context = rt_.NewContext();
+    
+    rs::jsapi::Value array(*context);    
+    rs::jsapi::DynamicArray::Create(*context,
+        [](int index, rs::jsapi::Value& value) { value.set(index); return true; },
+        nullptr,
+        []() { return 10; },
+        nullptr,
+        array);
+    ASSERT_TRUE(!!array);
+    
+    rt_.Evaluate("var myfunc = function(arr, n) { return arr[n]; };");
+   
+    for (int i = 0; i < 10; ++i) {
+        rs::jsapi::FunctionArguments args(*context);
+        args.Append(array);
+        args.Append(std::to_string(i));
+        
+        rs::jsapi::Value result(*context);
+        rt_.Call("myfunc", args, result);
+        
+        ASSERT_TRUE(result.isInt32());
+        ASSERT_EQ(i, result.toInt32());
+    }
+}
+
+TEST_F(SimpleDynamicArrayTests, test7) {
+    auto context = rt_.NewContext();
+    
+    rs::jsapi::Value array(*context);    
+    rs::jsapi::DynamicArray::Create(*context,
+        [](int index, rs::jsapi::Value& value) { value.set(index); return true; },
+        nullptr,
+        []() { return 10; },
+        nullptr,
+        array);
+    ASSERT_TRUE(!!array);
+    
+    rt_.Evaluate("var myfunc = function(arr, n) { return arr[n]; };");
+   
+    for (int i = 0; i < 10; ++i) {
+        rs::jsapi::FunctionArguments args(*context);
+        args.Append(array);
+        args.Append("abc");
+        
+        rs::jsapi::Value result(*context);
+        rt_.Call("myfunc", args, result);
+        
+        ASSERT_TRUE(result.isUndefined());
+    }
+}

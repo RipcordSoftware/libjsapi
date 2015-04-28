@@ -8,7 +8,7 @@ int main() {
 
     rs::jsapi::Runtime rt;
 
-    // create a dynamic array
+    // create a dynamic array which exposes the `data` vector to JS
     rs::jsapi::Value array(rt);
     rs::jsapi::DynamicArray::Create(rt,
         [&](int index, rs::jsapi::Value& value) { value.set(data[index]); return true; },
@@ -21,6 +21,7 @@ int main() {
     // on the passed array
     rt.Evaluate("var myfunc=function(arr, n){ return arr[n]; }");
 
+    // create an arguments instance so we can call the JS function
     rs::jsapi::FunctionArguments args(rt);
     args.Append(array);
     args.Append(0);

@@ -14,7 +14,7 @@ bool rs::jsapi::DynamicArray::Create(Context& cx, GetCallback getter, SetCallbac
     JS::RootedObject obj(cx, JS_NewObject(cx, &class_, JS::NullPtr(), JS::NullPtr()));
     
     if (obj) {
-        JS_DefineProperty(cx, obj, "length", 0, JSPROP_ENUMERATE | JSPROP_READONLY, DynamicArray::Length, nullptr);
+        JS_DefineProperty(cx, obj, "length", 0, JSPROP_READONLY, DynamicArray::Length, nullptr);
         
         auto callbacks = new ClassCallbacks { getter, setter, length, finalize };
         DynamicArray::SetObjectCallbacks(obj, callbacks);
@@ -28,7 +28,7 @@ bool rs::jsapi::DynamicArray::Create(Context& cx, GetCallback getter, SetCallbac
 bool rs::jsapi::DynamicArray::Get(JSContext* cx, JS::HandleObject obj, JS::HandleId id, JS::MutableHandleValue vp) {
     auto callbacks = DynamicArray::GetObjectCallbacks(obj);
     
-    if (callbacks != nullptr && callbacks->getter != nullptr) {                
+    if (callbacks != nullptr && callbacks->getter != nullptr && JSID_IS_INT(id)) {
         auto index = JSID_TO_INT(id);
         Value value(cx, vp);
         bool status = callbacks->getter(index, value);        
@@ -45,9 +45,9 @@ bool rs::jsapi::DynamicArray::Get(JSContext* cx, JS::HandleObject obj, JS::Handl
 bool rs::jsapi::DynamicArray::Set(JSContext* cx, JS::HandleObject obj, JS::HandleId id, bool strict, JS::MutableHandleValue vp) {
     auto callbacks = DynamicArray::GetObjectCallbacks(obj);
     
-    if (callbacks != nullptr && callbacks->setter != nullptr) {
-        Value value(cx, vp);        
+    if (callbacks != nullptr && callbacks->setter != nullptr && JSID_IS_INT(id)) {
         auto index = JSID_TO_INT(id);
+        Value value(cx, vp);                
         return callbacks->setter(index, value);    
     } else {
         // TODO: what will this do to the JS?
