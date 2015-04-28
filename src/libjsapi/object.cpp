@@ -123,7 +123,20 @@ bool rs::jsapi::Object::CallFunction(JSContext* cx, unsigned argc, JS::Value* vp
             JS_ReportError(cx, "Unable to find function callback in libjsapi object");
             return false;
         } else {
-          return callbacks->functions[name](cx, argc, vp);
+            try {
+                std::vector<Value> vArgs;
+                for (int i = 0; i < argc; ++i) {
+                    vArgs.emplace_back(cx, args.get(i));
+                }
+
+                Value result(cx);
+                callbacks->functions[name](vArgs, result);
+                args.rval().set(result);
+                return true;
+            } catch (const std::exception& ex) {
+                JS_ReportError(cx, ex.what());
+                return false;
+            }
         }        
     }
 }

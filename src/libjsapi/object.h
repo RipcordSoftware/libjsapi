@@ -6,6 +6,7 @@
 #include <initializer_list>
 #include <functional>
 #include <unordered_map>
+#include <vector>
 
 namespace rs {
 namespace jsapi {
@@ -18,7 +19,7 @@ public:
     typedef std::function<bool(const char* name, Value& value)> GetCallback;
     typedef std::function<bool(const char* name, const Value& value)> SetCallback;
     typedef std::function<void()> FinalizeCallback;
-    typedef std::function<bool(JSContext*, unsigned, JS::Value*)> NativeFunction;
+    typedef std::function<void(const std::vector<Value>&, Value&)> NativeFunction;
     typedef std::pair<const char*, NativeFunction> Function;
     
     Object(Context& cx) = delete;

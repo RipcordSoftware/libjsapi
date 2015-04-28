@@ -233,7 +233,7 @@ TEST_F(SimpleObjectTests, test9) {
         {},
         nullptr,
         nullptr, 
-        { std::make_pair("myfunc", [](JSContext* cx, unsigned argc, JS::Value* vp){ return true; })}, 
+        { std::make_pair("myfunc", [](const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result){} )}, 
         nullptr, 
         obj);
     ASSERT_TRUE(!!obj);
@@ -253,10 +253,8 @@ TEST_F(SimpleObjectTests, test10) {
         {},
         nullptr,
         nullptr, 
-        { std::make_pair("myfunc", [](JSContext* cx, unsigned argc, JS::Value* vp) { 
-            auto args = JS::CallArgsFromVp(argc, vp); 
-            args.rval().setInt32(42);
-            return true; 
+        { std::make_pair("myfunc", [](const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result) { 
+            result.set(42);
         })}, 
         nullptr, 
         obj);
@@ -278,10 +276,8 @@ TEST_F(SimpleObjectTests, test11) {
         nullptr,
         nullptr, 
         { 
-            std::make_pair("myfunc", [](JSContext* cx, unsigned argc, JS::Value* vp) { 
-                auto args = JS::CallArgsFromVp(argc, vp);
-                args.rval().setInt32(42);
-                return true;
+            std::make_pair("myfunc", [](const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result) { 
+                result.set(42);
             })
         },
         nullptr, 

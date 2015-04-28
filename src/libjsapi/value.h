@@ -12,7 +12,7 @@ namespace jsapi {
 class Context;
 class Value;
     
-class Value {
+class Value final {
 public:
     Value(JSContext* cx);
     Value(JSContext* cx, const char* str);
@@ -27,7 +27,14 @@ public:
 
     ~Value();    
     
-    Value(const Value&) = delete;
+    Value(const Value& rhs) : cx_(rhs.cx_) {
+        if (rhs.isObject_) {
+            set(rhs.object_);
+        } else {
+            set(rhs.value_);
+        }
+    }
+
     Value& operator=(const Value& rhs) {
         cx_ = rhs.cx_;
         if (rhs.isObject_) {
