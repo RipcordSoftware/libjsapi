@@ -15,16 +15,18 @@ bool rs::jsapi::Object::Create(Context& cx, std::initializer_list<const char*> p
     JS::RootedObject newObj(cx, JS_NewObject(cx, &class_, JS::NullPtr(), JS::NullPtr()));    
     
     if (newObj) {
+        auto callbacks = new ClassCallbacks { getter, setter, finalizer };
+        
         for (auto p : properties) {
             JS_DefineProperty(cx, newObj, p, JS::NullHandleValue, JSPROP_ENUMERATE, 
                 Object::Get, Object::Set);
         }
 
         for (auto f : functions) {
-            JS_DefineFunction(cx, newObj, f.first, f.second, 0, JSPROP_ENUMERATE);
+            JS_DefineFunction(cx, newObj, f.first, Object::CallFunction, 0, JSPROP_ENUMERATE);
+            callbacks->functions.emplace(f.first, f.second);
         }
-
-        auto callbacks = new ClassCallbacks { getter, setter, finalizer };
+        
         Object::SetObjectCallbacks(newObj, callbacks);
 
         obj.set(newObj);
@@ -86,6 +88,43 @@ bool rs::jsapi::Object::Set(JSContext* cx, JS::HandleObject obj, JS::HandleId id
         // TODO: what will this do to the JS?
         vp.setUndefined();
         return true;
+    }
+}
+
+bool rs::jsapi::Object::CallFunction(JSContext* cx, unsigned argc, JS::Value* vp) {
+    char nameBuffer[256];
+    const char* name = nameBuffer;
+    
+    auto args = JS::CallArgsFromVp(argc, vp);
+    auto func = JS_ValueToFunction(cx, args.calleev());
+    if (func != nullptr) {
+        auto funcName = JS_GetFunctionId(func);                
+        if (funcName != nullptr) {
+            auto nameLength = JS_EncodeStringToBuffer(cx, funcName, nameBuffer, sizeof(nameBuffer));
+            if ((nameLength + 1) < sizeof(nameBuffer)) {
+                nameBuffer[nameLength] = '\0';
+            } else {
+                std::vector<char> vBuffer(nameLength + 1);
+                JS_EncodeStringToBuffer(cx, funcName, &vBuffer[0], nameLength);
+                vBuffer[nameLength] = '\0';
+                name = &vBuffer[0];
+            }
+        }
+    }
+    
+    if (name == nullptr) {
+        // TODO: test this case
+        JS_ReportError(cx, "Unable to find function in libjsapi object");
+        return false;        
+    } else {
+        auto callbacks = Object::GetObjectCallbacks(args.thisv().toObjectOrNull());
+        if (callbacks == nullptr) {
+            // TODO: test this case
+            JS_ReportError(cx, "Unable to find function callback in libjsapi object");
+            return false;
+        } else {
+          return callbacks->functions[name](cx, argc, vp);
+        }        
     }
 }
 
