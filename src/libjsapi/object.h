@@ -19,8 +19,8 @@ public:
     typedef std::function<bool(const char* name, Value& value)> GetCallback;
     typedef std::function<bool(const char* name, const Value& value)> SetCallback;
     typedef std::function<void()> FinalizeCallback;
-    typedef std::function<void(const std::vector<Value>&, Value&)> NativeFunction;
-    typedef std::pair<const char*, NativeFunction> Function;
+    typedef std::function<void(const std::vector<Value>&, Value&)> FunctionCallback;
+    typedef std::unordered_map<std::string, FunctionCallback> Functions;
     
     Object(Context& cx) = delete;
     Object(const Object&) = delete;
@@ -28,12 +28,12 @@ public:
     static bool Create(Context& cx, 
         std::initializer_list<const char*> properties,
         GetCallback getter, SetCallback setter,
-        std::initializer_list<Function> functions,
+        const std::vector<std::pair<const char*, FunctionCallback>>& functions,
         FinalizeCallback finalizer,
         Value& obj);
     
 private:
-    struct ClassCallbacks { GetCallback getter; SetCallback setter; FinalizeCallback finalizer; std::unordered_map<std::string, NativeFunction> functions; };
+    struct ClassCallbacks { GetCallback getter; SetCallback setter; FinalizeCallback finalizer; Functions functions; };
     
     static bool Get(JSContext*, JS::HandleObject, JS::HandleId, JS::MutableHandleValue);
     static bool Set(JSContext*, JS::HandleObject, JS::HandleId, bool, JS::MutableHandleValue);

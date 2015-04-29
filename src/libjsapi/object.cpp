@@ -11,7 +11,8 @@ JSClass rs::jsapi::Object::class_ = {
 };
 
 bool rs::jsapi::Object::Create(Context& cx, std::initializer_list<const char*> properties, 
-        GetCallback getter, SetCallback setter, std::initializer_list<Function> functions, FinalizeCallback finalizer, Value& obj) {
+        GetCallback getter, SetCallback setter, const std::vector<std::pair<const char*, FunctionCallback>>& functions,
+        FinalizeCallback finalizer, Value& obj) {
     JS::RootedObject newObj(cx, JS_NewObject(cx, &class_, JS::NullPtr(), JS::NullPtr()));    
     
     if (newObj) {
