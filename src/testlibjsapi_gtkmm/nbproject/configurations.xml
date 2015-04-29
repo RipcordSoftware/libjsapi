@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="95">
+  <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
+    <logicalFolder name="HeaderFiles"
+                   displayName="Header Files"
+                   projectFiles="true">
+      <itemPath>button.h</itemPath>
+      <itemPath>label.h</itemPath>
+      <itemPath>widget.h</itemPath>
+      <itemPath>window.h</itemPath>
+    </logicalFolder>
+    <logicalFolder name="ResourceFiles"
+                   displayName="Resource Files"
+                   projectFiles="true">
+    </logicalFolder>
+    <logicalFolder name="SourceFiles"
+                   displayName="Source Files"
+                   projectFiles="true">
+      <itemPath>button.cpp</itemPath>
+      <itemPath>label.cpp</itemPath>
+      <itemPath>main.cpp</itemPath>
+      <itemPath>widget.cpp</itemPath>
+      <itemPath>window.cpp</itemPath>
+    </logicalFolder>
+    <logicalFolder name="TestFiles"
+                   displayName="Test Files"
+                   projectFiles="false"
+                   kind="TEST_LOGICAL_FOLDER">
+    </logicalFolder>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>Makefile</itemPath>
+    </logicalFolder>
+  </logicalFolder>
+  <projectmakefile>Makefile</projectmakefile>
+  <confs>
+    <conf name="Debug" type="1">
+      <toolsSet>
+        <compilerSet>default</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <ccTool>
+          <standard>8</standard>
+          <commandlineTool>g++</commandlineTool>
+          <incDir>
+            <pElem>../libjsapi</pElem>
+            <pElem>../../externals/installed/include/mozjs-31</pElem>
+          </incDir>
+          <commandLine>`pkg-config gtkmm-3.0 --cflags --libs` --coverage</commandLine>
+        </ccTool>
+        <linkerTool>
+          <linkerLibItems>
+            <linkerLibProjectItem>
+              <makeArtifact PL="../libjsapi"
+                            CT="3"
+                            CN="Debug"
+                            AC="true"
+                            BL="true"
+                            WD="../libjsapi"
+                            BC="${MAKE}  -f Makefile CONF=Debug"
+                            CC="${MAKE}  -f Makefile CONF=Debug clean"
+                            OP="${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libjsapi.a">
+              </makeArtifact>
+            </linkerLibProjectItem>
+            <linkerLibFileItem>../../externals/installed/lib/libmozjs-31.a</linkerLibFileItem>
+            <linkerLibStdlibItem>DataCompression</linkerLibStdlibItem>
+            <linkerLibStdlibItem>DynamicLinking</linkerLibStdlibItem>
+          </linkerLibItems>
+        </linkerTool>
+      </compileType>
+      <item path="button.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="button.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="label.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="label.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="widget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="widget.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="window.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="window.h" ex="false" tool="3" flavor2="0">
+      </item>
+    </conf>
+    <conf name="Release" type="1">
+      <toolsSet>
+        <compilerSet>default</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <developmentMode>5</developmentMode>
+        </cTool>
+        <ccTool>
+          <developmentMode>5</developmentMode>
+          <standard>8</standard>
+          <commandlineTool>g++</commandlineTool>
+          <incDir>
+            <pElem>../libjsapi</pElem>
+            <pElem>../../externals/installed/include/mozjs-31</pElem>
+          </incDir>
+          <commandLine>`pkg-config gtkmm-3.0 --cflags --libs`</commandLine>
+        </ccTool>
+        <fortranCompilerTool>
+          <developmentMode>5</developmentMode>
+        </fortranCompilerTool>
+        <asmTool>
+          <developmentMode>5</developmentMode>
+        </asmTool>
+        <linkerTool>
+          <linkerLibItems>
+            <linkerLibProjectItem>
+              <makeArtifact PL="../libjsapi"
+                            CT="3"
+                            CN="Release"
+                            AC="false"
+                            BL="true"
+                            WD="../libjsapi"
+                            BC="${MAKE}  -f Makefile CONF=Release"
+                            CC="${MAKE}  -f Makefile CONF=Release clean"
+                            OP="${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libjsapi.a">
+              </makeArtifact>
+            </linkerLibProjectItem>
+          </linkerLibItems>
+        </linkerTool>
+      </compileType>
+      <item path="button.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="button.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="label.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="label.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="widget.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="widget.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="window.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="window.h" ex="false" tool="3" flavor2="0">
+      </item>
+    </conf>
+  </confs>
+</configurationDescriptor>
