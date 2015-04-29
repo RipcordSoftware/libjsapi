@@ -1,5 +1,6 @@
 #include "value.h"
 #include "context.h"
+#include "function_arguments.h"
 
 #include <vector>
 
@@ -172,6 +173,15 @@ bool rs::jsapi::Value::isArray() const {
     }
 }
 
+bool rs::jsapi::Value::isFunction() const { 
+    if (isObject_) {
+        return object_ && JS_ObjectIsFunction(cx_, object_);
+    } else {
+        auto obj = value_.toObjectOrNull();
+        return obj != nullptr && JS_ObjectIsFunction(cx_, obj);
+    }
+}
+
 JSString* rs::jsapi::Value::toString() const { 
     if (isObject_) {
         throw ValueCastException();    
@@ -207,6 +217,16 @@ bool rs::jsapi::Value::toBoolean() const {
 JSObject* rs::jsapi::Value::toObject() const { 
     ToObjectRef();
     return object_.get();
+}
+
+const JS::HandleValue rs::jsapi::Value::toFunction() const { 
+    ToValueRef();
+    return value_;
+}
+
+bool rs::jsapi::Value::CallFunction(const FunctionArguments& args, Value& result) {
+    ToValueRef();
+    return JS_CallFunctionValue(cx_, JS::NullPtr(), value_, args, result);
 }
 
 JSContext* rs::jsapi::Value::getContext() { 

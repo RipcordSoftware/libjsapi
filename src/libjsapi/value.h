@@ -11,6 +11,7 @@ namespace jsapi {
 
 class Context;
 class Value;
+class FunctionArguments;
     
 class Value final {
 public:
@@ -88,12 +89,16 @@ public:
     bool isNull() const;
     bool isUndefined() const;
     bool isArray() const;
+    bool isFunction() const;
     
     JSString* toString() const;
     double toNumber() const;
     int32_t toInt32() const;
     bool toBoolean() const;
     JSObject* toObject() const;
+    const JS::HandleValue toFunction() const;
+    
+    bool CallFunction(const FunctionArguments&, Value&);
 
     std::string ToString() const;
 
