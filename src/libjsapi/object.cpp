@@ -2,15 +2,13 @@
 #include "context.h"
 #include "value.h"
 
-#include <vector>
-
 JSClass rs::jsapi::Object::class_ = { 
     "rs_jsapi_object", JSCLASS_HAS_PRIVATE, JS_PropertyStub, JS_DeletePropertyStub,
     JS_PropertyStub, JS_StrictPropertyStub, JS_EnumerateStub, JS_ResolveStub, 
     JS_ConvertStub, Object::Finalize 
 };
 
-bool rs::jsapi::Object::Create(Context& cx, std::initializer_list<const char*> properties, 
+bool rs::jsapi::Object::Create(Context& cx, const std::vector<const char*>& properties,
         GetCallback getter, SetCallback setter, const std::vector<std::pair<const char*, FunctionCallback>>& functions,
         FinalizeCallback finalizer, Value& obj) {
     JS::RootedObject newObj(cx, JS_NewObject(cx, &class_, JS::NullPtr(), JS::NullPtr()));    

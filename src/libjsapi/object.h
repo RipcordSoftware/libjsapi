@@ -3,7 +3,6 @@
 
 #include <jsapi.h>
 
-#include <initializer_list>
 #include <functional>
 #include <unordered_map>
 #include <vector>
@@ -26,7 +25,7 @@ public:
     Object(const Object&) = delete;
     
     static bool Create(Context& cx, 
-        std::initializer_list<const char*> properties,
+        const std::vector<const char*>& properties,
         GetCallback getter, SetCallback setter,
         const std::vector<std::pair<const char*, FunctionCallback>>& functions,
         FinalizeCallback finalizer,
