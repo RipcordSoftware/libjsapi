@@ -42,7 +42,18 @@ public:
         } else {
             set(rhs.value_);
         }
+        
+        return *this;
     }
+    
+    Value& operator=(int value) { set(value); return *this; }
+    Value& operator=(double value) { set(value); return *this; }
+    Value& operator=(bool value) { set(value); return *this; }
+    Value& operator=(const char* str) { set(str); return *this; }
+    Value& operator=(const std::string& str) { set(str); return *this; }
+    Value& operator=(const JS::HandleValue& value) { set(value); return *this; }
+    Value& operator=(const JS::HandleObject& value) { set(value); return *this; }
+    Value& operator=(const JS::RootedObject& value) { set(value); return *this; }
     
     operator const JS::Value&() const { ToValueRef(); return value_.get(); }
     operator const JS::HandleValue() const { ToValueRef(); return value_; }
