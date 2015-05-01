@@ -16,7 +16,7 @@ bool rs::jsapi::Object::Create(Context& cx, const std::vector<const char*>& prop
     JS::RootedObject newObj(cx, JS_NewObject(cx, &class_, JS::NullPtr(), JS::NullPtr()));    
     
     if (newObj) {
-        auto state = new ObjectState { getter, setter, finalizer, {}, 0, nullptr };
+        auto state = new ObjectState { getter, setter, finalizer, Functions(), 0, nullptr };
         
         for (auto p : properties) {
             JS_DefineProperty(cx, newObj, p, JS::NullHandleValue, JSPROP_ENUMERATE, 
