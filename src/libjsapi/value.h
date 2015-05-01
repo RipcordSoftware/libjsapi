@@ -25,6 +25,7 @@ public:
     Value(JSContext* cx, const JS::HandleObject& obj);
     Value(JSContext* cx, const JS::RootedObject& obj);
     Value(JSContext* cx, JSObject* obj);
+    Value(JSContext* cx, JSString* obj);
 
     ~Value();    
     
@@ -55,6 +56,8 @@ public:
     Value& operator=(const JS::HandleValue& value) { set(value); return *this; }
     Value& operator=(const JS::HandleObject& value) { set(value); return *this; }
     Value& operator=(const JS::RootedObject& value) { set(value); return *this; }
+    Value& operator=(const JSObject* value) { set(value); return *this; }
+    Value& operator=(const JSString* value) { set(value); return *this; }
     
     operator const JS::Value&() const { ToValueRef(); return value_.get(); }
     operator const JS::HandleValue() const { ToValueRef(); return value_; }
@@ -77,6 +80,7 @@ public:
     void set(const JS::HandleObject& value);
     void set(const JS::RootedObject& value);
     void set(JSObject* value);
+    void set(JSString* value);
     void set(const Value& value);
     void setUndefined();
     void setNull();

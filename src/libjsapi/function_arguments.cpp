@@ -41,6 +41,10 @@ bool rs::jsapi::FunctionArguments::Append(const JS::RootedObject& obj) {
     return args_.append(JS::ObjectOrNullValue(obj));
 }
 
+bool rs::jsapi::FunctionArguments::Append(const JS::RootedValue& value) {
+    return args_.append(value);
+}
+
 void rs::jsapi::FunctionArguments::Clear() {
     args_.clear();
 }

@@ -24,6 +24,7 @@ public:
     bool Append(bool value);
     bool Append(Value& value);
     bool Append(const JS::RootedObject& obj);
+    bool Append(const JS::RootedValue& value);
     
     void Clear();
     bool Empty();
