@@ -4,6 +4,8 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
+      <itemPath>application.h</itemPath>
+      <itemPath>builder.h</itemPath>
       <itemPath>button.h</itemPath>
       <itemPath>label.h</itemPath>
       <itemPath>widget.h</itemPath>
@@ -16,6 +18,8 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
+      <itemPath>application.cpp</itemPath>
+      <itemPath>builder.cpp</itemPath>
       <itemPath>button.cpp</itemPath>
       <itemPath>label.cpp</itemPath>
       <itemPath>main.cpp</itemPath>
@@ -33,6 +37,7 @@
                    kind="IMPORTANT_FILES_FOLDER">
       <itemPath>Makefile</itemPath>
     </logicalFolder>
+    <itemPath>test.js</itemPath>
   </logicalFolder>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
@@ -72,6 +77,14 @@
           </linkerLibItems>
         </linkerTool>
       </compileType>
+      <item path="application.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="application.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="builder.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="builder.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="button.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="button.h" ex="false" tool="3" flavor2="0">
@@ -81,6 +94,8 @@
       <item path="label.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="test.js" ex="false" tool="3" flavor2="0">
       </item>
       <item path="widget.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -134,6 +149,14 @@
           </linkerLibItems>
         </linkerTool>
       </compileType>
+      <item path="application.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="application.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="builder.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="builder.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="button.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="button.h" ex="false" tool="3" flavor2="0">
@@ -143,6 +166,8 @@
       <item path="label.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="test.js" ex="false" tool="3" flavor2="0">
       </item>
       <item path="widget.cpp" ex="false" tool="1" flavor2="0">
       </item>

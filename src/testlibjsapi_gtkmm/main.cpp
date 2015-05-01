@@ -1,29 +1,34 @@
 #include <gtkmm.h>
 
-#include <memory>
-#include <vector>
+#include <string>
+#include <fstream>
 
 #include "libjsapi.h"
 
+#include "application.h"
 #include "window.h"
+#include "builder.h"
 
-int main(int argc, char** argv) {
-
-    auto app = Gtk::Application::create(argc, argv, "com.ripcordsoftware.examples.gtk");            
+int main(int argc, char** argv) {  
     
+    std::string script;
+    std::fstream file;
+    file.open("test.js", std::ios::in);
+    while (!!file) {
+        char buffer[4096];
+        file.read(buffer, sizeof(buffer));
+        script.append(buffer, file.gcount());
+    }
+            
     rs::jsapi::Runtime rt;
-    Window mainWindow(rt);
-      
-    rs::jsapi::Global::DefineProperty(rt, "window", mainWindow);
-    rt.Evaluate(
-        "window.setDefaultSize(10, 10); "
-        "window.setTitle('This is a TEST!'); "
-        "window.setBorderWidth(100); "
-        //"var label = window.addLabel('myLabel'); "
-        //"label && label.setText('hello').setOpacity(0.6).show();"
-        "var button = window.addButton('myButton');"
-        "button && button.setText('Press me!').show();"
-    );
-
-    return app->run(mainWindow);    
+    
+    auto app = new Application(rt, "com.ripcordsoftware.examples.gtk", argc, argv);
+    rs::jsapi::Global::DefineProperty(rt, "app", *app);
+    
+    auto builder = new Builder(rt);
+    rs::jsapi::Global::DefineProperty(rt, "builder", *builder);
+    
+    rt.Evaluate(script.c_str());
+    
+    return 0;
 }

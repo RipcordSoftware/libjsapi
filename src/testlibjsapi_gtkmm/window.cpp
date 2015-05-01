@@ -1,10 +1,12 @@
 #include "window.h"
 
+#include <typeinfo>
+
 #include "widget.h"
 #include "label.h"
 #include "button.h"
 
-Window::Window(rs::jsapi::Runtime& rt) : rt_(rt), obj_(rt), widget_(&window_, obj_) {
+Window::Window(rs::jsapi::Runtime& rt, Gtk::Window* window) : rt_(rt), obj_(rt), widget_(window_, obj_), window_(window) {
     
     auto functions = widget_.GetFunctions();
     
@@ -15,30 +17,31 @@ Window::Window(rs::jsapi::Runtime& rt) : rt_(rt), obj_(rt), widget_(&window_, ob
     functions.emplace_back("addLabel", std::bind(&Window::AddLabel, this, std::placeholders::_1, std::placeholders::_2));
     functions.emplace_back("addButton", std::bind(&Window::AddButton, this, std::placeholders::_1, std::placeholders::_2));
 
-    rs::jsapi::Object::Create(rt, {}, nullptr, nullptr, functions,
-        nullptr, obj_);
+    rs::jsapi::Object::Create(rt, {}, nullptr, nullptr, functions, std::bind(&Window::Finalizer, this), obj_);
+    
+    rs::jsapi::Object::SetPrivate(obj_, typeid(Window).hash_code(), this);
 }
 
 void Window::SetDefaultSize(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result) { 
     auto width = args[0].toInt32();
     auto height = args[1].toInt32();
-    window_.set_default_size(width, height);
+    window_->set_default_size(width, height);
     result = *this;
 }
 
 void Window::SetTitle(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result) { 
-    window_.set_title(args[0].ToString());
+    window_->set_title(args[0].ToString());
     result = *this;
 }
 
 void Window::SetBorderWidth(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result) { 
-    window_.set_border_width(args[0].toInt32());
+    window_->set_border_width(args[0].toInt32());
     result = *this;
 }
 
 void Window::GetLabel(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result) { 
     auto name = args[0].ToString();
-    auto children = window_.get_children();
+    auto children = window_->get_children();
 
     for (auto c : children) {
         if (c->get_name().compare(name) == 0) {
@@ -58,7 +61,7 @@ void Window::AddLabel(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Valu
         label->set_name(args[0].ToString());
     }
 
-    window_.add(*label);
+    window_->add(*label);
     result = *(new Label(rt_, label));
 }      
 
@@ -69,6 +72,19 @@ void Window::AddButton(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Val
         button->set_name(args[0].ToString());
     }
 
-    window_.add(*button);
+    window_->add(*button);
     result = *(new Button(rt_, button));
 }  
+
+Gtk::Window* Window::getWindowFromValue(const rs::jsapi::Value& value) {
+    Gtk::Window* window = nullptr;
+    
+    uint64_t data = 0;
+    void* ptr = nullptr;
+    if (rs::jsapi::Object::GetPrivate(value, data, ptr) && data == typeid(Window).hash_code()) {
+        auto that = reinterpret_cast<Window*>(ptr);
+        window = that->window_;
+    }
+    
+    return window;
+}

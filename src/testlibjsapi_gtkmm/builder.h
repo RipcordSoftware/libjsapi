@@ -1,0 +1,29 @@
+#ifndef BUILDER_H
+#define	BUILDER_H
+
+#include <gtkmm.h>
+
+#include "libjsapi.h"
+
+class Builder {
+public:
+    Builder(rs::jsapi::Runtime& rt);
+    
+    void AddFromFile(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result);
+    void GetWindow(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result);
+    void GetButton(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result);
+    
+    operator rs::jsapi::Value&() { return obj_; }
+    
+private:
+    Gtk::Widget* GetWidget(const std::vector<rs::jsapi::Value>& args);
+    
+    rs::jsapi::Runtime& rt_;
+    rs::jsapi::Value obj_;
+    Glib::RefPtr<Gtk::Builder> builder_;
+    
+    rs::jsapi::Value null_;
+};
+
+#endif	/* BUILDER_H */
+

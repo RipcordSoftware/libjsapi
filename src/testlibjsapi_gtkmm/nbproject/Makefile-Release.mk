@@ -35,6 +35,8 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
+	${OBJECTDIR}/application.o \
+	${OBJECTDIR}/builder.o \
 	${OBJECTDIR}/button.o \
 	${OBJECTDIR}/label.o \
 	${OBJECTDIR}/main.o \
@@ -67,6 +69,16 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/testlibjsapi_gtkmm: ../libjsapi/dist/
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/testlibjsapi_gtkmm: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/testlibjsapi_gtkmm ${OBJECTFILES} ${LDLIBSOPTIONS}
+
+${OBJECTDIR}/application.o: application.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../libjsapi -I../../externals/installed/include/mozjs-31 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/application.o application.cpp
+
+${OBJECTDIR}/builder.o: builder.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../libjsapi -I../../externals/installed/include/mozjs-31 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/builder.o builder.cpp
 
 ${OBJECTDIR}/button.o: button.cpp 
 	${MKDIR} -p ${OBJECTDIR}
