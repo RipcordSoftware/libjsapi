@@ -106,3 +106,5 @@ $ ./build.sh
 ```
 
 If building is slow on your system then you can speed it up by stripping the debugging information from the mozjs library by running `./strip_mozjs.sh`.
+
+The [wiki](https://github.com/RipcordSoftware/libjsapi/wiki) contains details on building on different systems.
