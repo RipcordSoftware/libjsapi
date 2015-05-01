@@ -338,3 +338,64 @@ TEST_F(SimpleValueTests, test28) {
     
     ASSERT_TRUE(thrown);
 }
+
+TEST_F(SimpleValueTests, test29) {
+    rs::jsapi::Value func(rt_);
+    rt_.Evaluate("(function() { return function() { return 42; } })();", func);
+    
+    ASSERT_TRUE(func.isFunction());
+    
+    rs::jsapi::FunctionArguments args(rt_);
+    rs::jsapi::Value result(rt_);
+    func.CallFunction(args, result);
+    
+    ASSERT_TRUE(result.isInt32());
+    ASSERT_EQ(42, result.toInt32());
+}
+
+TEST_F(SimpleValueTests, test30) {
+    rs::jsapi::Value func(rt_);
+    rt_.Evaluate("(function() { return function(n) { return n; } })();", func);
+    
+    ASSERT_TRUE(func.isFunction());
+    
+    rs::jsapi::FunctionArguments args(rt_);
+    args.Append(3.14159);
+    
+    rs::jsapi::Value result(rt_);
+    func.CallFunction(args, result);
+    
+    ASSERT_TRUE(result.isNumber());
+    ASSERT_FLOAT_EQ(3.14159, result.toNumber());
+}
+
+TEST_F(SimpleValueTests, test31) {
+    rs::jsapi::Value value1(rt_);
+    ASSERT_TRUE(value1.isUndefined());
+    
+    rs::jsapi::Value obj(rt_);
+    rs::jsapi::Object::Create(rt_, 
+        {}, 
+        nullptr, 
+        nullptr, 
+        {},
+        nullptr, 
+        obj);
+    ASSERT_TRUE(!!obj);
+    
+    value1 = obj;
+    ASSERT_TRUE(value1.isObject());
+    
+    rs::jsapi::Value value2(value1);
+    ASSERT_TRUE(value2.isObject());
+}
+
+TEST_F(SimpleValueTests, test32) {
+    rs::jsapi::Value value1(rt_, 42);
+    ASSERT_TRUE(value1.isInt32());    
+    ASSERT_EQ(42, value1.toInt32());       
+    
+    rs::jsapi::Value value2(value1);
+    ASSERT_TRUE(value2.isInt32());
+    ASSERT_EQ(42, value2.toInt32());
+}
