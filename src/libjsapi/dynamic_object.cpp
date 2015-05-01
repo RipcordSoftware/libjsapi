@@ -3,6 +3,7 @@
 #include "value.h"
 
 #include <vector>
+#include <cstring>
 
 JSClass rs::jsapi::DynamicObject::class_ = { 
     "rs_jsapi_dynamicobject", JSCLASS_HAS_PRIVATE, JS_PropertyStub, JS_DeletePropertyStub,
@@ -14,8 +15,8 @@ bool rs::jsapi::DynamicObject::Create(Context& cx, GetCallback getter, DynamicOb
     JS::RootedObject newObj(cx, JS_NewObject(cx, &class_, JS::NullPtr(), JS::NullPtr()));
     
     if (newObj) {
-        auto callbacks = new ClassCallbacks { getter, setter, enumerator, finalize };
-        DynamicObject::SetObjectCallbacks(newObj, callbacks);
+        auto state = new DynamicObjectState { getter, setter, enumerator, finalize, 0, nullptr };
+        DynamicObject::SetState(newObj, state);
         
         obj.set(newObj);
     }
@@ -24,9 +25,9 @@ bool rs::jsapi::DynamicObject::Create(Context& cx, GetCallback getter, DynamicOb
 }
 
 bool rs::jsapi::DynamicObject::Get(JSContext* cx, JS::HandleObject obj, JS::HandleId id, JS::MutableHandleValue vp) {
-    auto callbacks = DynamicObject::GetObjectCallbacks(obj);
+    auto state = DynamicObject::GetState(obj);
     
-    if (callbacks != nullptr && callbacks->getter != nullptr) {
+    if (state != nullptr && state->getter != nullptr) {
         Value value(cx, vp);
         
         auto name = JSID_TO_STRING(id);
@@ -36,12 +37,12 @@ bool rs::jsapi::DynamicObject::Get(JSContext* cx, JS::HandleObject obj, JS::Hand
         
         if (nameLength < sizeof(nameBuffer)) {
             nameBuffer[nameLength] = '\0';    
-            status = callbacks->getter(nameBuffer, value);    
+            status = state->getter(nameBuffer, value);    
         } else {
             std::vector<char> nameVector(nameLength + 1);
             nameLength = JS_EncodeStringToBuffer(cx, name, &nameVector[0], nameVector.size() - 1);
             nameVector[nameLength] = '\0';
-            status = callbacks->getter(&nameVector[0], value);
+            status = state->getter(&nameVector[0], value);
         }
         
         if (status) {
@@ -55,9 +56,9 @@ bool rs::jsapi::DynamicObject::Get(JSContext* cx, JS::HandleObject obj, JS::Hand
 }
 
 bool rs::jsapi::DynamicObject::Set(JSContext* cx, JS::HandleObject obj, JS::HandleId id, bool strict, JS::MutableHandleValue vp) {
-    auto callbacks = DynamicObject::GetObjectCallbacks(obj);
+    auto state = DynamicObject::GetState(obj);
     
-    if (callbacks != nullptr && callbacks->setter != nullptr) {
+    if (state != nullptr && state->setter != nullptr) {
         Value value(cx, vp);
         
         auto name = JSID_TO_STRING(id);
@@ -66,12 +67,12 @@ bool rs::jsapi::DynamicObject::Set(JSContext* cx, JS::HandleObject obj, JS::Hand
         
         if (nameLength < sizeof(nameBuffer)) {
             nameBuffer[nameLength] = '\0';    
-            return callbacks->setter( nameBuffer, value);    
+            return state->setter( nameBuffer, value);    
         } else {
             std::vector<char> nameVector(nameLength + 1);
             nameLength = JS_EncodeStringToBuffer(cx, name, &nameVector[0], nameVector.size() - 1);
             nameVector[nameLength] = '\0';
-            return callbacks->setter(&nameVector[0], value);
+            return state->setter(&nameVector[0], value);
         }    
     } else {
         // TODO: what will this do to the JS?
@@ -82,11 +83,11 @@ bool rs::jsapi::DynamicObject::Set(JSContext* cx, JS::HandleObject obj, JS::Hand
 
 bool rs::jsapi::DynamicObject::Enumerate(JSContext* cx, JS::HandleObject obj) {
     auto status = true;
-    auto callbacks = DynamicObject::GetObjectCallbacks(obj);
-    if (callbacks != nullptr && callbacks->enumerator != nullptr) {
+    auto state = DynamicObject::GetState(obj);
+    if (state != nullptr && state->enumerator != nullptr) {
         std::vector<std::string> props;
         std::vector<std::pair<std::string, JSNative>> funcs;
-        status = callbacks->enumerator(props, funcs);
+        status = state->enumerator(props, funcs);
         if (status) {
             for (auto p : props) {
                 JS_DefineProperty(cx, obj, p.c_str(), JS::NullHandleValue, JSPROP_ENUMERATE, 
@@ -102,20 +103,52 @@ bool rs::jsapi::DynamicObject::Enumerate(JSContext* cx, JS::HandleObject obj) {
 }
 
 void rs::jsapi::DynamicObject::Finalize(JSFreeOp* fop, JSObject* obj) {
-    auto callbacks = DynamicObject::GetObjectCallbacks(obj);
-    if (callbacks != nullptr && callbacks->finalize != nullptr) {
-        callbacks->finalize();
+    auto state = DynamicObject::GetState(obj);
+    if (state != nullptr && state->finalize != nullptr) {
+        state->finalize();
     }
     
-    SetObjectCallbacks(obj, nullptr);
-    delete callbacks;    
+    SetState(obj, nullptr);
+    delete state;    
 }
 
-rs::jsapi::DynamicObject::ClassCallbacks* rs::jsapi::DynamicObject::GetObjectCallbacks(JSObject* obj) {
-    auto callbacks = JS_GetPrivate(obj);
-    return reinterpret_cast<ClassCallbacks*>(callbacks);
+rs::jsapi::DynamicObject::DynamicObjectState* rs::jsapi::DynamicObject::GetState(JSObject* obj) {
+    auto state = JS_GetPrivate(obj);
+    return reinterpret_cast<DynamicObjectState*>(state);
 }
 
-void rs::jsapi::DynamicObject::SetObjectCallbacks(JSObject* obj, ClassCallbacks* callbacks) {
-    JS_SetPrivate(obj, callbacks);    
+void rs::jsapi::DynamicObject::SetState(JSObject* obj, DynamicObjectState* state) {
+    JS_SetPrivate(obj, state);    
+}
+
+bool rs::jsapi::DynamicObject::SetPrivate(Value& value, uint64_t data, void* ptr) {
+    auto set = false;
+    if (value.isObject()) {
+        auto obj = value.toObject();
+        auto klass = JS_GetClass(obj);
+        if (klass != nullptr && std::strcmp(klass->name, DynamicObject::class_.name) == 0) {
+            auto state = GetState(obj);
+            state->data = data;
+            state->ptr = ptr;
+            set = true;
+        }
+    }
+    
+    return set;
+}
+
+bool rs::jsapi::DynamicObject::GetPrivate(const Value& value, uint64_t& data, void*& ptr) {
+    auto get = false;
+    if (value.isObject()) {
+        auto obj = value.toObject();
+        auto klass = JS_GetClass(obj);
+        if (klass != nullptr && std::strcmp(klass->name, DynamicObject::class_.name) == 0) {
+            auto state = GetState(obj);
+            data = state->data;
+            ptr = state->ptr;
+            get = true;
+        }
+    }
+    
+    return get;
 }

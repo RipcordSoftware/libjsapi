@@ -31,16 +31,26 @@ public:
         FinalizeCallback finalizer,
         Value& obj);
     
+    static bool SetPrivate(Value&, uint64_t, void*);
+    static bool GetPrivate(const Value&, uint64_t&, void*&);
+    
 private:
-    struct ClassCallbacks { GetCallback getter; SetCallback setter; FinalizeCallback finalizer; Functions functions; };
+    struct ObjectState { 
+        GetCallback getter; 
+        SetCallback setter; 
+        FinalizeCallback finalizer; 
+        Functions functions;
+        uint64_t data;
+        void* ptr;
+    };
     
     static bool Get(JSContext*, JS::HandleObject, JS::HandleId, JS::MutableHandleValue);
     static bool Set(JSContext*, JS::HandleObject, JS::HandleId, bool, JS::MutableHandleValue);
     static bool CallFunction(JSContext*, unsigned, JS::Value*);
     static void Finalize(JSFreeOp* fop, JSObject* obj);
 
-    static ClassCallbacks* GetObjectCallbacks(JSObject* obj);
-    static void SetObjectCallbacks(JSObject* obj, ClassCallbacks* callbacks);
+    static ObjectState* GetState(JSObject* obj);
+    static void SetState(JSObject* obj, ObjectState* state);
     
     static JSClass class_;
 };

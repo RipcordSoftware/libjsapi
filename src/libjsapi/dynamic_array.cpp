@@ -3,6 +3,7 @@
 #include "value.h"
 
 #include <vector>
+#include <cstring>
 
 JSClass rs::jsapi::DynamicArray::class_ = { 
     "rs_jsapi_dynamicarray", JSCLASS_HAS_PRIVATE, JS_PropertyStub, JS_DeletePropertyStub,
@@ -16,8 +17,8 @@ bool rs::jsapi::DynamicArray::Create(Context& cx, GetCallback getter, SetCallbac
     if (obj) {
         JS_DefineProperty(cx, obj, "length", 0, JSPROP_READONLY, DynamicArray::Length, nullptr);
         
-        auto callbacks = new ClassCallbacks { getter, setter, length, finalize };
-        DynamicArray::SetObjectCallbacks(obj, callbacks);
+        auto state = new DynamicArrayState { getter, setter, length, finalize, 0, nullptr };
+        DynamicArray::SetState(obj, state);
         
         array.set(obj);
     }
@@ -26,12 +27,12 @@ bool rs::jsapi::DynamicArray::Create(Context& cx, GetCallback getter, SetCallbac
 }
 
 bool rs::jsapi::DynamicArray::Get(JSContext* cx, JS::HandleObject obj, JS::HandleId id, JS::MutableHandleValue vp) {
-    auto callbacks = DynamicArray::GetObjectCallbacks(obj);
+    auto state = DynamicArray::GetState(obj);
     
-    if (callbacks != nullptr && callbacks->getter != nullptr && JSID_IS_INT(id)) {
+    if (state != nullptr && state->getter != nullptr && JSID_IS_INT(id)) {
         auto index = JSID_TO_INT(id);
         Value value(cx, vp);
-        bool status = callbacks->getter(index, value);        
+        bool status = state->getter(index, value);        
         if (status) {
             vp.set(value);
         }
@@ -43,12 +44,12 @@ bool rs::jsapi::DynamicArray::Get(JSContext* cx, JS::HandleObject obj, JS::Handl
 }
 
 bool rs::jsapi::DynamicArray::Set(JSContext* cx, JS::HandleObject obj, JS::HandleId id, bool strict, JS::MutableHandleValue vp) {
-    auto callbacks = DynamicArray::GetObjectCallbacks(obj);
+    auto state = DynamicArray::GetState(obj);
     
-    if (callbacks != nullptr && callbacks->setter != nullptr && JSID_IS_INT(id)) {
+    if (state != nullptr && state->setter != nullptr && JSID_IS_INT(id)) {
         auto index = JSID_TO_INT(id);
         Value value(cx, vp);                
-        return callbacks->setter(index, value);    
+        return state->setter(index, value);    
     } else {
         // TODO: what will this do to the JS?
         vp.setUndefined();
@@ -57,21 +58,21 @@ bool rs::jsapi::DynamicArray::Set(JSContext* cx, JS::HandleObject obj, JS::Handl
 }
 
 void rs::jsapi::DynamicArray::Finalize(JSFreeOp* fop, JSObject* obj) {
-    auto callbacks = GetObjectCallbacks(obj);
-    if (callbacks != nullptr && callbacks->finalize != nullptr) {
-        callbacks->finalize();
+    auto state = GetState(obj);
+    if (state != nullptr && state->finalize != nullptr) {
+        state->finalize();
     }
     
-    SetObjectCallbacks(obj, nullptr);
-    delete callbacks;    
+    SetState(obj, nullptr);
+    delete state;    
 }
 
 bool rs::jsapi::DynamicArray::Length(JSContext* cx, JS::HandleObject obj, JS::HandleId id, JS::MutableHandleValue vp) {    
     auto length = 0;
     
-    auto callbacks = DynamicArray::GetObjectCallbacks(obj);    
-    if (callbacks != nullptr && callbacks->length != nullptr) {
-        length = callbacks->length();
+    auto state = DynamicArray::GetState(obj);    
+    if (state != nullptr && state->length != nullptr) {
+        length = state->length();
     }
     
     vp.setInt32(length);
@@ -79,11 +80,43 @@ bool rs::jsapi::DynamicArray::Length(JSContext* cx, JS::HandleObject obj, JS::Ha
     return true;
 }
 
-rs::jsapi::DynamicArray::ClassCallbacks* rs::jsapi::DynamicArray::GetObjectCallbacks(JSObject* obj) {
-    auto callbacks = JS_GetPrivate(obj);
-    return reinterpret_cast<ClassCallbacks*>(callbacks);
+rs::jsapi::DynamicArray::DynamicArrayState* rs::jsapi::DynamicArray::GetState(JSObject* obj) {
+    auto state = JS_GetPrivate(obj);
+    return reinterpret_cast<DynamicArrayState*>(state);
 }
 
-void rs::jsapi::DynamicArray::SetObjectCallbacks(JSObject* obj, ClassCallbacks* callbacks) {
-    JS_SetPrivate(obj, callbacks);    
+void rs::jsapi::DynamicArray::SetState(JSObject* obj, DynamicArrayState* state) {
+    JS_SetPrivate(obj, state);    
+}
+
+bool rs::jsapi::DynamicArray::SetPrivate(Value& value, uint64_t data, void* ptr) {
+    auto set = false;
+    if (value.isObject()) {
+        auto obj = value.toObject();
+        auto klass = JS_GetClass(obj);
+        if (klass != nullptr && std::strcmp(klass->name, DynamicArray::class_.name) == 0) {
+            auto state = GetState(obj);
+            state->data = data;
+            state->ptr = ptr;
+            set = true;
+        }
+    }
+    
+    return set;
+}
+
+bool rs::jsapi::DynamicArray::GetPrivate(const Value& value, uint64_t& data, void*& ptr) {
+    auto get = false;
+    if (value.isObject()) {
+        auto obj = value.toObject();
+        auto klass = JS_GetClass(obj);
+        if (klass != nullptr && std::strcmp(klass->name, DynamicArray::class_.name) == 0) {
+            auto state = GetState(obj);
+            data = state->data;
+            ptr = state->ptr;
+            get = true;
+        }
+    }
+    
+    return get;
 }

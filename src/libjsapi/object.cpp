@@ -2,6 +2,8 @@
 #include "context.h"
 #include "value.h"
 
+#include <cstring>
+
 JSClass rs::jsapi::Object::class_ = { 
     "rs_jsapi_object", JSCLASS_HAS_PRIVATE, JS_PropertyStub, JS_DeletePropertyStub,
     JS_PropertyStub, JS_StrictPropertyStub, JS_EnumerateStub, JS_ResolveStub, 
@@ -14,7 +16,7 @@ bool rs::jsapi::Object::Create(Context& cx, const std::vector<const char*>& prop
     JS::RootedObject newObj(cx, JS_NewObject(cx, &class_, JS::NullPtr(), JS::NullPtr()));    
     
     if (newObj) {
-        auto callbacks = new ClassCallbacks { getter, setter, finalizer };
+        auto state = new ObjectState { getter, setter, finalizer, {}, 0, nullptr };
         
         for (auto p : properties) {
             JS_DefineProperty(cx, newObj, p, JS::NullHandleValue, JSPROP_ENUMERATE, 
@@ -23,10 +25,10 @@ bool rs::jsapi::Object::Create(Context& cx, const std::vector<const char*>& prop
 
         for (auto f : functions) {
             JS_DefineFunction(cx, newObj, f.first, Object::CallFunction, 0, JSPROP_ENUMERATE);
-            callbacks->functions.emplace(f.first, f.second);
+            state->functions.emplace(f.first, f.second);
         }
         
-        Object::SetObjectCallbacks(newObj, callbacks);
+        Object::SetState(newObj, state);
 
         obj.set(newObj);
     }
@@ -35,8 +37,8 @@ bool rs::jsapi::Object::Create(Context& cx, const std::vector<const char*>& prop
 }
 
 bool rs::jsapi::Object::Get(JSContext* cx, JS::HandleObject obj, JS::HandleId id, JS::MutableHandleValue vp) {
-    auto callbacks = Object::GetObjectCallbacks(obj);    
-    if (callbacks != nullptr && callbacks->getter != nullptr) {
+    auto state = Object::GetState(obj);    
+    if (state != nullptr && state->getter != nullptr) {
         Value value(cx, vp);
         
         auto name = JSID_TO_STRING(id);
@@ -46,12 +48,12 @@ bool rs::jsapi::Object::Get(JSContext* cx, JS::HandleObject obj, JS::HandleId id
         
         if (nameLength < sizeof(nameBuffer)) {
             nameBuffer[nameLength] = '\0';
-            status = callbacks->getter(nameBuffer, value);
+            status = state->getter(nameBuffer, value);
         } else {
             std::vector<char> nameVector(nameLength + 1);
             nameLength = JS_EncodeStringToBuffer(cx, name, &nameVector[0], nameVector.size() - 1);
             nameVector[nameLength] = '\0';
-            status = callbacks->getter(&nameVector[0], value);
+            status = state->getter(&nameVector[0], value);
         }
         
         if (status) {
@@ -66,8 +68,8 @@ bool rs::jsapi::Object::Get(JSContext* cx, JS::HandleObject obj, JS::HandleId id
 }
 
 bool rs::jsapi::Object::Set(JSContext* cx, JS::HandleObject obj, JS::HandleId id, bool strict, JS::MutableHandleValue vp) {
-    auto callbacks = Object::GetObjectCallbacks(obj);
-    if (callbacks != nullptr && callbacks->setter != nullptr) {
+    auto state = Object::GetState(obj);
+    if (state != nullptr && state->setter != nullptr) {
         Value value(cx, vp);
         
         char nameBuffer[256];
@@ -76,12 +78,12 @@ bool rs::jsapi::Object::Set(JSContext* cx, JS::HandleObject obj, JS::HandleId id
         
         if (nameLength < sizeof(nameBuffer)) {
             nameBuffer[nameLength] = '\0';    
-            return callbacks->setter(nameBuffer, value);    
+            return state->setter(nameBuffer, value);    
         } else {
             std::vector<char> nameVector(nameLength + 1);
             nameLength = JS_EncodeStringToBuffer(cx, name, &nameVector[0], nameVector.size() - 1);
             nameVector[nameLength] = '\0';
-            return callbacks->setter(&nameVector[0], value);
+            return state->setter(&nameVector[0], value);
         }    
     } else {
         // TODO: what will this do to the JS?
@@ -116,8 +118,8 @@ bool rs::jsapi::Object::CallFunction(JSContext* cx, unsigned argc, JS::Value* vp
         JS_ReportError(cx, "Unable to find function in libjsapi object");
         return false;        
     } else {
-        auto callbacks = Object::GetObjectCallbacks(args.thisv().toObjectOrNull());
-        if (callbacks == nullptr) {
+        auto state = Object::GetState(args.thisv().toObjectOrNull());
+        if (state == nullptr) {
             // TODO: test this case
             JS_ReportError(cx, "Unable to find function callback in libjsapi object");
             return false;
@@ -129,7 +131,7 @@ bool rs::jsapi::Object::CallFunction(JSContext* cx, unsigned argc, JS::Value* vp
                 }
 
                 Value result(cx);
-                callbacks->functions[name](vArgs, result);
+                state->functions[name](vArgs, result);
                 args.rval().set(result);
                 return true;
             } catch (const std::exception& ex) {
@@ -141,20 +143,52 @@ bool rs::jsapi::Object::CallFunction(JSContext* cx, unsigned argc, JS::Value* vp
 }
 
 void rs::jsapi::Object::Finalize(JSFreeOp* fop, JSObject* obj) {
-    auto callbacks = Object::GetObjectCallbacks(obj);
-    if (callbacks != nullptr && callbacks->finalizer != nullptr) {
-        callbacks->finalizer();
+    auto state = Object::GetState(obj);
+    if (state != nullptr && state->finalizer != nullptr) {
+        state->finalizer();
     }
     
-    SetObjectCallbacks(obj, nullptr);
-    delete callbacks;    
+    SetState(obj, nullptr);
+    delete state;    
 }
 
-rs::jsapi::Object::ClassCallbacks* rs::jsapi::Object::GetObjectCallbacks(JSObject* obj) {
-    auto callbacks = JS_GetPrivate(obj);
-    return reinterpret_cast<ClassCallbacks*>(callbacks);
+rs::jsapi::Object::ObjectState* rs::jsapi::Object::GetState(JSObject* obj) {
+    auto state = JS_GetPrivate(obj);
+    return reinterpret_cast<ObjectState*>(state);
 }
 
-void rs::jsapi::Object::SetObjectCallbacks(JSObject* obj, ClassCallbacks* callbacks) {
-    JS_SetPrivate(obj, callbacks);    
+void rs::jsapi::Object::SetState(JSObject* obj, ObjectState* state) {
+    JS_SetPrivate(obj, state);    
+}
+
+bool rs::jsapi::Object::SetPrivate(Value& value, uint64_t data, void* ptr) {
+    auto set = false;
+    if (value.isObject()) {
+        auto obj = value.toObject();
+        auto klass = JS_GetClass(obj);
+        if (klass != nullptr && std::strcmp(klass->name, Object::class_.name) == 0) {
+            auto state = GetState(obj);
+            state->data = data;
+            state->ptr = ptr;
+            set = true;
+        }
+    }
+    
+    return set;
+}
+
+bool rs::jsapi::Object::GetPrivate(const Value& value, uint64_t& data, void*& ptr) {
+    auto get = false;
+    if (value.isObject()) {
+        auto obj = value.toObject();
+        auto klass = JS_GetClass(obj);
+        if (klass != nullptr && std::strcmp(klass->name, Object::class_.name) == 0) {
+            auto state = GetState(obj);
+            data = state->data;
+            ptr = state->ptr;
+            get = true;
+        }
+    }
+    
+    return get;
 }

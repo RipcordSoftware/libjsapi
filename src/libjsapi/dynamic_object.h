@@ -22,16 +22,19 @@ public:
     
     static bool Create(Context& cx, GetCallback getter, SetCallback setter, EnumeratorCallback enumerator, FinalizeCallback finalize, Value& obj);
     
+    static bool SetPrivate(Value&, uint64_t, void*);
+    static bool GetPrivate(const Value&, uint64_t&, void*&);
+    
 private:
-    struct ClassCallbacks { GetCallback getter; SetCallback setter; EnumeratorCallback enumerator; FinalizeCallback finalize; };
+    struct DynamicObjectState { GetCallback getter; SetCallback setter; EnumeratorCallback enumerator; FinalizeCallback finalize; uint64_t data; void* ptr; };
     
     static bool Get(JSContext*, JS::HandleObject, JS::HandleId, JS::MutableHandleValue);
     static bool Set(JSContext*, JS::HandleObject, JS::HandleId, bool, JS::MutableHandleValue);
     static bool Enumerate(JSContext* cx, JS::HandleObject obj);
     static void Finalize(JSFreeOp* fop, JSObject* obj);
     
-    static ClassCallbacks* GetObjectCallbacks(JSObject* obj);
-    static void SetObjectCallbacks(JSObject* obj, ClassCallbacks* callbacks);
+    static DynamicObjectState* GetState(JSObject* obj);
+    static void SetState(JSObject* obj, DynamicObjectState* state);
     
     static JSClass class_;
 };
