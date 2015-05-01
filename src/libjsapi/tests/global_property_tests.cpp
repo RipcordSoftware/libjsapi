@@ -61,3 +61,31 @@ TEST_F(GlobalPropertyTests, test3) {
     rt_.Evaluate("(function(){return test3;})();", result);
     ASSERT_TRUE(result.isObject());
 }
+
+TEST_F(GlobalPropertyTests, test4) {
+    rs::jsapi::Value value(rt_, 99);
+    rs::jsapi::Global::DefineProperty(rt_, "test4", value); 
+    
+    rs::jsapi::Value result(rt_);
+    rt_.Evaluate("(function(){return test4;})();", result);
+    ASSERT_TRUE(result.isInt32());
+    ASSERT_EQ(99, result.toInt32());
+}
+
+TEST_F(GlobalPropertyTests, test5) {
+    rs::jsapi::Value obj(rt_);
+    rs::jsapi::Object::Create(rt_, 
+        {}, 
+        nullptr, 
+        nullptr, 
+        {},
+        nullptr, 
+        obj);
+    ASSERT_TRUE(!!obj);
+    
+    rs::jsapi::Global::DefineProperty(rt_, "test5", obj); 
+        
+    rs::jsapi::Value result(rt_);
+    rt_.Evaluate("(function(){return test5;})();", result);
+    ASSERT_TRUE(result.isObject());
+}
