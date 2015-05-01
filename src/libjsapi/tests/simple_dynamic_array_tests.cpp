@@ -184,3 +184,37 @@ TEST_F(SimpleDynamicArrayTests, test7) {
         ASSERT_TRUE(result.isUndefined());
     }
 }
+
+TEST_F(SimpleDynamicArrayTests, test8) {
+    auto context = rt_.NewContext();
+
+    rs::jsapi::Value array(*context);
+    rs::jsapi::DynamicArray::Create(*context, 
+        nullptr, 
+        nullptr, 
+        nullptr,
+        nullptr,
+        array);
+    ASSERT_TRUE(!!array);
+    
+    rs::jsapi::DynamicArray::SetPrivate(array, 123456789, this);
+    
+    uint64_t data = 0;
+    void* that = nullptr;
+    ASSERT_TRUE(rs::jsapi::DynamicArray::GetPrivate(array, data, that));
+    ASSERT_EQ(123456789, data);
+    ASSERT_EQ(this, that);
+}
+
+TEST_F(SimpleDynamicArrayTests, test9) {
+    auto context = rt_.NewContext();
+
+    rs::jsapi::Value array(*context);
+    ASSERT_FALSE(rs::jsapi::DynamicArray::SetPrivate(array, 123456789, this));
+    
+    uint64_t data = 0;
+    void* that = nullptr;
+    ASSERT_FALSE(rs::jsapi::DynamicArray::GetPrivate(array, data, that));
+    ASSERT_NE(123456789, data);
+    ASSERT_NE(this, that);
+}

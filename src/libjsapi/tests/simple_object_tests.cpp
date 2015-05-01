@@ -396,3 +396,38 @@ TEST_F(SimpleObjectTests, test15) {
     
     ASSERT_EQ(1, count);
 }
+
+TEST_F(SimpleObjectTests, test16) {    
+    auto context = rt_.NewContext();
+
+    rs::jsapi::Value obj(*context);
+    rs::jsapi::Object::Create(*context, 
+        {}, 
+        nullptr, 
+        nullptr, 
+        {},
+        nullptr,
+        obj);
+    ASSERT_TRUE(!!obj);
+    
+    rs::jsapi::Object::SetPrivate(obj, 123456789, this);
+    
+    uint64_t data = 0;
+    void* that = nullptr;
+    ASSERT_TRUE(rs::jsapi::Object::GetPrivate(obj, data, that));
+    ASSERT_EQ(123456789, data);
+    ASSERT_EQ(this, that);
+}
+
+TEST_F(SimpleObjectTests, test17) {    
+    auto context = rt_.NewContext();
+
+    rs::jsapi::Value obj(*context);
+    ASSERT_FALSE(rs::jsapi::Object::SetPrivate(obj, 123456789, this));
+    
+    uint64_t data = 0;
+    void* that = nullptr;
+    ASSERT_FALSE(rs::jsapi::Object::GetPrivate(obj, data, that));
+    ASSERT_NE(123456789, data);
+    ASSERT_NE(this, that);
+}

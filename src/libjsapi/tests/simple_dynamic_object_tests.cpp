@@ -274,3 +274,37 @@ TEST_F(SimpleDynamicObjectTests, test9) {
     
     ASSERT_EQ(1, count);
 }
+
+TEST_F(SimpleDynamicObjectTests, test10) {    
+    auto context = rt_.NewContext();
+
+    rs::jsapi::Value obj(*context);
+    rs::jsapi::DynamicObject::Create(*context, 
+        nullptr, 
+        nullptr, 
+        nullptr,
+        nullptr,
+        obj);
+    ASSERT_TRUE(!!obj);
+    
+    rs::jsapi::DynamicObject::SetPrivate(obj, 123456789, this);
+    
+    uint64_t data = 0;
+    void* that = nullptr;
+    ASSERT_TRUE(rs::jsapi::DynamicObject::GetPrivate(obj, data, that));
+    ASSERT_EQ(123456789, data);
+    ASSERT_EQ(this, that);
+}
+
+TEST_F(SimpleDynamicObjectTests, test11) {    
+    auto context = rt_.NewContext();
+
+    rs::jsapi::Value obj(*context);
+    ASSERT_FALSE(rs::jsapi::DynamicObject::SetPrivate(obj, 123456789, this));
+    
+    uint64_t data = 0;
+    void* that = nullptr;
+    ASSERT_FALSE(rs::jsapi::DynamicObject::GetPrivate(obj, data, that));
+    ASSERT_NE(123456789, data);
+    ASSERT_NE(this, that);
+}
