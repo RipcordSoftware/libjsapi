@@ -7,6 +7,8 @@
       <itemPath>application.h</itemPath>
       <itemPath>builder.h</itemPath>
       <itemPath>button.h</itemPath>
+      <itemPath>check_button.h</itemPath>
+      <itemPath>entry.h</itemPath>
       <itemPath>label.h</itemPath>
       <itemPath>widget.h</itemPath>
       <itemPath>window.h</itemPath>
@@ -21,6 +23,8 @@
       <itemPath>application.cpp</itemPath>
       <itemPath>builder.cpp</itemPath>
       <itemPath>button.cpp</itemPath>
+      <itemPath>check_button.cpp</itemPath>
+      <itemPath>entry.cpp</itemPath>
       <itemPath>label.cpp</itemPath>
       <itemPath>main.cpp</itemPath>
       <itemPath>widget.cpp</itemPath>
@@ -88,6 +92,14 @@
       <item path="button.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="button.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="check_button.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="check_button.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="entry.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="entry.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="label.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -160,6 +172,14 @@
       <item path="button.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="button.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="check_button.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="check_button.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="entry.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="entry.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="label.cpp" ex="false" tool="1" flavor2="0">
       </item>

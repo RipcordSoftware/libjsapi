@@ -10,13 +10,25 @@ var msgs = [
     'buy more stuff!'
 ];
 
+var label = builder.getLabel('label1');
 var button = builder.getButton('button1');
-if (button) { 
+var entry = builder.getEntry('entry1');
+if (label && button && entry) { 
     button.onClick(function(){ 
         var i = Math.random() * msgs.length;
         var msg = msgs[Math.floor(i)];
-        button.setLabel(msg); 
+        label.setText(msg);
+        entry.setText(msg);
     }); 
+}
+
+var checkButton = builder.getCheckButton('checkbutton1');
+if (checkButton) {
+    checkButton.onClick(function() {
+       if (entry) {
+           checkButton.getActive() ? entry.hide() : entry.show();
+       }
+    });
 }
 
 var window = builder.getWindow('window1');

@@ -38,6 +38,8 @@ OBJECTFILES= \
 	${OBJECTDIR}/application.o \
 	${OBJECTDIR}/builder.o \
 	${OBJECTDIR}/button.o \
+	${OBJECTDIR}/check_button.o \
+	${OBJECTDIR}/entry.o \
 	${OBJECTDIR}/label.o \
 	${OBJECTDIR}/main.o \
 	${OBJECTDIR}/widget.o \
@@ -84,6 +86,16 @@ ${OBJECTDIR}/button.o: button.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -I../libjsapi -I../../externals/installed/include/mozjs-31 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/button.o button.cpp
+
+${OBJECTDIR}/check_button.o: check_button.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../libjsapi -I../../externals/installed/include/mozjs-31 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/check_button.o check_button.cpp
+
+${OBJECTDIR}/entry.o: entry.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../libjsapi -I../../externals/installed/include/mozjs-31 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/entry.o entry.cpp
 
 ${OBJECTDIR}/label.o: label.cpp 
 	${MKDIR} -p ${OBJECTDIR}

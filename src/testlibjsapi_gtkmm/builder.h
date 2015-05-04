@@ -12,6 +12,9 @@ public:
     void AddFromFile(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result);
     void GetWindow(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result);
     void GetButton(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result);
+    void GetCheckButton(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result);
+    void GetLabel(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result);
+    void GetEntry(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result);    
     
     operator rs::jsapi::Value&() { return obj_; }
     

@@ -1,10 +1,12 @@
 #include "builder.h"
 
 #include <exception>
-#include <gtk-3.0/gtk/gtkbutton.h>
 
 #include "window.h"
 #include "button.h"
+#include "check_button.h"
+#include "label.h"
+#include "entry.h"
 
 class BuilderException : public std::exception {
 public:
@@ -20,7 +22,10 @@ Builder::Builder(rs::jsapi::Runtime& rt) : rt_(rt), obj_(rt), null_(rt) {
     rs::jsapi::Object::Create(rt, {}, nullptr, nullptr, {
         { "addFromFile", std::bind(&Builder::AddFromFile, this, std::placeholders::_1, std::placeholders::_2) },
         { "getWindow", std::bind(&Builder::GetWindow, this, std::placeholders::_1, std::placeholders::_2) },
-        { "getButton", std::bind(&Builder::GetButton, this, std::placeholders::_1, std::placeholders::_2) }
+        { "getButton", std::bind(&Builder::GetButton, this, std::placeholders::_1, std::placeholders::_2) },
+        { "getCheckButton", std::bind(&Builder::GetCheckButton, this, std::placeholders::_1, std::placeholders::_2) },
+        { "getLabel", std::bind(&Builder::GetLabel, this, std::placeholders::_1, std::placeholders::_2) },
+        { "getEntry", std::bind(&Builder::GetEntry, this, std::placeholders::_1, std::placeholders::_2) }
     }, nullptr, obj_);
 }
 
@@ -50,6 +55,30 @@ void Builder::GetButton(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Va
     if (widget && GTK_IS_BUTTON(widget->gobj())) {
         auto button = reinterpret_cast<Gtk::Button*>(widget);
         result = *(new Button(rt_, button));
+    }
+}
+
+void Builder::GetCheckButton(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result) {
+    auto widget = GetWidget(args);
+    if (widget && GTK_IS_CHECK_BUTTON(widget->gobj())) {
+        auto button = reinterpret_cast<Gtk::CheckButton*>(widget);
+        result = *(new CheckButton(rt_, button));
+    }
+}
+
+void Builder::GetLabel(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result) {
+    auto widget = GetWidget(args);
+    if (widget && GTK_IS_LABEL(widget->gobj())) {
+        auto label = reinterpret_cast<Gtk::Label*>(widget);
+        result = *(new Label(rt_, label));
+    }
+}
+
+void Builder::GetEntry(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result) {
+    auto widget = GetWidget(args);
+    if (widget && GTK_IS_ENTRY(widget->gobj())) {
+        auto label = reinterpret_cast<Gtk::Entry*>(widget);
+        result = *(new Entry(rt_, label));
     }
 }
 
