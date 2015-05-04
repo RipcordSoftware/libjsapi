@@ -39,6 +39,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/builder.o \
 	${OBJECTDIR}/button.o \
 	${OBJECTDIR}/check_button.o \
+	${OBJECTDIR}/drawing_area.o \
 	${OBJECTDIR}/entry.o \
 	${OBJECTDIR}/label.o \
 	${OBJECTDIR}/main.o \
@@ -91,6 +92,11 @@ ${OBJECTDIR}/check_button.o: check_button.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -I../libjsapi -I../../externals/installed/include/mozjs-31 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/check_button.o check_button.cpp
+
+${OBJECTDIR}/drawing_area.o: drawing_area.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../libjsapi -I../../externals/installed/include/mozjs-31 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/drawing_area.o drawing_area.cpp
 
 ${OBJECTDIR}/entry.o: entry.cpp 
 	${MKDIR} -p ${OBJECTDIR}

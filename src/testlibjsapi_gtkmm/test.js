@@ -10,9 +10,9 @@ var msgs = [
     'buy more stuff!'
 ];
 
-var label = builder.getLabel('label1');
-var button = builder.getButton('button1');
-var entry = builder.getEntry('entry1');
+var label = $('label1');
+var button = $('button1');
+var entry = $('entry1');
 if (label && button && entry) { 
     button.onClick(function(){ 
         var i = Math.random() * msgs.length;
@@ -22,7 +22,7 @@ if (label && button && entry) {
     }); 
 }
 
-var checkButton = builder.getCheckButton('checkbutton1');
+var checkButton = $('checkbutton1');
 if (checkButton) {
     checkButton.onClick(function() {
        if (entry) {
@@ -31,7 +31,24 @@ if (checkButton) {
     });
 }
 
-var window = builder.getWindow('window1');
+$('window2').show();
+$('drawingarea1').onDraw(function(area, width, height) {
+    area.setLineWidth(10.0);
+    
+    var xc = width / 2;
+    var yc = height / 2;
+
+    // draw red lines out from the center of the window
+    area.setSourceRgb(0.8, 0.0, 0.0);
+    area.moveTo(0, 0);
+    area.lineTo(xc, yc);
+    area.lineTo(0, height);
+    area.moveTo(xc, yc);
+    area.lineTo(width, yc);
+    area.stroke();
+});
+
+var window = $('window1');
 if (window) { 
     window.setTitle('TEST!').show(); 
     app.run(window); 

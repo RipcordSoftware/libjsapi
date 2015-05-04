@@ -9,20 +9,30 @@
 #include "window.h"
 #include "builder.h"
 
+std::string LoadScript(int argc, char** argv) {
+    std::string script;
+    
+    for (int i = 1; i < argc; i++) {
+        std::fstream file;
+        file.open(argv[i], std::ios::in);
+        while (!!file) {
+            char buffer[4096];
+            file.read(buffer, sizeof(buffer));
+            script.append(buffer, file.gcount());
+            script += ";\n";
+        }
+    }
+    
+    return std::move(script);
+}
+
 int main(int argc, char** argv) {  
     
-    std::string script;
-    std::fstream file;
-    file.open("test.js", std::ios::in);
-    while (!!file) {
-        char buffer[4096];
-        file.read(buffer, sizeof(buffer));
-        script.append(buffer, file.gcount());
-    }
+    std::string script = LoadScript(argc, argv);
             
     rs::jsapi::Runtime rt;
     
-    auto app = new Application(rt, "com.ripcordsoftware.examples.gtk", argc, argv);
+    auto app = new Application(rt, "com.ripcordsoftware.examples.gtk", 1, argv);
     rs::jsapi::Global::DefineProperty(rt, "app", *app);
     
     auto builder = new Builder(rt);

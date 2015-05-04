@@ -7,6 +7,7 @@
 #include "check_button.h"
 #include "label.h"
 #include "entry.h"
+#include "drawing_area.h"
 
 class BuilderException : public std::exception {
 public:
@@ -21,11 +22,13 @@ private:
 Builder::Builder(rs::jsapi::Runtime& rt) : rt_(rt), obj_(rt), null_(rt) {
     rs::jsapi::Object::Create(rt, {}, nullptr, nullptr, {
         { "addFromFile", std::bind(&Builder::AddFromFile, this, std::placeholders::_1, std::placeholders::_2) },
+        { "getWidget", std::bind(&Builder::GetWidget, this, std::placeholders::_1, std::placeholders::_2) },
         { "getWindow", std::bind(&Builder::GetWindow, this, std::placeholders::_1, std::placeholders::_2) },
         { "getButton", std::bind(&Builder::GetButton, this, std::placeholders::_1, std::placeholders::_2) },
         { "getCheckButton", std::bind(&Builder::GetCheckButton, this, std::placeholders::_1, std::placeholders::_2) },
         { "getLabel", std::bind(&Builder::GetLabel, this, std::placeholders::_1, std::placeholders::_2) },
-        { "getEntry", std::bind(&Builder::GetEntry, this, std::placeholders::_1, std::placeholders::_2) }
+        { "getEntry", std::bind(&Builder::GetEntry, this, std::placeholders::_1, std::placeholders::_2) },
+        { "getDrawingArea", std::bind(&Builder::GetDrawingArea, this, std::placeholders::_1, std::placeholders::_2) }
     }, nullptr, obj_);
 }
 
@@ -43,7 +46,7 @@ void Builder::AddFromFile(const std::vector<rs::jsapi::Value>& args, rs::jsapi::
 }
 
 void Builder::GetWindow(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result) {
-    auto widget = GetWidget(args);
+    auto widget = FindWidget(args);
     if (widget && GTK_IS_WINDOW(widget->gobj())) {
         auto window = reinterpret_cast<Gtk::Window*>(widget);
         result = *(new Window(rt_, window));
@@ -51,7 +54,7 @@ void Builder::GetWindow(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Va
 }
 
 void Builder::GetButton(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result) {
-    auto widget = GetWidget(args);
+    auto widget = FindWidget(args);
     if (widget && GTK_IS_BUTTON(widget->gobj())) {
         auto button = reinterpret_cast<Gtk::Button*>(widget);
         result = *(new Button(rt_, button));
@@ -59,7 +62,7 @@ void Builder::GetButton(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Va
 }
 
 void Builder::GetCheckButton(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result) {
-    auto widget = GetWidget(args);
+    auto widget = FindWidget(args);
     if (widget && GTK_IS_CHECK_BUTTON(widget->gobj())) {
         auto button = reinterpret_cast<Gtk::CheckButton*>(widget);
         result = *(new CheckButton(rt_, button));
@@ -67,7 +70,7 @@ void Builder::GetCheckButton(const std::vector<rs::jsapi::Value>& args, rs::jsap
 }
 
 void Builder::GetLabel(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result) {
-    auto widget = GetWidget(args);
+    auto widget = FindWidget(args);
     if (widget && GTK_IS_LABEL(widget->gobj())) {
         auto label = reinterpret_cast<Gtk::Label*>(widget);
         result = *(new Label(rt_, label));
@@ -75,17 +78,42 @@ void Builder::GetLabel(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Val
 }
 
 void Builder::GetEntry(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result) {
-    auto widget = GetWidget(args);
+    auto widget = FindWidget(args);
     if (widget && GTK_IS_ENTRY(widget->gobj())) {
         auto label = reinterpret_cast<Gtk::Entry*>(widget);
         result = *(new Entry(rt_, label));
     }
 }
 
-Gtk::Widget* Builder::GetWidget(const std::vector<rs::jsapi::Value>& args) {
+void Builder::GetDrawingArea(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result) {
+    auto widget = FindWidget(args);
+    if (widget && GTK_IS_DRAWING_AREA(widget->gobj())) {
+        auto area = reinterpret_cast<Gtk::DrawingArea*>(widget);
+        result = *(new DrawingArea(rt_, area));
+    }
+}
+
+Gtk::Widget* Builder::FindWidget(const std::vector<rs::jsapi::Value>& args) {
     Gtk::Widget* widget = nullptr;
     if (args.size() > 0 && args[0].isString()) {        
         builder_->get_widget(args[0].ToString(), widget);
     }
     return widget;
+}
+
+void Builder::GetWidget(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result) {
+    auto widget = FindWidget(args);
+    if (widget && GTK_IS_CHECK_BUTTON(widget->gobj())) {
+        GetCheckButton(args, result);
+    } else if (widget && GTK_IS_BUTTON(widget->gobj())) {
+        GetButton(args, result);
+    } else if (widget && GTK_IS_ENTRY(widget->gobj())) {
+        GetEntry(args, result);
+    } else if (widget && GTK_IS_LABEL(widget->gobj())) {
+        GetLabel(args, result);
+    } else if (widget && GTK_IS_WINDOW(widget->gobj())) {
+        GetWindow(args, result);
+    } else if (widget && GTK_IS_DRAWING_AREA(widget->gobj())) {
+        GetDrawingArea(args, result);
+    }
 }
