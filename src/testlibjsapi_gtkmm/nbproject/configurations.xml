@@ -8,7 +8,9 @@
       <itemPath>builder.h</itemPath>
       <itemPath>button.h</itemPath>
       <itemPath>check_button.h</itemPath>
+      <itemPath>drawing_area.h</itemPath>
       <itemPath>entry.h</itemPath>
+      <itemPath>image_surface.h</itemPath>
       <itemPath>label.h</itemPath>
       <itemPath>widget.h</itemPath>
       <itemPath>window.h</itemPath>
@@ -24,7 +26,9 @@
       <itemPath>builder.cpp</itemPath>
       <itemPath>button.cpp</itemPath>
       <itemPath>check_button.cpp</itemPath>
+      <itemPath>drawing_area.cpp</itemPath>
       <itemPath>entry.cpp</itemPath>
+      <itemPath>image_surface.cpp</itemPath>
       <itemPath>label.cpp</itemPath>
       <itemPath>main.cpp</itemPath>
       <itemPath>widget.cpp</itemPath>
@@ -41,6 +45,10 @@
                    kind="IMPORTANT_FILES_FOLDER">
       <itemPath>Makefile</itemPath>
     </logicalFolder>
+    <itemPath>drawing_area.js</itemPath>
+    <itemPath>mandelbrot.js</itemPath>
+    <itemPath>mandelbrot_dom.js</itemPath>
+    <itemPath>mandelbrot_run.js</itemPath>
     <itemPath>test.js</itemPath>
   </logicalFolder>
   <projectmakefile>Makefile</projectmakefile>
@@ -97,21 +105,31 @@
       </item>
       <item path="check_button.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="dom.js" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="drawing_area.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="drawing_area.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="drawing_area.js" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="entry.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="entry.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="image_surface.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="image_surface.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="label.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="label.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="mandelbrot.js" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="mandelbrot_dom.js" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="mandelbrot_run.js" ex="false" tool="3" flavor2="0">
       </item>
       <item path="test.js" ex="false" tool="3" flavor2="0">
       </item>
@@ -164,6 +182,9 @@
                             OP="${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libjsapi.a">
               </makeArtifact>
             </linkerLibProjectItem>
+            <linkerLibFileItem>../../externals/installed/lib/libmozjs-31.a</linkerLibFileItem>
+            <linkerLibStdlibItem>DataCompression</linkerLibStdlibItem>
+            <linkerLibStdlibItem>DynamicLinking</linkerLibStdlibItem>
           </linkerLibItems>
         </linkerTool>
       </compileType>
@@ -183,21 +204,31 @@
       </item>
       <item path="check_button.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="dom.js" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="drawing_area.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="drawing_area.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="drawing_area.js" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="entry.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="entry.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="image_surface.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="image_surface.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="label.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="label.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="mandelbrot.js" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="mandelbrot_dom.js" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="mandelbrot_run.js" ex="false" tool="3" flavor2="0">
       </item>
       <item path="test.js" ex="false" tool="3" flavor2="0">
       </item>

@@ -41,6 +41,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/check_button.o \
 	${OBJECTDIR}/drawing_area.o \
 	${OBJECTDIR}/entry.o \
+	${OBJECTDIR}/image_surface.o \
 	${OBJECTDIR}/label.o \
 	${OBJECTDIR}/main.o \
 	${OBJECTDIR}/widget.o \
@@ -104,6 +105,11 @@ ${OBJECTDIR}/entry.o: entry.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -I../libjsapi -I../../externals/installed/include/mozjs-31 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/entry.o entry.cpp
+
+${OBJECTDIR}/image_surface.o: image_surface.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -I../libjsapi -I../../externals/installed/include/mozjs-31 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/image_surface.o image_surface.cpp
 
 ${OBJECTDIR}/label.o: label.cpp 
 	${MKDIR} -p ${OBJECTDIR}

@@ -13,6 +13,7 @@ public:
     void GetLabel(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result);
     void SetLabel(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result);
     void OnClick(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result);        
+    void SetFocus(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result); 
     
     operator rs::jsapi::Value&() { return obj_; }
     

@@ -41,6 +41,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/check_button.o \
 	${OBJECTDIR}/drawing_area.o \
 	${OBJECTDIR}/entry.o \
+	${OBJECTDIR}/image_surface.o \
 	${OBJECTDIR}/label.o \
 	${OBJECTDIR}/main.o \
 	${OBJECTDIR}/widget.o \
@@ -61,13 +62,15 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=../libjsapi/dist/Release/GNU-Linux-x86/libjsapi.a
+LDLIBSOPTIONS=../libjsapi/dist/Release/GNU-Linux-x86/libjsapi.a ../../externals/installed/lib/libmozjs-31.a -lz -ldl
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
 	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/testlibjsapi_gtkmm
 
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/testlibjsapi_gtkmm: ../libjsapi/dist/Release/GNU-Linux-x86/libjsapi.a
+
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/testlibjsapi_gtkmm: ../../externals/installed/lib/libmozjs-31.a
 
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/testlibjsapi_gtkmm: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
@@ -102,6 +105,11 @@ ${OBJECTDIR}/entry.o: entry.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -I../libjsapi -I../../externals/installed/include/mozjs-31 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/entry.o entry.cpp
+
+${OBJECTDIR}/image_surface.o: image_surface.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../libjsapi -I../../externals/installed/include/mozjs-31 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/image_surface.o image_surface.cpp
 
 ${OBJECTDIR}/label.o: label.cpp 
 	${MKDIR} -p ${OBJECTDIR}

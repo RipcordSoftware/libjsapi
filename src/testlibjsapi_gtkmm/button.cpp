@@ -6,6 +6,8 @@ Button::Button(rs::jsapi::Runtime& rt, Gtk::Button* button) : rt_(rt), button_(b
     functions.emplace_back("getLabel", std::bind(&Button::SetLabel, this, std::placeholders::_1, std::placeholders::_2));        
     functions.emplace_back("setLabel", std::bind(&Button::SetLabel, this, std::placeholders::_1, std::placeholders::_2));        
     functions.emplace_back("onClick", std::bind(&Button::OnClick, this, std::placeholders::_1, std::placeholders::_2)); 
+    functions.emplace_back("setFocus", std::bind(&Button::SetFocus, this, std::placeholders::_1, std::placeholders::_2)); 
+    functions.emplace_back("focus", std::bind(&Button::SetFocus, this, std::placeholders::_1, std::placeholders::_2)); 
 
     rs::jsapi::Object::Create(rt, {}, nullptr, nullptr, 
         functions, std::bind(&Button::Finalizer, this), obj_);
@@ -17,6 +19,11 @@ void Button::GetLabel(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Valu
 
 void Button::SetLabel(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result) { 
     button_->set_label(args[0].ToString());
+    result = *this;
+}
+
+void Button::SetFocus(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result) { 
+    button_->get_toplevel()->set_focus_child(*button_);
     result = *this;
 }
 
