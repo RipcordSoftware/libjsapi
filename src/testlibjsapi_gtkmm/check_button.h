@@ -10,6 +10,7 @@ public:
     CheckButton(rs::jsapi::Runtime& rt, Gtk::CheckButton* button);
     
     void GetActive(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result);
+    void SetActive(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result);
     void GetLabel(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result);
     void SetLabel(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result);
     void OnClick(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result);
@@ -20,6 +21,9 @@ private:
     void Finalizer() {
         delete this;
     }
+    
+    bool GetCallback(const char* name, rs::jsapi::Value& value);
+    bool SetCallback(const char* name, const rs::jsapi::Value& value);        
     
     void OnButtonClicked();
     
