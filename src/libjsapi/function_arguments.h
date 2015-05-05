@@ -22,7 +22,7 @@ public:
     bool Append(const char* value);
     bool Append(const std::string& value);
     bool Append(bool value);
-    bool Append(Value& value);
+    bool Append(const Value& value);
     bool Append(const JS::RootedObject& obj);
     bool Append(const JS::RootedValue& value);
     

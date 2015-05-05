@@ -33,7 +33,7 @@ bool rs::jsapi::FunctionArguments::Append(bool value) {
     return args_.append(JS::BooleanValue(value));
 }
 
-bool rs::jsapi::FunctionArguments::Append(Value& value) {
+bool rs::jsapi::FunctionArguments::Append(const Value& value) {
     return args_.append(value);
 }
 
