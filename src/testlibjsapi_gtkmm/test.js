@@ -17,8 +17,8 @@ if (label && button && entry) {
     button.onClick(function(){ 
         var i = Math.random() * msgs.length;
         var msg = msgs[Math.floor(i)];
-        label.setText(msg);
-        entry.setText(msg);
+        label.value = msg;
+        entry.value = msg;
     }); 
 }
 
