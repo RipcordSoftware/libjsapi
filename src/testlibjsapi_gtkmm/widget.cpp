@@ -14,17 +14,14 @@ void Widget::Hide(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& r
 
 void Widget::GetWidth(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result) { 
     result = widget_->get_width();
-    result = parent_;
 }
 
 void Widget::GetHeight(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result) { 
     result = widget_->get_height();
-    result = parent_;
 }
 
 void Widget::GetOpacity(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result) { 
     result = widget_->get_opacity();
-    result = parent_;
 }
 
 void Widget::SetOpacity(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result) { 
@@ -34,7 +31,6 @@ void Widget::SetOpacity(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Va
 
 void Widget::GetName(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result) { 
     result = widget_->get_name();
-    result = parent_;
 }
 
 void Widget::SetName(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result) { 
