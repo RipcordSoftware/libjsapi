@@ -19,9 +19,10 @@ std::string LoadScript(int argc, char** argv) {
         while (!!file) {
             char buffer[4096];
             file.read(buffer, sizeof(buffer));
-            script.append(buffer, file.gcount());
-            script += ";\n";
+            script.append(buffer, file.gcount());            
         }
+        
+        script += ";\n";
     }
     
     return std::move(script);
@@ -32,7 +33,7 @@ int main(int argc, char** argv) {
     try {
         std::string script = LoadScript(argc, argv);
 
-        rs::jsapi::Runtime rt(512 * 1024 * 1024);
+        rs::jsapi::Runtime rt(1024 * 1024 * 1024);
 
         auto app = new Application(rt, "com.ripcordsoftware.examples.gtk", 1, argv);
         rs::jsapi::Global::DefineProperty(rt, "app", *app);
