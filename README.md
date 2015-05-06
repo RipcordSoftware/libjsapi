@@ -19,7 +19,7 @@ With `libjsapi` you will be able to:
 * Handle errors with C++ exceptions
 * Create any number of Runtimes and Contexts - simultaneously on multiple threads
  
-##Screenshot
+##Gratuitous Screenshot
 
 The image below shows `libjsapi` hosting a GTK+ application which emulates enough browser bits to render a funky JavaScript Mandelbrot application ported from https://github.com/cslarsen/mandelbrot-js.
 
