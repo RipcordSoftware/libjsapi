@@ -14,8 +14,8 @@ DrawingArea::DrawingArea(rs::jsapi::Runtime& rt, Gtk::DrawingArea* area) : rt_(r
     functions.emplace_back("onDraw", std::bind(&DrawingArea::OnDraw, this, std::placeholders::_1, std::placeholders::_2));
     functions.emplace_back("stroke", std::bind(&DrawingArea::Stroke, this, std::placeholders::_1, std::placeholders::_2));
     functions.emplace_back("createImageSurface", std::bind(&DrawingArea::CreateImageSurface, this, std::placeholders::_1, std::placeholders::_2));
-    functions.emplace_back("getContext", std::bind(&DrawingArea::CreateImageSurface, this, std::placeholders::_1, std::placeholders::_2));
     functions.emplace_back("createImageSurfaceFromPng", std::bind(&DrawingArea::CreateImageSurfaceFromPng, this, std::placeholders::_1, std::placeholders::_2));
+    functions.emplace_back("createImageData", std::bind(&DrawingArea::CreateImageSurface, this, std::placeholders::_1, std::placeholders::_2));
     functions.emplace_back("putImageData", std::bind(&DrawingArea::PutImageData, this, std::placeholders::_1, std::placeholders::_2));
 
     rs::jsapi::Object::Create(rt, {}, nullptr, nullptr, 
@@ -152,6 +152,7 @@ void DrawingArea::PutImageData(const std::vector<rs::jsapi::Value>& args, rs::js
             std::memcpy(destOffset, sourceOffset, sourceWidth * height * sourceDepth);
             
             image_->mark_dirty(0, destY, sourceWidth, height);
+            area_->queue_draw_area(0, destY, sourceWidth, height);
         } else {
             auto width = (destWidth - destX) < sourceWidth ? (destWidth - destX) : sourceWidth;
             for (unsigned i = 0; i < height; ++i) {
@@ -161,7 +162,7 @@ void DrawingArea::PutImageData(const std::vector<rs::jsapi::Value>& args, rs::js
             }
             
             image_->mark_dirty(destX, destY, width, height);
+            area_->queue_draw_area(destX, destY, width, height);
         }
-        
     }
 }

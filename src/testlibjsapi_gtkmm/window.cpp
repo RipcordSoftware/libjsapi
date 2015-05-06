@@ -1,6 +1,7 @@
 #include "window.h"
 
 #include <typeinfo>
+#include <cstring>
 
 #include "widget.h"
 #include "label.h"
@@ -17,9 +18,27 @@ Window::Window(rs::jsapi::Runtime& rt, Gtk::Window* window) : rt_(rt), obj_(rt),
     functions.emplace_back("addLabel", std::bind(&Window::AddLabel, this, std::placeholders::_1, std::placeholders::_2));
     functions.emplace_back("addButton", std::bind(&Window::AddButton, this, std::placeholders::_1, std::placeholders::_2));
 
-    rs::jsapi::Object::Create(rt, {}, nullptr, nullptr, functions, std::bind(&Window::Finalizer, this), obj_);
+    rs::jsapi::Object::Create(rt, 
+        { "width", "height" }, 
+        std::bind(&Window::GetCallback, this, std::placeholders::_1, std::placeholders::_2),
+        nullptr,
+        functions, std::bind(&Window::Finalizer, this), obj_);
     
     rs::jsapi::Object::SetPrivate(obj_, typeid(Window).hash_code(), this);
+}
+
+bool Window::GetCallback(const char* name, rs::jsapi::Value& value) {
+    auto status = false;
+    
+    if (std::strcmp(name, "width") == 0) {
+        value = window_->get_width();
+        status = true;
+    } else if (std::strcmp(name, "height") == 0) {
+        value = window_->get_height();
+        status = true;
+    }   
+    
+    return status;
 }
 
 void Window::SetDefaultSize(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result) { 

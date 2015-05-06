@@ -11,6 +11,8 @@ class Window {
 public:
     Window(rs::jsapi::Runtime& rt, Gtk::Window* window);
     
+    bool GetCallback(const char* name, rs::jsapi::Value& value);
+    
     void SetDefaultSize(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result);    
     void SetTitle(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result);    
     void SetBorderWidth(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result);    

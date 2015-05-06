@@ -47,8 +47,6 @@
     </logicalFolder>
     <itemPath>drawing_area.js</itemPath>
     <itemPath>mandelbrot.js</itemPath>
-    <itemPath>mandelbrot_dom.js</itemPath>
-    <itemPath>mandelbrot_run.js</itemPath>
     <itemPath>test.js</itemPath>
   </logicalFolder>
   <projectmakefile>Makefile</projectmakefile>
@@ -126,10 +124,6 @@
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="mandelbrot.js" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="mandelbrot_dom.js" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="mandelbrot_run.js" ex="false" tool="3" flavor2="0">
       </item>
       <item path="test.js" ex="false" tool="3" flavor2="0">
       </item>
@@ -225,10 +219,6 @@
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="mandelbrot.js" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="mandelbrot_dom.js" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="mandelbrot_run.js" ex="false" tool="3" flavor2="0">
       </item>
       <item path="test.js" ex="false" tool="3" flavor2="0">
       </item>
