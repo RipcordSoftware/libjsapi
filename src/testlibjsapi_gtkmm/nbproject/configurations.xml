@@ -65,7 +65,7 @@
             <pElem>../libjsapi</pElem>
             <pElem>../../externals/installed/include/mozjs-31</pElem>
           </incDir>
-          <commandLine>`pkg-config gtkmm-3.0 --cflags --libs` --coverage</commandLine>
+          <commandLine>`pkg-config gtkmm-3.0 --cflags` --coverage</commandLine>
         </ccTool>
         <linkerTool>
           <linkerLibItems>
@@ -85,6 +85,7 @@
             <linkerLibStdlibItem>DataCompression</linkerLibStdlibItem>
             <linkerLibStdlibItem>DynamicLinking</linkerLibStdlibItem>
           </linkerLibItems>
+          <commandLine>`pkg-config gtkmm-3.0 --libs`</commandLine>
         </linkerTool>
       </compileType>
       <item path="application.cpp" ex="false" tool="1" flavor2="0">
@@ -154,7 +155,7 @@
             <pElem>../libjsapi</pElem>
             <pElem>../../externals/installed/include/mozjs-31</pElem>
           </incDir>
-          <commandLine>`pkg-config gtkmm-3.0 --cflags --libs`</commandLine>
+          <commandLine>`pkg-config gtkmm-3.0 --cflags`</commandLine>
         </ccTool>
         <fortranCompilerTool>
           <developmentMode>5</developmentMode>
@@ -180,6 +181,7 @@
             <linkerLibStdlibItem>DataCompression</linkerLibStdlibItem>
             <linkerLibStdlibItem>DynamicLinking</linkerLibStdlibItem>
           </linkerLibItems>
+          <commandLine>`pkg-config gtkmm-3.0 --libs`</commandLine>
         </linkerTool>
       </compileType>
       <item path="application.cpp" ex="false" tool="1" flavor2="0">

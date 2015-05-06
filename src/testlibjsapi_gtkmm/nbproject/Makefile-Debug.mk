@@ -52,8 +52,8 @@ OBJECTFILES= \
 CFLAGS=
 
 # CC Compiler Flags
-CCFLAGS=`pkg-config gtkmm-3.0 --cflags --libs` --coverage 
-CXXFLAGS=`pkg-config gtkmm-3.0 --cflags --libs` --coverage 
+CCFLAGS=`pkg-config gtkmm-3.0 --cflags` --coverage 
+CXXFLAGS=`pkg-config gtkmm-3.0 --cflags` --coverage 
 
 # Fortran Compiler Flags
 FFLAGS=
@@ -74,7 +74,7 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/testlibjsapi_gtkmm: ../../externals/i
 
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/testlibjsapi_gtkmm: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
-	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/testlibjsapi_gtkmm ${OBJECTFILES} ${LDLIBSOPTIONS}
+	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/testlibjsapi_gtkmm ${OBJECTFILES} ${LDLIBSOPTIONS} `pkg-config gtkmm-3.0 --libs`
 
 ${OBJECTDIR}/application.o: application.cpp 
 	${MKDIR} -p ${OBJECTDIR}
