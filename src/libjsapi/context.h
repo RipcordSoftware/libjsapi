@@ -38,7 +38,7 @@ public:
     operator JSContext*() { return cx_; }        
         
 private:
-    friend void Script::Compile();
+    friend bool Script::Compile();
     friend bool Script::Execute();
     friend bool Script::Execute(Value&);
     

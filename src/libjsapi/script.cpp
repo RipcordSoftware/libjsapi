@@ -10,7 +10,7 @@ rs::jsapi::Script::Script(Context& cx, const char* code) :
 rs::jsapi::Script::~Script() {
 }
 
-void rs::jsapi::Script::Compile() {
+bool rs::jsapi::Script::Compile() {
     JS::CompileOptions options(cx_);
     script_ = JS_CompileScript(cx_, cx_.getGlobal(), code_.c_str(), code_.length(), options);
     
@@ -18,9 +18,15 @@ void rs::jsapi::Script::Compile() {
     if (!!error) {
         throw *error;
     }
+    
+    return script_;
 }
 
 bool rs::jsapi::Script::Execute() {
+    if (!script_) {
+        Compile();
+    }
+    
     auto status = JS_ExecuteScript(cx_, cx_.getGlobal(), script_);
     
     auto error = cx_.getError();
@@ -32,6 +38,10 @@ bool rs::jsapi::Script::Execute() {
 }
 
 bool rs::jsapi::Script::Execute(Value& result) {
+    if (!script_) {
+        Compile();
+    }
+    
     auto status = JS_ExecuteScript(cx_, cx_.getGlobal(), script_, result);    
     
     auto error = cx_.getError();

@@ -24,6 +24,22 @@ TEST_F(ScriptExceptionTests, test1) {
 
 TEST_F(ScriptExceptionTests, test1b) {        
     ASSERT_THROW({                
+        rs::jsapi::Script script(rt_, "!)(*\")(!*\"!");
+        script.Execute();
+    }, rs::jsapi::ScriptException);        
+}
+
+TEST_F(ScriptExceptionTests, test1c) {        
+    ASSERT_THROW({                
+        rs::jsapi::Script script(rt_, "!)(*\")(!*\"!");
+        
+        rs::jsapi::Value result(rt_);
+        script.Execute(result);
+    }, rs::jsapi::ScriptException);        
+}
+
+TEST_F(ScriptExceptionTests, test1d) {        
+    ASSERT_THROW({                
         rt_.Evaluate("!)(*\")(!*\"!");
     }, rs::jsapi::ScriptException);        
 }
