@@ -25,7 +25,7 @@ The image below shows `libjsapi` hosting a GTK+ application which emulates enoug
 
 ![A JS generated Mandelbrot running under libjsapi](https://pbs.twimg.com/media/CEVOZlRWAAAt6-w.png:large)
 
-The window on the left is Firefox rendering a Mandelbot fractal, on the right is the `libjsapi` application running (mainly) the same JavaScript code.
+The window on the left is Firefox rendering a Mandelbrot fractal, on the right is the `libjsapi` application running (mainly) the same JavaScript code.
 
 ##Examples:
 
