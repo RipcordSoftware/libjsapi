@@ -17,7 +17,7 @@ int main() {
         [&](const char* name, rs::jsapi::Value& value) {
             auto result = data.find(name);
             if (result != data.cend()) {
-                value.set(result->second);
+                value = result->second;
             } else {
                 value.setUndefined();
             }

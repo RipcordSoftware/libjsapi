@@ -11,7 +11,7 @@ int main() {
     // create a dynamic array which exposes the `data` vector to JS
     rs::jsapi::Value array(rt);
     rs::jsapi::DynamicArray::Create(rt,
-        [&](int index, rs::jsapi::Value& value) { value.set(data[index]); return true; },
+        [&](int index, rs::jsapi::Value& value) { value = data[index]; return true; },
         nullptr,
         [&]() { return data.size(); },
         nullptr,

@@ -7,7 +7,7 @@ int main() {
     // create an object with a single field 'the_answer' with a getter callback which always returns 42
     rs::jsapi::Value obj(rt);
     rs::jsapi::Object::Create(rt, { "the_answer" },
-        [](const char* name, rs::jsapi::Value& value) { value.set(42); return true; },
+        [](const char* name, rs::jsapi::Value& value) { value = 42; return true; },
         nullptr,
         {},
         nullptr,
