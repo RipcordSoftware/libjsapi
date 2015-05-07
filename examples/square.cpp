@@ -6,11 +6,10 @@ int main() {
 
     // define a function which squares the first argument and returns the result
     rs::jsapi::Global::DefineFunction(rt, "square",
-        [](JSContext* cx, unsigned argc, JS::Value* vp) {
-            auto args = JS::CallArgsFromVp(argc, vp);
-            rs::jsapi::Value x(cx, args.get(0));
-            args.rval().setNumber(x.toNumber() * x.toNumber());
-            return true;
+        [](const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result) {
+            if (args.size() > 0) {
+                result = args[0].toNumber() * args[0].toNumber();
+            }
         });
 
     // call the function via JSAPI

@@ -59,9 +59,8 @@ int main() {
     
     // define a function in global scope implemented by a C++ lambda
     rs::jsapi::Global::DefineFunction(rt, "getTheAnswer", 
-        [](JSContext* cx, unsigned argc, JS::Value* vp) { 
-            JS::CallArgsFromVp(argc, vp).rval().setInt32(42); 
-            return true; 
+        [](const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result) { 
+            result = 42; 
     });
     
     // call the native function from JS

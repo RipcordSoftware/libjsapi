@@ -7,13 +7,10 @@ int main() {
     // define a global function called echo which
     // prints the first argument on stdout
     rs::jsapi::Global::DefineFunction(rt, "echo",
-        [](JSContext* cx, unsigned argc, JS::Value* vp) {
-            auto args = JS::CallArgsFromVp(argc, vp);
-            if (argc > 0) {
-                rs::jsapi::Value str(cx, args.get(0));
-                std::cout << str << std::endl;
+        [](const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result) {
+            if (args.size() > 0) {
+                std::cout << args[0] << std::endl;
             }
-            return true;
         });
 
     // invoke echo passing a string

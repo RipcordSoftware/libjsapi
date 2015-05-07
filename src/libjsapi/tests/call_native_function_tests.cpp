@@ -1,7 +1,5 @@
 #include <gtest/gtest.h>
 
-#include <thread>
-
 #include "../libjsapi.h"
 
 rs::jsapi::Runtime rt_;
@@ -16,17 +14,25 @@ protected:
         
     }
     
-    static bool Echo(JSContext* cx, unsigned argc, JS::Value* vp);
+    static bool Echo(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result);
 };
 
-bool CallNativeFunctionTests::Echo(JSContext* cx, unsigned argc, JS::Value* vp) {
-    auto args = JS::CallArgsFromVp(argc, vp);
+class CallNativeFunctionTestException : public std::exception {
+public:
+    CallNativeFunctionTestException(const char* msg) : msg_(msg) {
+    }
+    
+    const char* what() const throw() override { return msg_.c_str(); }
+    
+private:
+    const std::string msg_;
+};
 
-    if (argc > 0) {
-        auto value = args.get(0);
-        args.rval().set(value);
+bool CallNativeFunctionTests::Echo(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result) {
+    if (args.size() > 0) {
+        result = args[0];
     } else {    
-        args.rval().setNull();
+        result = JS::NullHandleValue;
     }
     return true;
 }
@@ -34,7 +40,7 @@ bool CallNativeFunctionTests::Echo(JSContext* cx, unsigned argc, JS::Value* vp) 
 TEST_F(CallNativeFunctionTests, test1) {
     auto context = rt_.NewContext();
     
-    rs::jsapi::Global::DefineFunction(*context, "getTheAnswer", [](JSContext* cx, unsigned argc, JS::Value* vp) { JS::CallArgsFromVp(argc, vp).rval().setInt32(42); return true; });
+    rs::jsapi::Global::DefineFunction(*context, "getTheAnswer", [](const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result) { result = 42; });
     
     rs::jsapi::Value result(*context);
     context->Evaluate("(function(){return getTheAnswer();})();", result);
@@ -43,11 +49,31 @@ TEST_F(CallNativeFunctionTests, test1) {
     ASSERT_EQ(42, result.toInt32());    
 }
 
+TEST_F(CallNativeFunctionTests, test1b) {
+    auto context = rt_.NewContext();
+    int valueClosure = 42;
+    
+    rs::jsapi::Global::DefineFunction(*context, "getTheAnswer", [&](const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result) { result = valueClosure++; });
+    
+    rs::jsapi::Value result(*context);
+    context->Call("getTheAnswer", result);    
+    ASSERT_TRUE(result.isInt32());
+    ASSERT_EQ(42, result.toInt32());    
+    
+    context->Call("getTheAnswer", result);
+    ASSERT_TRUE(result.isInt32());
+    ASSERT_EQ(43, result.toInt32());    
+    
+    context->Call("getTheAnswer", result);
+    ASSERT_TRUE(result.isInt32());
+    ASSERT_EQ(44, result.toInt32());
+}
+
 TEST_F(CallNativeFunctionTests, test2) {
     auto context = rt_.NewContext();
     
     rs::jsapi::Global::DefineFunction(*context, "getLorem", 
-        [](JSContext* cx, unsigned argc, JS::Value* vp) { JS::CallArgsFromVp(argc, vp).rval().setString(JS_NewStringCopyZ(cx, "Lorem ipsum")); return true; });
+        [](const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result) { result = "Lorem ipsum"; });
     
     rs::jsapi::Value result(*context);
     context->Evaluate("(function(){return getLorem();})();", result);
@@ -163,4 +189,31 @@ TEST_F(CallNativeFunctionTests, test9) {
     
     ASSERT_TRUE(result.isNumber());
     ASSERT_FLOAT_EQ(3.14159, result.toNumber());
+}
+
+TEST_F(CallNativeFunctionTests, test10) {
+    auto context = rt_.NewContext();
+    
+    rs::jsapi::Global::DefineFunction(*context, "makeMeSad", [](const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result) { 
+        throw CallNativeFunctionTestException("It happened!");
+    });
+    
+    ASSERT_THROW({
+        rs::jsapi::Value result(*context);
+        context->Evaluate("(function(){return makeMeSad();})();", result);
+    }, rs::jsapi::ScriptException);
+}
+
+TEST_F(CallNativeFunctionTests, test11) {
+    auto context = rt_.NewContext();
+    
+    rs::jsapi::Global::DefineFunction(*context, "makeMeSad", [](const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result) { 
+        throw CallNativeFunctionTestException("It happened!");
+    });
+    
+    rs::jsapi::Value result(*context);
+    context->Evaluate("(function(){ try { return makeMeSad(); } catch (e) { return e.message; } })();", result);
+    
+    ASSERT_TRUE(result.isString());
+    ASSERT_STREQ("It happened!", result.ToString().c_str());
 }
