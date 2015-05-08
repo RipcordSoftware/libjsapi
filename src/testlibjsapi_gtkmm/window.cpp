@@ -27,18 +27,12 @@ Window::Window(rs::jsapi::Runtime& rt, Gtk::Window* window) : rt_(rt), obj_(rt),
     rs::jsapi::Object::SetPrivate(obj_, typeid(Window).hash_code(), this);
 }
 
-bool Window::GetCallback(const char* name, rs::jsapi::Value& value) {
-    auto status = false;
-    
+void Window::GetCallback(const char* name, rs::jsapi::Value& value) {
     if (std::strcmp(name, "width") == 0) {
         value = window_->get_width();
-        status = true;
     } else if (std::strcmp(name, "height") == 0) {
         value = window_->get_height();
-        status = true;
-    }   
-    
-    return status;
+    }       
 }
 
 void Window::SetDefaultSize(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result) { 

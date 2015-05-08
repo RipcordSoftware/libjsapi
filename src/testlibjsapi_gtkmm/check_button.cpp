@@ -17,29 +17,19 @@ CheckButton::CheckButton(rs::jsapi::Runtime& rt, Gtk::CheckButton* button) : rt_
         functions, std::bind(&CheckButton::Finalizer, this), obj_);
 }
 
-bool CheckButton::GetCallback(const char* name, rs::jsapi::Value& value) {
-    auto status = false;
-    
+void CheckButton::GetCallback(const char* name, rs::jsapi::Value& value) {
     if (std::strcmp(name, "checked") == 0) {
         GetActive({}, value);
-        status = true;
     }
-    
-    return status;
 }
 
-bool CheckButton::SetCallback(const char* name, const rs::jsapi::Value& value) {
-    auto status = false;
-    
+void CheckButton::SetCallback(const char* name, const rs::jsapi::Value& value) {
     if (std::strcmp(name, "checked") == 0) {
         std::vector<rs::jsapi::Value> args;
         args.push_back(value);
         rs::jsapi::Value result(rt_);
         SetActive(args, result);
-        status = true;
-    }
-    
-    return status;
+    }    
 }
 
 void CheckButton::GetActive(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result) { 

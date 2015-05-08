@@ -9,9 +9,7 @@
 
 class Window {
 public:
-    Window(rs::jsapi::Runtime& rt, Gtk::Window* window);
-    
-    bool GetCallback(const char* name, rs::jsapi::Value& value);
+    Window(rs::jsapi::Runtime& rt, Gtk::Window* window);        
     
     void SetDefaultSize(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result);    
     void SetTitle(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result);    
@@ -29,6 +27,8 @@ private:
     void Finalizer() {
         delete this;
     }
+    
+    void GetCallback(const char* name, rs::jsapi::Value& value);
     
     rs::jsapi::Runtime& rt_;
     rs::jsapi::Value obj_;

@@ -23,24 +23,16 @@ ImageSurface::ImageSurface(rs::jsapi::Runtime& rt, unsigned width, unsigned heig
         array_);
 }
 
-bool ImageSurface::GetCallback(const char* name, rs::jsapi::Value& value) {
-    auto status = false;
-    
+void ImageSurface::GetCallback(const char* name, rs::jsapi::Value& value) {
     if (std::strcmp(name, "data") == 0) {
         value = array_;
-        status = true;
     } else if (std::strcmp(name, "width") == 0) {
         value = (int)width_;
-        status = true;
     } else if (std::strcmp(name, "height") == 0) {
         value = (int)height_;
-        status = true;
     } else if (std::strcmp(name, "depth") == 0) {
         value = (int)depth_;
-        status = true;
     }    
-    
-    return status;
 }
 
  bool ImageSurface::GetData(const rs::jsapi::Value& obj, const unsigned char*& data, unsigned& width, unsigned& height, unsigned& depth) {

@@ -15,8 +15,8 @@ class Value;
 
 class Object final {
 public:
-    typedef std::function<bool(const char* name, Value& value)> GetCallback;
-    typedef std::function<bool(const char* name, const Value& value)> SetCallback;
+    typedef std::function<void(const char* name, Value& value)> GetCallback;
+    typedef std::function<void(const char* name, const Value& value)> SetCallback;
     typedef std::function<void()> FinalizeCallback;
     typedef std::function<void(const std::vector<Value>&, Value&)> FunctionCallback;
     typedef std::unordered_map<std::string, FunctionCallback> Functions;

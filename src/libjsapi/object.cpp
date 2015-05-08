@@ -46,21 +46,25 @@ bool rs::jsapi::Object::Get(JSContext* cx, JS::HandleObject obj, JS::HandleId id
         auto nameLength = JS_EncodeStringToBuffer(cx, name, nameBuffer, sizeof(nameBuffer) - 1);
         auto status = false;
         
-        if (nameLength < sizeof(nameBuffer)) {
-            nameBuffer[nameLength] = '\0';
-            status = state->getter(nameBuffer, value);
-        } else {
-            std::vector<char> nameVector(nameLength + 1);
-            nameLength = JS_EncodeStringToBuffer(cx, name, &nameVector[0], nameVector.size() - 1);
-            nameVector[nameLength] = '\0';
-            status = state->getter(&nameVector[0], value);
-        }
-        
-        if (status) {
+        try {
+            value.setUndefined();
+            
+            if (nameLength < sizeof(nameBuffer)) {
+                nameBuffer[nameLength] = '\0';
+                state->getter(nameBuffer, value);
+            } else {
+                std::vector<char> nameVector(nameLength + 1);
+                nameLength = JS_EncodeStringToBuffer(cx, name, &nameVector[0], nameVector.size() - 1);
+                nameVector[nameLength] = '\0';
+                state->getter(&nameVector[0], value);
+            }
+
             vp.set(value);
+            return true;
+        } catch (const std::exception& ex) {
+            JS_ReportError(cx, ex.what());
+            return false;
         }
-        
-        return status;
     } else {
         vp.setUndefined();
         return true;
@@ -76,15 +80,22 @@ bool rs::jsapi::Object::Set(JSContext* cx, JS::HandleObject obj, JS::HandleId id
         auto name = JSID_TO_STRING(id);                
         auto nameLength = JS_EncodeStringToBuffer(cx, name, nameBuffer, sizeof(nameBuffer) - 1);
         
-        if (nameLength < sizeof(nameBuffer)) {
-            nameBuffer[nameLength] = '\0';    
-            return state->setter(nameBuffer, value);    
-        } else {
-            std::vector<char> nameVector(nameLength + 1);
-            nameLength = JS_EncodeStringToBuffer(cx, name, &nameVector[0], nameVector.size() - 1);
-            nameVector[nameLength] = '\0';
-            return state->setter(&nameVector[0], value);
-        }    
+        try {
+            if (nameLength < sizeof(nameBuffer)) {
+                nameBuffer[nameLength] = '\0';    
+                state->setter(nameBuffer, value);    
+            } else {
+                std::vector<char> nameVector(nameLength + 1);
+                nameLength = JS_EncodeStringToBuffer(cx, name, &nameVector[0], nameVector.size() - 1);
+                nameVector[nameLength] = '\0';
+                state->setter(&nameVector[0], value);
+            }
+
+            return true;
+        } catch (const std::exception& ex) {
+            JS_ReportError(cx, ex.what());
+            return false;
+        }
     } else {
         // TODO: what will this do to the JS?
         vp.setUndefined();

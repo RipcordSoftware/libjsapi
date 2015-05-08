@@ -10,20 +10,20 @@
 
 class ImageSurface {
 public:
-    ImageSurface(rs::jsapi::Runtime& rt, unsigned width, unsigned height, unsigned depth = 4);
-    
-    bool GetCallback(const char* name, rs::jsapi::Value& value);
+    ImageSurface(rs::jsapi::Runtime& rt, unsigned width, unsigned height, unsigned depth = 4);        
     
     operator rs::jsapi::Value&() { return obj_; }
     
     static bool GetData(const rs::jsapi::Value& obj, const unsigned char*& data, unsigned& width, unsigned& height, unsigned& depth);
     
-private:    
+private:
     void Finalizer() {
         if (--refCount_ == 0) {
             delete this;
         }
     }
+    
+    void GetCallback(const char* name, rs::jsapi::Value& value);
     
     rs::jsapi::Runtime& rt_;
     rs::jsapi::Value obj_;

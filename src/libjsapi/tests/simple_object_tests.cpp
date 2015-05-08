@@ -19,6 +19,17 @@ protected:
     }            
 };
 
+class SimpleObjectTestException : public std::exception {
+public:
+    SimpleObjectTestException(const char* msg) : msg_(msg) {
+    }
+    
+    const char* what() const throw() override { return msg_.c_str(); }
+    
+private:
+    const std::string msg_;
+};
+
 TEST_F(SimpleObjectTests, test1) {
     auto context = rt_.NewContext();
     
@@ -80,7 +91,6 @@ TEST_F(SimpleObjectTests, test4) {
             } else {
                 value.setUndefined();
             }
-            return true;
         }, 
         nullptr, 
         {},
@@ -166,7 +176,7 @@ TEST_F(SimpleObjectTests, test6) {
     rs::jsapi::Value obj(*context);
     rs::jsapi::Object::Create(*context, 
         { longFieldName.c_str() },
-        [](const char* name, rs::jsapi::Value& value) { value.set(42); return true; },
+        [](const char* name, rs::jsapi::Value& value) { value = 42; },
         nullptr, 
         {}, 
         nullptr, 
@@ -184,7 +194,7 @@ TEST_F(SimpleObjectTests, test7) {
     
     rs::jsapi::Value obj(*context);
     rs::jsapi::Object::Create(*context, { "the_answer" }, 
-        [](const char* name, rs::jsapi::Value& value) { value.set(42); return true; },
+        [](const char* name, rs::jsapi::Value& value) { value = 42; },
         nullptr,
         {},
         nullptr, 
@@ -207,7 +217,7 @@ TEST_F(SimpleObjectTests, test8) {
     
     rs::jsapi::Value obj(*context);
     rs::jsapi::Object::Create(*context, { "hello" }, 
-        [](const char* name, rs::jsapi::Value& value) { value.set("world"); return true; },
+        [](const char* name, rs::jsapi::Value& value) { value = "world"; },
         nullptr,
         {},
         nullptr, 
@@ -233,7 +243,7 @@ TEST_F(SimpleObjectTests, test9) {
         {},
         nullptr,
         nullptr, 
-        { std::make_pair("myfunc", [](const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result){} )}, 
+        { std::make_pair("myfunc", [](const std::vector<rs::jsapi::Value>&, rs::jsapi::Value&){} )}, 
         nullptr, 
         obj);
     ASSERT_TRUE(!!obj);
@@ -253,8 +263,8 @@ TEST_F(SimpleObjectTests, test10) {
         {},
         nullptr,
         nullptr, 
-        { std::make_pair("myfunc", [](const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result) { 
-            result.set(42);
+        { std::make_pair("myfunc", [](const std::vector<rs::jsapi::Value>&, rs::jsapi::Value& result) { 
+            result = 42;
         })}, 
         nullptr, 
         obj);
@@ -276,8 +286,8 @@ TEST_F(SimpleObjectTests, test11) {
         nullptr,
         nullptr, 
         { 
-            std::make_pair("myfunc", [](const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result) { 
-                result.set(42);
+            std::make_pair("myfunc", [](const std::vector<rs::jsapi::Value>&, rs::jsapi::Value& result) { 
+                result = 42;
             })
         },
         nullptr, 
@@ -304,8 +314,7 @@ TEST_F(SimpleObjectTests, test12) {
     rs::jsapi::Object::Create(*context, { "hello" },         
         nullptr,
         [&](const char* name, const rs::jsapi::Value& value) { 
-            fieldValue.set(value); 
-            return true; 
+            fieldValue = value;
         },
         {},
         nullptr, 
@@ -332,8 +341,7 @@ TEST_F(SimpleObjectTests, test13) {
     rs::jsapi::Object::Create(*context, { longFieldName.c_str() },         
         nullptr,
         [&](const char* name, const rs::jsapi::Value& value) { 
-            fieldValue.set(value); 
-            return true; 
+            fieldValue = value;
         },
         {},
         nullptr, 
@@ -430,4 +438,110 @@ TEST_F(SimpleObjectTests, test17) {
     ASSERT_FALSE(rs::jsapi::Object::GetPrivate(obj, data, that));
     ASSERT_NE(123456789, data);
     ASSERT_NE(this, that);
+}
+
+TEST_F(SimpleObjectTests, test18) {
+    auto context = rt_.NewContext();
+    
+    rs::jsapi::Value obj(*context);
+    rs::jsapi::Object::Create(*context, { "the_answer" }, 
+        [](const char* name, rs::jsapi::Value& value) { 
+            throw SimpleObjectTestException("It happened!");
+        },
+        nullptr,
+        {},
+        nullptr, 
+        obj);
+        
+    context->Evaluate("var myfunc=function(n){return n.the_answer;};");
+
+    rs::jsapi::FunctionArguments args(*context);
+    args.Append(obj);
+    
+    ASSERT_THROW({        
+        rs::jsapi::Value result(*context);
+        context->Call("myfunc", args, result);
+    }, rs::jsapi::ScriptException);        
+}
+
+TEST_F(SimpleObjectTests, test19) {
+    auto context = rt_.NewContext();
+    
+    rs::jsapi::Value obj(*context);
+    rs::jsapi::Object::Create(*context, { "the_answer" }, 
+        [](const char* name, rs::jsapi::Value& value) { 
+            throw SimpleObjectTestException("It happened!");
+        },
+        nullptr,
+        {},
+        nullptr, 
+        obj);
+        
+    context->Evaluate("var myfunc=function(n){return n.the_answer;};");
+
+    rs::jsapi::FunctionArguments args(*context);
+    args.Append(obj);
+    
+    bool thrown = false;
+    try {
+        rs::jsapi::Value result(*context);
+        context->Call("myfunc", args, result);
+    } catch (const rs::jsapi::ScriptException& ex) {
+        thrown = true;
+    }
+    
+    ASSERT_TRUE(thrown);
+}
+
+TEST_F(SimpleObjectTests, test20) {
+    auto context = rt_.NewContext();
+    
+    rs::jsapi::Value obj(*context);
+    rs::jsapi::Object::Create(*context, { "the_answer" }, 
+        nullptr,
+        [](const char* name, const rs::jsapi::Value& value) { 
+            throw SimpleObjectTestException("It happened!");
+        },
+        {},
+        nullptr, 
+        obj);
+        
+    context->Evaluate("var myfunc=function(n){ n.the_answer = 42;};");
+
+    rs::jsapi::FunctionArguments args(*context);
+    args.Append(obj);
+    
+    ASSERT_THROW({
+        rs::jsapi::Value result(*context);
+        context->Call("myfunc", args, result);
+    }, rs::jsapi::ScriptException);        
+}
+
+TEST_F(SimpleObjectTests, test21) {
+    auto context = rt_.NewContext();
+    
+    rs::jsapi::Value obj(*context);
+    rs::jsapi::Object::Create(*context, { "the_answer" }, 
+        nullptr,
+        [](const char* name, const rs::jsapi::Value& value) { 
+            throw SimpleObjectTestException("It happened!");
+        },
+        {},
+        nullptr, 
+        obj);
+        
+    context->Evaluate("var myfunc=function(n){ n.the_answer = 42;};");
+
+    rs::jsapi::FunctionArguments args(*context);
+    args.Append(obj);
+    
+    bool thrown = false;
+    try {
+        rs::jsapi::Value result(*context);
+        context->Call("myfunc", args, result);
+    } catch (const rs::jsapi::ScriptException& ex) {
+        thrown = true;
+    }
+    
+    ASSERT_TRUE(thrown);
 }

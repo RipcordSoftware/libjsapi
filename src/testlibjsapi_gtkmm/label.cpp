@@ -14,29 +14,19 @@ Label::Label(rs::jsapi::Runtime& rt, Gtk::Label* label) : rt_(rt), obj_(rt), lab
         functions, std::bind(&Label::Finalizer, this), obj_);
 }
 
-bool Label::GetCallback(const char* name, rs::jsapi::Value& value) {
-    auto status = false;
-    
+void Label::GetCallback(const char* name, rs::jsapi::Value& value) {
     if (std::strcmp(name, "value") == 0 || std::strcmp(name, "innerHTML") == 0) {
         GetText({}, value);
-        status = true;
     }
-    
-    return status;
 }
 
-bool Label::SetCallback(const char* name, const rs::jsapi::Value& value) {
-    auto status = false;
-    
+void Label::SetCallback(const char* name, const rs::jsapi::Value& value) {
     if (std::strcmp(name, "value") == 0 || std::strcmp(name, "innerHTML") == 0) {
         std::vector<rs::jsapi::Value> args;
         args.push_back(value);
         rs::jsapi::Value result(rt_);
         SetText(args, result);
-        status = true;
     }
-    
-    return status;
 }
 
 void Label::SetText(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result) { 

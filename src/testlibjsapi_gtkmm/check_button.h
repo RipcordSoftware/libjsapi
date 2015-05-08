@@ -22,8 +22,8 @@ private:
         delete this;
     }
     
-    bool GetCallback(const char* name, rs::jsapi::Value& value);
-    bool SetCallback(const char* name, const rs::jsapi::Value& value);        
+    void GetCallback(const char* name, rs::jsapi::Value& value);
+    void SetCallback(const char* name, const rs::jsapi::Value& value);        
     
     void OnButtonClicked();
     

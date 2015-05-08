@@ -14,29 +14,19 @@ Entry::Entry(rs::jsapi::Runtime& rt, Gtk::Entry* entry) : rt_(rt), obj_(rt), ent
         functions, std::bind(&Entry::Finalizer, this), obj_);
 }
 
-bool Entry::GetCallback(const char* name, rs::jsapi::Value& value) {
-    auto status = false;
-    
+void Entry::GetCallback(const char* name, rs::jsapi::Value& value) {
     if (std::strcmp(name, "value") == 0 || std::strcmp(name, "innerHTML") == 0) {
         GetText({}, value);
-        status = true;
     }
-    
-    return status;
 }
 
-bool Entry::SetCallback(const char* name, const rs::jsapi::Value& value) {
-    auto status = false;
-    
+void Entry::SetCallback(const char* name, const rs::jsapi::Value& value) {        
     if (std::strcmp(name, "value") == 0 || std::strcmp(name, "innerHTML") == 0) {
         std::vector<rs::jsapi::Value> args;
         args.push_back(value);
         rs::jsapi::Value result(rt_);
         SetText(args, result);
-        status = true;
-    }
-    
-    return status;
+    }   
 }
 
 void Entry::SetText(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result) { 
