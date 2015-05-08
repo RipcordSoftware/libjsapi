@@ -39,7 +39,7 @@ bool rs::jsapi::Object::Create(Context& cx, const std::vector<const char*>& prop
 bool rs::jsapi::Object::Get(JSContext* cx, JS::HandleObject obj, JS::HandleId id, JS::MutableHandleValue vp) {
     auto state = Object::GetState(obj);    
     if (state != nullptr && state->getter != nullptr) {
-        Value value(cx, vp);
+        Value value(cx);
         
         auto name = JSID_TO_STRING(id);
         char nameBuffer[256];

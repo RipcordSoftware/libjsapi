@@ -30,13 +30,17 @@ bool rs::jsapi::DynamicArray::Get(JSContext* cx, JS::HandleObject obj, JS::Handl
     auto state = DynamicArray::GetState(obj);
     
     if (state != nullptr && state->getter != nullptr && JSID_IS_INT(id)) {
-        auto index = JSID_TO_INT(id);
-        Value value(cx, vp);
-        bool status = state->getter(index, value);        
-        if (status) {
+        try {
+            auto index = JSID_TO_INT(id);
+            Value value(cx);
+            value.setUndefined();
+            state->getter(index, value);            
             vp.set(value);
+            return true;
+        } catch (const std::exception& ex) {
+            JS_ReportError(cx, ex.what());
+            return false;
         }
-        return status;
     } else {
         vp.setUndefined();
         return true;
@@ -47,9 +51,15 @@ bool rs::jsapi::DynamicArray::Set(JSContext* cx, JS::HandleObject obj, JS::Handl
     auto state = DynamicArray::GetState(obj);
     
     if (state != nullptr && state->setter != nullptr && JSID_IS_INT(id)) {
-        auto index = JSID_TO_INT(id);
-        Value value(cx, vp);                
-        return state->setter(index, value);    
+        try {
+            auto index = JSID_TO_INT(id);
+            Value value(cx, vp);                
+            state->setter(index, value);    
+            return true;
+        } catch (const std::exception& ex) {
+            JS_ReportError(cx, ex.what());
+            return false;
+        }
     } else {
         // TODO: what will this do to the JS?
         vp.setUndefined();

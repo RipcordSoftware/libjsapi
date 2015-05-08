@@ -28,7 +28,7 @@ bool rs::jsapi::DynamicObject::Get(JSContext* cx, JS::HandleObject obj, JS::Hand
     auto state = DynamicObject::GetState(obj);
     
     if (state != nullptr && state->getter != nullptr) {
-        Value value(cx, vp);
+        Value value(cx);
         
         auto name = JSID_TO_STRING(id);
         char nameBuffer[256];

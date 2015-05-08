@@ -15,8 +15,8 @@ class Value;
 
 class DynamicArray final {
 public:
-    typedef std::function<bool(int index, Value& value)> GetCallback;
-    typedef std::function<bool(int index, const Value& value)> SetCallback;
+    typedef std::function<void(int index, Value& value)> GetCallback;
+    typedef std::function<void(int index, const Value& value)> SetCallback;
     typedef std::function<int()> LengthCallback;
     typedef std::function<void()> FinalizeCallback;
     
