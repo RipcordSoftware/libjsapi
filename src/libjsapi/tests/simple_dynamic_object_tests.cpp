@@ -15,6 +15,17 @@ protected:
     }    
 };
 
+class SimpleDynamicObjectTestException : public std::exception {
+public:
+    SimpleDynamicObjectTestException(const char* msg) : msg_(msg) {
+    }
+    
+    const char* what() const throw() override { return msg_.c_str(); }
+    
+private:
+    const std::string msg_;
+};
+
 TEST_F(SimpleDynamicObjectTests, test1) {
     auto context = rt_.NewContext();    
     
@@ -22,8 +33,7 @@ TEST_F(SimpleDynamicObjectTests, test1) {
     rs::jsapi::DynamicObject::Create(
         *context,
         [](const char* name, rs::jsapi::Value& value) {            
-            value.set(42);
-            return true;
+            value = 42;
         }, 
         nullptr, 
         nullptr,
@@ -50,8 +60,7 @@ TEST_F(SimpleDynamicObjectTests, test2) {
     rs::jsapi::DynamicObject::Create(
         *context,
         [](const char* name, rs::jsapi::Value& value) {            
-            value.set("world");
-            return true;
+            value = "world";
         }, 
         nullptr,
         nullptr, 
@@ -79,8 +88,7 @@ TEST_F(SimpleDynamicObjectTests, test3) {
     rs::jsapi::DynamicObject::Create(
         *context,
         [](const char* name, rs::jsapi::Value& value) {            
-            value.set(42);
-            return true;
+            value = 42;
         }, 
         nullptr, 
         nullptr,
@@ -113,7 +121,6 @@ TEST_F(SimpleDynamicObjectTests, test4) {
         nullptr, 
         [&](const char* name, const rs::jsapi::Value& value) { 
             fieldValue.set(value); 
-            return true; 
         },
         nullptr,
         nullptr,
@@ -143,7 +150,6 @@ TEST_F(SimpleDynamicObjectTests, test5) {
         nullptr, 
         [&](const char* name, const rs::jsapi::Value& value) { 
             fieldValue.set(value); 
-            return true; 
         },
         nullptr,
         nullptr,
@@ -307,4 +313,120 @@ TEST_F(SimpleDynamicObjectTests, test11) {
     ASSERT_FALSE(rs::jsapi::DynamicObject::GetPrivate(obj, data, that));
     ASSERT_NE(123456789, data);
     ASSERT_NE(this, that);
+}
+
+TEST_F(SimpleDynamicObjectTests, test12) {
+    auto context = rt_.NewContext();    
+    
+    rs::jsapi::Value obj(*context);
+    rs::jsapi::DynamicObject::Create(
+        *context,
+        [](const char* name, rs::jsapi::Value& value) {            
+            throw SimpleDynamicObjectTestException("It happened!");
+        }, 
+        nullptr, 
+        nullptr,
+        nullptr,
+        obj);
+    ASSERT_TRUE(!!obj);
+    
+    context->Evaluate("var myfunc=function(n){return n.hello;};");    
+    
+    rs::jsapi::FunctionArguments args(*context);    
+    args.Append(obj);            
+    
+    ASSERT_THROW({
+        rs::jsapi::Value result(*context);
+        context->Call("myfunc", args, result);
+    }, rs::jsapi::ScriptException);    
+}
+
+TEST_F(SimpleDynamicObjectTests, test13) {
+    auto context = rt_.NewContext();    
+    
+    rs::jsapi::Value obj(*context);
+    rs::jsapi::DynamicObject::Create(
+        *context,
+        [](const char* name, rs::jsapi::Value& value) {            
+            throw SimpleDynamicObjectTestException("It happened!");
+        }, 
+        nullptr, 
+        nullptr,
+        nullptr,
+        obj);
+    ASSERT_TRUE(!!obj);
+    
+    context->Evaluate("var myfunc=function(n){return n.hello;};");    
+    
+    rs::jsapi::FunctionArguments args(*context);    
+    args.Append(obj);            
+    
+    bool thrown = false;
+    
+    try {
+        rs::jsapi::Value result(*context);
+        context->Call("myfunc", args, result);
+    } catch (const rs::jsapi::ScriptException& ex) {
+        thrown = true;
+    }
+    
+    ASSERT_TRUE(thrown);
+}
+
+TEST_F(SimpleDynamicObjectTests, test14) {
+    auto context = rt_.NewContext();    
+    
+    rs::jsapi::Value obj(*context);
+    rs::jsapi::DynamicObject::Create(
+        *context,
+        nullptr,
+        [](const char* name, const rs::jsapi::Value& value) {            
+            throw SimpleDynamicObjectTestException("It happened!");
+        },  
+        nullptr,
+        nullptr,
+        obj);
+    ASSERT_TRUE(!!obj);
+    
+    context->Evaluate("var myfunc=function(n){n.hello=null;};");    
+    
+    rs::jsapi::FunctionArguments args(*context);    
+    args.Append(obj);            
+    
+    ASSERT_THROW({
+        rs::jsapi::Value result(*context);
+        context->Call("myfunc", args, result);
+    }, rs::jsapi::ScriptException);    
+}
+
+TEST_F(SimpleDynamicObjectTests, test15) {
+    auto context = rt_.NewContext();    
+    
+    rs::jsapi::Value obj(*context);
+    rs::jsapi::DynamicObject::Create(
+        *context,
+        nullptr,
+        [](const char* name, const rs::jsapi::Value& value) {            
+            throw SimpleDynamicObjectTestException("It happened!");
+        }, 
+        nullptr,
+        nullptr,
+        obj);
+    ASSERT_TRUE(!!obj);
+    
+    context->Evaluate("var myfunc=function(n){n.hello=null;};");    
+    
+    rs::jsapi::FunctionArguments args(*context);    
+    args.Append(obj);            
+    
+    bool thrown = false;
+    
+    try {
+        rs::jsapi::Value result(*context);
+        context->Call("myfunc", args, result);
+    } catch (const rs::jsapi::ScriptException& ex) {
+        thrown = true;
+    }
+    
+    ASSERT_TRUE(thrown);
 }

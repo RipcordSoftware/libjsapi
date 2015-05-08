@@ -44,7 +44,6 @@ bool rs::jsapi::Object::Get(JSContext* cx, JS::HandleObject obj, JS::HandleId id
         auto name = JSID_TO_STRING(id);
         char nameBuffer[256];
         auto nameLength = JS_EncodeStringToBuffer(cx, name, nameBuffer, sizeof(nameBuffer) - 1);
-        auto status = false;
         
         try {
             value.setUndefined();

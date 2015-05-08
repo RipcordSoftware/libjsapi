@@ -15,8 +15,8 @@ class Value;
 
 class DynamicObject final {
 public:
-    typedef std::function<bool(const char* name, Value& value)> GetCallback;
-    typedef std::function<bool(const char* name, const Value& value)> SetCallback;
+    typedef std::function<void(const char* name, Value& value)> GetCallback;
+    typedef std::function<void(const char* name, const Value& value)> SetCallback;
     typedef std::function<bool(std::vector<std::string>& props, std::vector<std::pair<std::string, JSNative>>& funcs)> EnumeratorCallback;
     typedef std::function<void()> FinalizeCallback;
     

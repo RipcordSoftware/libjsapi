@@ -21,7 +21,6 @@ int main() {
             } else {
                 value.setUndefined();
             }
-            return true;
         },
         nullptr,
         nullptr,
