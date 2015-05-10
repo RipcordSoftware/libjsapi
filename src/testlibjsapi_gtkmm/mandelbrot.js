@@ -364,9 +364,9 @@ function pickColorGrayscale(steps, n, Tr, Ti)
 
 function rgba_to_bgra(arr) {
     var temp = arr[0];
-    arr[0] = Math.floor(arr[2]);
-    arr[1] = Math.floor(arr[1]);
-    arr[2] = Math.floor(temp);
+    arr[0] = arr[2];
+    arr[1] = arr[1];
+    arr[2] = temp;
     return arr;
 }
 

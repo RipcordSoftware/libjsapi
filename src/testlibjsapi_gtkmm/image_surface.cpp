@@ -16,8 +16,14 @@ ImageSurface::ImageSurface(rs::jsapi::Runtime& rt, unsigned width, unsigned heig
     rs::jsapi::Object::SetPrivate(obj_, typeid(ImageSurface).hash_code(), this);
     
     rs::jsapi::DynamicArray::Create(rt,
-        [&](int index, rs::jsapi::Value& value) { value.set(data_[index]); return true; },
-        [&](int index, const rs::jsapi::Value& value) { data_[index] = value.toInt32(); return true; },
+        [&](int index, rs::jsapi::Value& value) { value.set(data_[index]); },
+        [&](int index, const rs::jsapi::Value& value) { 
+            if (value.isInt32()) {
+                data_[index] = value.toInt32();
+            } else if (value.isNumber()) {
+                data_[index] = value.toNumber();
+            }
+        },
         [&]() { return data_.size(); },
         std::bind(&ImageSurface::Finalizer, this),
         array_);

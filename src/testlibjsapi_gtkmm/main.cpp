@@ -33,7 +33,7 @@ int main(int argc, char** argv) {
     try {
         std::string script = LoadScript(argc, argv);
 
-        rs::jsapi::Runtime rt(1024 * 1024 * 1024);
+        rs::jsapi::Runtime rt(1024 * 1024 * 1024, true, true);
 
         auto app = new Application(rt, "com.ripcordsoftware.examples.gtk", 1, argv);
         rs::jsapi::Global::DefineProperty(rt, "app", *app);
@@ -63,8 +63,7 @@ int main(int argc, char** argv) {
         std::cerr << 
             "ERROR: line " << ex.lineno << std::endl <<
             ex.what() << std::endl <<
-            ex.linebuf << std::endl;
-        
+            ex.linebuf << std::endl;        
     }
     
     return 0;
