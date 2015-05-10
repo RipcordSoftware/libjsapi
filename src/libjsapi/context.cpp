@@ -19,7 +19,7 @@ static JSClass globalClass = {
 };
 
 rs::jsapi::Context::Context(Runtime& rt) : 
-        cx_(JS_NewContext(rt.getRuntime(), 8192)),
+        cx_(JS_NewContext(rt.getRuntime(), 32 * 1024)),
         global_(cx_, JS_NewGlobalObject(cx_, &globalClass, nullptr, JS::DontFireOnNewGlobalHook)),
         oldCompartment_(nullptr) {
     oldCompartment_ = JS_EnterCompartment(cx_, global_);
