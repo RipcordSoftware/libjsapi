@@ -20,7 +20,7 @@ class FunctionArguments;
 
 class Runtime final {
 public:
-    Runtime(uint32_t maxBytes = 8 * 1024 * 1024);
+    Runtime(uint32_t maxBytes = 64 * 1024 * 1024, bool enableBaselineCompiler = true, bool enableIonCompiler = false);
     Runtime(const Runtime&) = delete;
     ~Runtime();
     

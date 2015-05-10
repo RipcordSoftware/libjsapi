@@ -42,11 +42,18 @@ rs::jsapi::Runtime::Instance::~Instance() {
     }
 }
 
-rs::jsapi::Runtime::Runtime(uint32_t maxBytes) :
-    threadId_(std::this_thread::get_id()),
-    threadGuard_(threadId_),
-    rt_(JS_NewRuntime(maxBytes, JSUseHelperThreads::JS_USE_HELPER_THREADS)),
-    cx_(*this) {
+rs::jsapi::Runtime::Runtime(uint32_t maxBytes, bool enableBaselineCompiler, bool enableIonCompiler) :
+        threadId_(std::this_thread::get_id()),
+        threadGuard_(threadId_),
+        rt_(JS_NewRuntime(maxBytes, JSUseHelperThreads::JS_USE_HELPER_THREADS)),
+        cx_(*this) {
+    if (enableBaselineCompiler) {
+        JS_SetGlobalJitCompilerOption(rt_, JSJITCOMPILER_BASELINE_ENABLE, 1);
+        
+        if (enableIonCompiler) {
+            JS_SetGlobalJitCompilerOption(rt_, JSJITCOMPILER_ION_ENABLE, 1);
+        }
+    }
 }
 
 rs::jsapi::Runtime::~Runtime() {
