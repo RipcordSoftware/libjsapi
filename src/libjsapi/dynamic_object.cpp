@@ -25,7 +25,7 @@ bool rs::jsapi::DynamicObject::Create(Context& cx, GetCallback getter, DynamicOb
 }
 
 bool rs::jsapi::DynamicObject::Get(JSContext* cx, JS::HandleObject obj, JS::HandleId id, JS::MutableHandleValue vp) {
-    auto state = DynamicObject::GetState(obj);
+    auto state = DynamicObject::GetState(cx, obj);
     
     if (state != nullptr && state->getter != nullptr) {
         Value value(cx);
@@ -60,7 +60,7 @@ bool rs::jsapi::DynamicObject::Get(JSContext* cx, JS::HandleObject obj, JS::Hand
 }
 
 bool rs::jsapi::DynamicObject::Set(JSContext* cx, JS::HandleObject obj, JS::HandleId id, bool strict, JS::MutableHandleValue vp) {
-    auto state = DynamicObject::GetState(obj);
+    auto state = DynamicObject::GetState(cx, obj);
     
     if (state != nullptr && state->setter != nullptr) {
         Value value(cx, vp);
@@ -94,7 +94,7 @@ bool rs::jsapi::DynamicObject::Set(JSContext* cx, JS::HandleObject obj, JS::Hand
 
 bool rs::jsapi::DynamicObject::Enumerate(JSContext* cx, JS::HandleObject obj) {
     auto status = true;
-    auto state = DynamicObject::GetState(obj);
+    auto state = DynamicObject::GetState(cx, obj);
     if (state != nullptr && state->enumerator != nullptr) {
         std::vector<std::string> props;
         std::vector<std::pair<std::string, JSNative>> funcs;
@@ -121,6 +121,11 @@ void rs::jsapi::DynamicObject::Finalize(JSFreeOp* fop, JSObject* obj) {
     
     SetState(obj, nullptr);
     delete state;    
+}
+
+rs::jsapi::DynamicObject::DynamicObjectState* rs::jsapi::DynamicObject::GetState(JSContext* cx, JS::HandleObject obj) {
+    auto state = JS_GetInstancePrivate(cx, obj, &DynamicObject::class_, nullptr);
+    return reinterpret_cast<DynamicObjectState*>(state);
 }
 
 rs::jsapi::DynamicObject::DynamicObjectState* rs::jsapi::DynamicObject::GetState(JSObject* obj) {

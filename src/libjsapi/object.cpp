@@ -37,7 +37,7 @@ bool rs::jsapi::Object::Create(Context& cx, const std::vector<const char*>& prop
 }
 
 bool rs::jsapi::Object::Get(JSContext* cx, JS::HandleObject obj, JS::HandleId id, JS::MutableHandleValue vp) {
-    auto state = Object::GetState(obj);    
+    auto state = Object::GetState(cx, obj);    
     if (state != nullptr && state->getter != nullptr) {
         Value value(cx);
         
@@ -71,7 +71,7 @@ bool rs::jsapi::Object::Get(JSContext* cx, JS::HandleObject obj, JS::HandleId id
 }
 
 bool rs::jsapi::Object::Set(JSContext* cx, JS::HandleObject obj, JS::HandleId id, bool strict, JS::MutableHandleValue vp) {
-    auto state = Object::GetState(obj);
+    auto state = Object::GetState(cx, obj);
     if (state != nullptr && state->setter != nullptr) {
         Value value(cx, vp);
         
@@ -128,7 +128,8 @@ bool rs::jsapi::Object::CallFunction(JSContext* cx, unsigned argc, JS::Value* vp
         JS_ReportError(cx, "Unable to find function in libjsapi object");
         return false;        
     } else {
-        auto state = Object::GetState(args.thisv().toObjectOrNull());
+        auto that = args.thisv();
+        auto state = that.isObjectOrNull() ? Object::GetState(cx, JS::RootedObject(cx, that.toObjectOrNull())) : nullptr;
         if (state == nullptr) {
             // TODO: test this case
             JS_ReportError(cx, "Unable to find function callback in libjsapi object");
@@ -160,6 +161,11 @@ void rs::jsapi::Object::Finalize(JSFreeOp* fop, JSObject* obj) {
     
     SetState(obj, nullptr);
     delete state;    
+}
+
+rs::jsapi::Object::ObjectState* rs::jsapi::Object::GetState(JSContext* cx, JS::HandleObject obj) {
+    auto state = JS_GetInstancePrivate(cx, obj, &Object::class_, nullptr);
+    return reinterpret_cast<ObjectState*>(state);
 }
 
 rs::jsapi::Object::ObjectState* rs::jsapi::Object::GetState(JSObject* obj) {

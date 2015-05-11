@@ -27,7 +27,7 @@ bool rs::jsapi::DynamicArray::Create(Context& cx, GetCallback getter, SetCallbac
 }
 
 bool rs::jsapi::DynamicArray::Get(JSContext* cx, JS::HandleObject obj, JS::HandleId id, JS::MutableHandleValue vp) {
-    auto state = DynamicArray::GetState(obj);
+    auto state = DynamicArray::GetState(cx, obj);
     
     if (state != nullptr && state->getter != nullptr && JSID_IS_INT(id)) {
         try {
@@ -48,7 +48,7 @@ bool rs::jsapi::DynamicArray::Get(JSContext* cx, JS::HandleObject obj, JS::Handl
 }
 
 bool rs::jsapi::DynamicArray::Set(JSContext* cx, JS::HandleObject obj, JS::HandleId id, bool strict, JS::MutableHandleValue vp) {
-    auto state = DynamicArray::GetState(obj);
+    auto state = DynamicArray::GetState(cx, obj);
     
     if (state != nullptr && state->setter != nullptr && JSID_IS_INT(id)) {
         try {
@@ -80,7 +80,7 @@ void rs::jsapi::DynamicArray::Finalize(JSFreeOp* fop, JSObject* obj) {
 bool rs::jsapi::DynamicArray::Length(JSContext* cx, JS::HandleObject obj, JS::HandleId id, JS::MutableHandleValue vp) {    
     auto length = 0;
     
-    auto state = DynamicArray::GetState(obj);    
+    auto state = DynamicArray::GetState(cx, obj);    
     if (state != nullptr && state->length != nullptr) {
         length = state->length();
     }
@@ -90,13 +90,18 @@ bool rs::jsapi::DynamicArray::Length(JSContext* cx, JS::HandleObject obj, JS::Ha
     return true;
 }
 
+rs::jsapi::DynamicArray::DynamicArrayState* rs::jsapi::DynamicArray::GetState(JSContext* cx, JS::HandleObject obj) {
+    auto state = JS_GetInstancePrivate(cx, obj, &DynamicArray::class_, nullptr);
+    return reinterpret_cast<DynamicArrayState*>(state);
+}
+
 rs::jsapi::DynamicArray::DynamicArrayState* rs::jsapi::DynamicArray::GetState(JSObject* obj) {
     auto state = JS_GetPrivate(obj);
     return reinterpret_cast<DynamicArrayState*>(state);
 }
 
 void rs::jsapi::DynamicArray::SetState(JSObject* obj, DynamicArrayState* state) {
-    JS_SetPrivate(obj, state);    
+    JS_SetPrivate(obj, state);
 }
 
 bool rs::jsapi::DynamicArray::SetPrivate(Value& value, uint64_t data, void* ptr) {

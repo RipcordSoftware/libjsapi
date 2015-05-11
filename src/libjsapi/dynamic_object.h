@@ -33,6 +33,7 @@ private:
     static bool Enumerate(JSContext* cx, JS::HandleObject obj);
     static void Finalize(JSFreeOp* fop, JSObject* obj);
     
+    static DynamicObjectState* GetState(JSContext* cx, JS::HandleObject obj);
     static DynamicObjectState* GetState(JSObject* obj);
     static void SetState(JSObject* obj, DynamicObjectState* state);
     

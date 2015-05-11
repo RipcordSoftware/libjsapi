@@ -33,6 +33,7 @@ private:
     static void Finalize(JSFreeOp* fop, JSObject* obj);
     static bool Length(JSContext*, JS::HandleObject, JS::HandleId, JS::MutableHandleValue);
     
+    static DynamicArrayState* GetState(JSContext* cx, JS::HandleObject obj);
     static DynamicArrayState* GetState(JSObject* obj);
     static void SetState(JSObject* obj, DynamicArrayState* state);
     

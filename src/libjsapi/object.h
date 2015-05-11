@@ -49,6 +49,7 @@ private:
     static bool CallFunction(JSContext*, unsigned, JS::Value*);
     static void Finalize(JSFreeOp* fop, JSObject* obj);
 
+    static ObjectState* GetState(JSContext* cx, JS::HandleObject obj);
     static ObjectState* GetState(JSObject* obj);
     static void SetState(JSObject* obj, ObjectState* state);
     
