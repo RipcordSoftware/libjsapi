@@ -107,7 +107,7 @@ $ ./grind.sh
 You will find examples in the `examples` directory. You can build these after building libjsapi by running:
 ```bash
 $ cd examples
-$ ./build.sh
+$ make
 ```
 
 If building is slow on your system then you can speed it up by stripping the debugging information from the mozjs library by running `./strip_mozjs.sh`.
