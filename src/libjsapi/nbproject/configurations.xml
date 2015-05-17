@@ -56,6 +56,12 @@
                      kind="TEST">
         <itemPath>tests/function_arguments_tests.cpp</itemPath>
       </logicalFolder>
+      <logicalFolder name="f13"
+                     displayName="GC Tests"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/gc_tests.cpp</itemPath>
+      </logicalFolder>
       <logicalFolder name="f8"
                      displayName="Global Property Tests"
                      projectFiles="true"
@@ -229,6 +235,21 @@
           <output>${TESTDIR}/TestFiles/f12</output>
         </linkerTool>
       </folder>
+      <folder path="TestFiles/f13">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f13</output>
+        </linkerTool>
+      </folder>
       <folder path="TestFiles/f2">
         <cTool>
           <incDir>
@@ -381,6 +402,8 @@
             flavor2="0">
       </item>
       <item path="tests/function_arguments_tests.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/gc_tests.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/global_property_tests.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -527,6 +550,21 @@
           <output>${TESTDIR}/TestFiles/f12</output>
         </linkerTool>
       </folder>
+      <folder path="TestFiles/f13">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f13</output>
+        </linkerTool>
+      </folder>
       <folder path="TestFiles/f2">
         <cTool>
           <incDir>
@@ -679,6 +717,8 @@
             flavor2="0">
       </item>
       <item path="tests/function_arguments_tests.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/gc_tests.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/global_property_tests.cpp" ex="false" tool="1" flavor2="0">
       </item>

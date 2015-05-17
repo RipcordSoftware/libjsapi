@@ -89,3 +89,11 @@ rs::jsapi::Global::GlobalFunctionState* rs::jsapi::Global::GetFunctionState(JSOb
 void rs::jsapi::Global::SetFunctionState(JSObject* obj, GlobalFunctionState* state) {
     JS_SetPrivate(obj, state);
 }
+
+bool rs::jsapi::Global::DeleteProperty(Context& cx, const char* name) {
+    return JS_DeleteProperty(cx, cx.getGlobal(), name);
+}
+
+bool rs::jsapi::Global::DeleteFunction(Context& cx, const char* name) {
+    return JS_DeleteProperty(cx, cx.getGlobal(), name);
+}

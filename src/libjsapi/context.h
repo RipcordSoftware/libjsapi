@@ -35,7 +35,9 @@ public:
     JSContext* getContext() { return cx_; }
     JS::HandleObject getGlobal() { return global_; }
     
-    operator JSContext*() { return cx_; }        
+    operator JSContext*() { return cx_; }
+    
+    void MaybeGC() { JS_MaybeGC(cx_); }
         
 private:
     friend bool Script::Compile();

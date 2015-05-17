@@ -54,6 +54,10 @@ public:
         return cx_; 
     }
     
+    void GCNow() { JS_GC(rt_); }
+    
+    void MaybeGC() { JS_MaybeGC(cx_); }
+    
 private:
     
     class Instance {

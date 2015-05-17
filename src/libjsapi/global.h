@@ -23,6 +23,9 @@ public:
     static bool DefineProperty(Context& cx, const char* name, JSNative getter, JSNative setter, unsigned attrs = JSPROP_ENUMERATE);
     static bool DefineFunction(Context& cx, const char* name, FunctionCallback callback, unsigned attrs = JSPROP_ENUMERATE);
     
+    static bool DeleteProperty(Context& cx, const char* name);
+    static bool DeleteFunction(Context& cx, const char* name);
+    
 private:
     struct GlobalFunctionState { 
         GlobalFunctionState(FunctionCallback function) : function_(function) {}

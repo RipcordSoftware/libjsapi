@@ -54,6 +54,7 @@ TESTFILES= \
 	${TESTDIR}/TestFiles/f5 \
 	${TESTDIR}/TestFiles/f6 \
 	${TESTDIR}/TestFiles/f12 \
+	${TESTDIR}/TestFiles/f13 \
 	${TESTDIR}/TestFiles/f8 \
 	${TESTDIR}/TestFiles/f3 \
 	${TESTDIR}/TestFiles/f4 \
@@ -175,6 +176,16 @@ ${TESTDIR}/TestFiles/f12: ${TESTDIR}/tests/function_arguments_tests.o ${OBJECTFI
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc}   -o ${TESTDIR}/TestFiles/f12 $^ ${LDLIBSOPTIONS} -lpthread -ldl `pkg-config --libs zlib`   
 
+${TESTDIR}/TestFiles/f13: ../../externals/installed/lib/libmozjs-31.a
+
+${TESTDIR}/TestFiles/f13: ../../externals/installed/lib/libgtest.a
+
+${TESTDIR}/TestFiles/f13: ../../externals/installed/lib/libgtest_main.a
+
+${TESTDIR}/TestFiles/f13: ${TESTDIR}/tests/gc_tests.o ${OBJECTFILES:%.o=%_nomain.o}
+	${MKDIR} -p ${TESTDIR}/TestFiles
+	${LINK.cc}   -o ${TESTDIR}/TestFiles/f13 $^ ${LDLIBSOPTIONS} -lpthread -ldl `pkg-config --libs zlib`   
+
 ${TESTDIR}/TestFiles/f8: ../../externals/installed/lib/libmozjs-31.a
 
 ${TESTDIR}/TestFiles/f8: ../../externals/installed/lib/libgtest.a
@@ -282,6 +293,12 @@ ${TESTDIR}/tests/function_arguments_tests.o: tests/function_arguments_tests.cpp
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -I../../externals/installed/include/mozjs-31 -I../../externals/installed/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/function_arguments_tests.o tests/function_arguments_tests.cpp
+
+
+${TESTDIR}/tests/gc_tests.o: tests/gc_tests.cpp 
+	${MKDIR} -p ${TESTDIR}/tests
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../../externals/installed/include/mozjs-31 -I../../externals/installed/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/gc_tests.o tests/gc_tests.cpp
 
 
 ${TESTDIR}/tests/global_property_tests.o: tests/global_property_tests.cpp 
@@ -475,6 +492,7 @@ ${OBJECTDIR}/value_nomain.o: ${OBJECTDIR}/value.o value.cpp
 	    ${TESTDIR}/TestFiles/f5 || true; \
 	    ${TESTDIR}/TestFiles/f6 || true; \
 	    ${TESTDIR}/TestFiles/f12 || true; \
+	    ${TESTDIR}/TestFiles/f13 || true; \
 	    ${TESTDIR}/TestFiles/f8 || true; \
 	    ${TESTDIR}/TestFiles/f3 || true; \
 	    ${TESTDIR}/TestFiles/f4 || true; \
