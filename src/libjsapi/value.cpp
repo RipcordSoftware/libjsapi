@@ -4,9 +4,17 @@
 
 #include <vector>
 
-rs::jsapi::Value::Value(JSContext* cx) : cx_(cx), isObject_(false) {
+rs::jsapi::Value::Value(JSContext* cx) : cx_(cx), ar_(cx), isObject_(false) {
     new (&value_) JS::RootedValue(cx);
 }
+
+rs::jsapi::Value::Value(const Value& rhs) : Value(rhs.cx_) {
+    if (rhs.isObject_) {
+            set(rhs.object_);
+        } else {
+            set(rhs.value_);
+        }
+    }
 
 rs::jsapi::Value::~Value() {
     using namespace JS;
@@ -41,22 +49,22 @@ rs::jsapi::Value::Value(JSContext* cx, const JS::HandleValue& value) : Value(cx)
     set(value);
 }
 
-rs::jsapi::Value::Value(JSContext* cx, const JS::RootedObject& value) : cx_(cx), isObject_(true) {
+rs::jsapi::Value::Value(JSContext* cx, const JS::RootedObject& value) : cx_(cx), ar_(cx), isObject_(true) {
     new (&object_) JS::RootedObject(cx);
     set(value);
 }
 
-rs::jsapi::Value::Value(JSContext* cx, JSObject* value) : cx_(cx), isObject_(true) {
+rs::jsapi::Value::Value(JSContext* cx, JSObject* value) : cx_(cx), ar_(cx), isObject_(true) {
     new (&object_) JS::RootedObject(cx);
     set(value);
 }
 
-rs::jsapi::Value::Value(JSContext* cx, JSString* value) : cx_(cx), isObject_(false) {
+rs::jsapi::Value::Value(JSContext* cx, JSString* value) : cx_(cx), ar_(cx), isObject_(false) {
     new (&value_) JS::RootedValue(cx);
     set(value);
 }
 
-rs::jsapi::Value::Value(JSContext* cx, const JS::HandleObject& value) : cx_(cx), isObject_(true) {
+rs::jsapi::Value::Value(JSContext* cx, const JS::HandleObject& value) : cx_(cx), ar_(cx), isObject_(true) {
     new (&object_) JS::RootedObject(cx);
     set(value);
 }

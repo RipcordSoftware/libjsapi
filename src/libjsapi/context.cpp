@@ -22,10 +22,11 @@ rs::jsapi::Context::Context(Runtime& rt) :
         cx_(JS_NewContext(rt.getRuntime(), 32 * 1024)),
         global_(cx_, JS_NewGlobalObject(cx_, &globalClass, nullptr, JS::DontFireOnNewGlobalHook)),
         oldCompartment_(nullptr) {
+    ContextState::NewState(cx_, this);
+    
     oldCompartment_ = JS_EnterCompartment(cx_, global_);
     JS_InitStandardClasses(cx_, global_);
     
-    JS_SetContextPrivate(cx_, this);
     JS_SetErrorReporter(cx_, &ReportError);
 }
 
@@ -34,7 +35,7 @@ rs::jsapi::Context::~Context() {
 }
 
 void rs::jsapi::Context::ReportError(JSContext* cx, const char* message, JSErrorReport* report) {
-    auto that = static_cast<Context*>(JS_GetContextPrivate(cx));
+    auto that = static_cast<Context*>(ContextState::GetDataPtr(cx));
     if (that != nullptr) {
         that->exception_.reset(new ScriptException(message, report));
     }
@@ -47,10 +48,12 @@ std::unique_ptr<rs::jsapi::ScriptException> rs::jsapi::Context::getError() {
 void rs::jsapi::Context::DestroyContext() {
     if (cx_) {
         JS_SetErrorReporter(cx_, nullptr);
-        JS_SetContextPrivate(cx_, nullptr);
         
         JS_LeaveCompartment(cx_, oldCompartment_);
         oldCompartment_ = nullptr;
+        
+        ContextState::FlushRequests(cx_);
+        ContextState::DeleteState(cx_);
         
         JS_DestroyContext(cx_);
         cx_ = nullptr;

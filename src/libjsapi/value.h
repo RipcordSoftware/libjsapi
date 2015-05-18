@@ -6,6 +6,8 @@
 
 #include <jsapi.h>
 
+#include "context_state.h"
+
 namespace rs {
 namespace jsapi {
 
@@ -29,13 +31,7 @@ public:
 
     ~Value();    
     
-    Value(const Value& rhs) : cx_(rhs.cx_) {
-        if (rhs.isObject_) {
-            set(rhs.object_);
-        } else {
-            set(rhs.value_);
-        }
-    }
+    Value(const Value& rhs);
 
     Value& operator=(const Value& rhs) {
         cx_ = rhs.cx_;
@@ -108,6 +104,7 @@ public:
 
 protected:
     JSContext* cx_;
+    ContextState::AutoRequest ar_;
     mutable bool isObject_;
     union {
         mutable JS::RootedValue value_;
@@ -125,4 +122,3 @@ protected:
 std::ostream& operator<<(std::ostream& os, const rs::jsapi::Value& value);
     
 #endif	/* RS_JSAPI_VALUE_H */
-

@@ -36,6 +36,7 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 # Object Files
 OBJECTFILES= \
 	${OBJECTDIR}/context.o \
+	${OBJECTDIR}/context_state.o \
 	${OBJECTDIR}/dynamic_array.o \
 	${OBJECTDIR}/dynamic_object.o \
 	${OBJECTDIR}/function_arguments.o \
@@ -95,6 +96,11 @@ ${OBJECTDIR}/context.o: context.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -I../../externals/installed/include/mozjs-31 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/context.o context.cpp
+
+${OBJECTDIR}/context_state.o: context_state.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../../externals/installed/include/mozjs-31 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/context_state.o context_state.cpp
 
 ${OBJECTDIR}/dynamic_array.o: dynamic_array.cpp 
 	${MKDIR} -p ${OBJECTDIR}
@@ -366,6 +372,19 @@ ${OBJECTDIR}/context_nomain.o: ${OBJECTDIR}/context.o context.cpp
 	    $(COMPILE.cc) -O2 -I../../externals/installed/include/mozjs-31 -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/context_nomain.o context.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/context.o ${OBJECTDIR}/context_nomain.o;\
+	fi
+
+${OBJECTDIR}/context_state_nomain.o: ${OBJECTDIR}/context_state.o context_state.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/context_state.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -I../../externals/installed/include/mozjs-31 -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/context_state_nomain.o context_state.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/context_state.o ${OBJECTDIR}/context_state_nomain.o;\
 	fi
 
 ${OBJECTDIR}/dynamic_array_nomain.o: ${OBJECTDIR}/dynamic_array.o dynamic_array.cpp 

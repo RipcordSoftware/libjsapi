@@ -5,15 +5,38 @@
 rs::jsapi::Runtime rt_;
 
 class GCTests : public ::testing::Test {
+public:
+    static void Finalize(JSFreeOp* fop, JSObject* obj);
+    
+    static int deleted_;
+    
 protected:
     virtual void SetUp() {
-        
+        deleted_ = 0;
     }
     
     virtual void TearDown() {
         
-    }    
+    }
+    
+    JSObject* CreateObject(JSContext* cx) {
+        return JS_NewObject(cx, &klass_, JS::NullPtr(), JS::NullPtr());
+    }
+
+    static JSClass klass_;
 };
+
+JSClass GCTests::klass_ = { 
+    "rs_jsapi_gctest_object", 0, JS_PropertyStub, JS_DeletePropertyStub,
+    JS_PropertyStub, JS_StrictPropertyStub, JS_EnumerateStub, JS_ResolveStub, 
+    JS_ConvertStub, &GCTests::Finalize
+};
+
+int GCTests::deleted_;
+
+void GCTests::Finalize(JSFreeOp* fop, JSObject* obj) {
+    ++GCTests::deleted_;
+}
 
 TEST_F(GCTests, test1) {
     auto cx = rt_.NewContext();
@@ -106,65 +129,58 @@ TEST_F(GCTests, test4) {
     ASSERT_TRUE(deleted);
 }
 
-#if 0
 TEST_F(GCTests, test5) {
-    auto cx = rt_.NewContext();    
-    
-    bool deleted = false;
+    auto cx = rt_.NewContext();        
         
     rs::jsapi::Value obj(*cx);
     rs::jsapi::Object::Create(*cx, {}, nullptr, nullptr, {},
-        [&]() { deleted = true; }, obj);
+        [&]() { ++GCTests::deleted_; }, obj);
         
     // force a GC pass and then check the delete flag
     rt_.GCNow();
-    ASSERT_FALSE(deleted);       
-}
-#endif
-
-#if 0
-int deleted = 0;
-static void Finalize(JSFreeOp* fop, JSObject* obj) {
-    ++deleted;
-}
-
-JSClass klass = { 
-    "rs_jsapi_test_object", 0, JS_PropertyStub, JS_DeletePropertyStub,
-    JS_PropertyStub, JS_StrictPropertyStub, JS_EnumerateStub, JS_ResolveStub, 
-    JS_ConvertStub, &Finalize
-};
-
-void doIt(JSContext* cx) {
-    JS::RootedObject obj(cx, JS_NewObject(cx, &klass, JS::NullPtr(), JS::NullPtr()));
-    JS_NewObject(cx, &klass, JS::NullPtr(), JS::NullPtr());
-
-    // force a GC pass and then check the delete flag
-    rt_.GCNow();
-    ASSERT_EQ(1, deleted);
+    ASSERT_EQ(0, deleted_);
 }
 
 TEST_F(GCTests, test6) {
-    auto cx = rt_.NewContext();         
-    
-    JSAutoRequest ar(*cx);
-    if (true)
-    //if (deleted != 10)
-    {
-        //JSAutoRequest ar(*cx);
-        
-        JS::RootedObject obj(*cx, JS_NewObject(*cx, &klass, JS::NullPtr(), JS::NullPtr()));
-        JS_NewObject(*cx, &klass, JS::NullPtr(), JS::NullPtr());
+    auto cx = rt_.NewContext();
 
-        // force a GC pass and then check the delete flag
-        rt_.GCNow();
-        ASSERT_EQ(1, deleted);
-        
-        //doIt(*cx);
-    }
-    
+    rs::jsapi::Value obj(*cx);
+    rs::jsapi::Object::Create(*cx, {}, nullptr, nullptr, {},
+        [&]() { ++GCTests::deleted_; }, obj);
+
+    CreateObject(*cx);
+
     // force a GC pass and then check the delete flag
     rt_.GCNow();
-    rt_.GCNow();
-    ASSERT_EQ(2, deleted);
+    ASSERT_EQ(1, deleted_);
 }
-#endif
+
+TEST_F(GCTests, test7) {
+    auto cx = rt_.NewContext();
+        
+    {
+        rs::jsapi::Value obj(*cx);
+        rs::jsapi::Object::Create(*cx, {}, nullptr, nullptr, {},
+            [&]() { ++GCTests::deleted_; }, obj);
+    }
+        
+    // force a GC pass and then check the delete flag
+    rt_.GCNow();
+    ASSERT_EQ(1, deleted_);
+}
+
+TEST_F(GCTests, test8) {
+    auto cx = rt_.NewContext();
+        
+    {
+        rs::jsapi::Value obj(*cx);
+        rs::jsapi::Object::Create(*cx, {}, nullptr, nullptr, {},
+            [&]() { ++GCTests::deleted_; }, obj);
+
+        CreateObject(*cx);
+    }
+
+    // force a GC pass and then check the delete flag
+    rt_.GCNow();
+    ASSERT_EQ(2, deleted_);
+}
