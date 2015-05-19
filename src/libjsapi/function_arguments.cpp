@@ -20,6 +20,7 @@ bool rs::jsapi::FunctionArguments::Append(double value) {
 }
 
 bool rs::jsapi::FunctionArguments::Append(const char* value) {
+    JSAutoRequest ar(cx_);
     auto str = JS_NewStringCopyZ(cx_, value);
     auto strValue = JS::StringValue(str);
     return args_.append(strValue);    

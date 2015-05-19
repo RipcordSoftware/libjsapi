@@ -11,6 +11,7 @@ JSClass rs::jsapi::Global::privateFunctionStateClass_ = {
 const char* rs::jsapi::Global::privateFunctionStatePropertyName_ = "__rs_jsapi__private_global_function_state";
 
 bool rs::jsapi::Global::DefineProperty(Context& cx, const char* name, const Value& value, unsigned attrs) {
+    JSAutoRequest ar(cx);    
     if (value.isObject()) {
         return JS_DefineProperty(cx, cx.getGlobal(), name, value.getHandleObject(), attrs, nullptr, nullptr);
     } else {    
@@ -19,12 +20,14 @@ bool rs::jsapi::Global::DefineProperty(Context& cx, const char* name, const Valu
 }
 
 bool rs::jsapi::Global::DefineProperty(Context& cx, const char* name, JSNative getter, JSNative setter, unsigned attrs) {
+    JSAutoRequest ar(cx);
     return JS_DefineProperty(cx, cx.getGlobal(), name, JS::NullHandleValue, 
         attrs | JSPROP_NATIVE_ACCESSORS,
         reinterpret_cast<JSPropertyOp>(getter), reinterpret_cast<JSStrictPropertyOp>(setter));
 }
 
 bool rs::jsapi::Global::DefineFunction(Context& cx, const char* name, FunctionCallback callback, unsigned attrs) {
+    JSAutoRequest ar(cx);
     JS::RootedFunction func(cx, JS_NewFunction(cx, CallFunction, 0, 0, JS::NullPtr(), name));
     JS::RootedObject funcObj(cx, JS_GetFunctionObject(func));
     
@@ -36,6 +39,7 @@ bool rs::jsapi::Global::DefineFunction(Context& cx, const char* name, FunctionCa
 }
 
 bool rs::jsapi::Global::CallFunction(JSContext* cx, unsigned argc, JS::Value* vp) {
+    JSAutoRequest ar(cx);
     auto args = JS::CallArgsFromVp(argc, vp);
     
     auto state = Global::GetFunctionState(&args.callee(), cx, privateFunctionStatePropertyName_);
@@ -69,6 +73,7 @@ void rs::jsapi::Global::Finalize(JSFreeOp* fop, JSObject* obj) {
 }
 
 rs::jsapi::Global::GlobalFunctionState* rs::jsapi::Global::GetFunctionState(JSObject* obj, JSContext* cx, const char* propName) {
+    JSAutoRequest ar(cx);
     GlobalFunctionState* state = nullptr;
     
     if (obj) {
@@ -91,9 +96,11 @@ void rs::jsapi::Global::SetFunctionState(JSObject* obj, GlobalFunctionState* sta
 }
 
 bool rs::jsapi::Global::DeleteProperty(Context& cx, const char* name) {
+    JSAutoRequest ar(cx);
     return JS_DeleteProperty(cx, cx.getGlobal(), name);
 }
 
 bool rs::jsapi::Global::DeleteFunction(Context& cx, const char* name) {
+    JSAutoRequest ar(cx);
     return JS_DeleteProperty(cx, cx.getGlobal(), name);
 }

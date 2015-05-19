@@ -66,6 +66,7 @@ bool rs::jsapi::Context::Evaluate(const char* script) {
 }
 
 bool rs::jsapi::Context::Evaluate(const char* script, Value& result) {
+    JSAutoRequest ar(cx_);    
     JS::CompileOptions options(cx_);
     auto status = JS::Evaluate(cx_, global_, options, script, ::strlen(script), result);
     
@@ -83,6 +84,7 @@ bool rs::jsapi::Context::Call(const char* name) {
 }
 
 bool rs::jsapi::Context::Call(const char* name, Value& result) {
+    JSAutoRequest ar(cx_);    
     auto status = JS_CallFunctionName(cx_, global_, name, JS::HandleValueArray::empty(), result);    
     
     auto error = getError();
@@ -99,6 +101,7 @@ bool rs::jsapi::Context::Call(const char* name, const FunctionArguments& args) {
 }
 
 bool rs::jsapi::Context::Call(const char* name, const FunctionArguments& args, Value& result) {
+    JSAutoRequest ar(cx_);    
     auto status = JS_CallFunctionName(cx_, global_, name, args, result);    
     
     auto error = getError();

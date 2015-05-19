@@ -12,6 +12,7 @@ JSClass rs::jsapi::DynamicObject::class_ = {
 };
 
 bool rs::jsapi::DynamicObject::Create(Context& cx, GetCallback getter, DynamicObject::SetCallback setter, EnumeratorCallback enumerator, FinalizeCallback finalize, Value& obj) {
+    JSAutoRequest ar(cx);    
     JS::RootedObject newObj(cx, JS_NewObject(cx, &class_, JS::NullPtr(), JS::NullPtr()));
     
     if (newObj) {
@@ -25,6 +26,7 @@ bool rs::jsapi::DynamicObject::Create(Context& cx, GetCallback getter, DynamicOb
 }
 
 bool rs::jsapi::DynamicObject::Get(JSContext* cx, JS::HandleObject obj, JS::HandleId id, JS::MutableHandleValue vp) {
+    JSAutoRequest ar(cx);    
     auto state = DynamicObject::GetState(cx, obj);
     
     if (state != nullptr && state->getter != nullptr) {
@@ -60,6 +62,7 @@ bool rs::jsapi::DynamicObject::Get(JSContext* cx, JS::HandleObject obj, JS::Hand
 }
 
 bool rs::jsapi::DynamicObject::Set(JSContext* cx, JS::HandleObject obj, JS::HandleId id, bool strict, JS::MutableHandleValue vp) {
+    JSAutoRequest ar(cx);    
     auto state = DynamicObject::GetState(cx, obj);
     
     if (state != nullptr && state->setter != nullptr) {
@@ -93,6 +96,8 @@ bool rs::jsapi::DynamicObject::Set(JSContext* cx, JS::HandleObject obj, JS::Hand
 }
 
 bool rs::jsapi::DynamicObject::Enumerate(JSContext* cx, JS::HandleObject obj) {
+    JSAutoRequest ar(cx);
+
     auto status = true;
     auto state = DynamicObject::GetState(cx, obj);
     if (state != nullptr && state->enumerator != nullptr) {
@@ -124,6 +129,7 @@ void rs::jsapi::DynamicObject::Finalize(JSFreeOp* fop, JSObject* obj) {
 }
 
 rs::jsapi::DynamicObject::DynamicObjectState* rs::jsapi::DynamicObject::GetState(JSContext* cx, JS::HandleObject obj) {
+    JSAutoRequest ar(cx);    
     auto state = JS_GetInstancePrivate(cx, obj, &DynamicObject::class_, nullptr);
     return reinterpret_cast<DynamicObjectState*>(state);
 }

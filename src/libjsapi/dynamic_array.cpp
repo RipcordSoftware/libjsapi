@@ -12,6 +12,7 @@ JSClass rs::jsapi::DynamicArray::class_ = {
 };
 
 bool rs::jsapi::DynamicArray::Create(Context& cx, GetCallback getter, SetCallback setter, LengthCallback length, FinalizeCallback finalize, Value& array) {
+    JSAutoRequest ar(cx);    
     JS::RootedObject obj(cx, JS_NewObject(cx, &class_, JS::NullPtr(), JS::NullPtr()));
     
     if (obj) {
@@ -27,6 +28,7 @@ bool rs::jsapi::DynamicArray::Create(Context& cx, GetCallback getter, SetCallbac
 }
 
 bool rs::jsapi::DynamicArray::Get(JSContext* cx, JS::HandleObject obj, JS::HandleId id, JS::MutableHandleValue vp) {
+    JSAutoRequest ar(cx);    
     auto state = DynamicArray::GetState(cx, obj);
     
     if (state != nullptr && state->getter != nullptr && JSID_IS_INT(id)) {
@@ -48,6 +50,7 @@ bool rs::jsapi::DynamicArray::Get(JSContext* cx, JS::HandleObject obj, JS::Handl
 }
 
 bool rs::jsapi::DynamicArray::Set(JSContext* cx, JS::HandleObject obj, JS::HandleId id, bool strict, JS::MutableHandleValue vp) {
+    JSAutoRequest ar(cx);    
     auto state = DynamicArray::GetState(cx, obj);
     
     if (state != nullptr && state->setter != nullptr && JSID_IS_INT(id)) {
@@ -91,6 +94,7 @@ bool rs::jsapi::DynamicArray::Length(JSContext* cx, JS::HandleObject obj, JS::Ha
 }
 
 rs::jsapi::DynamicArray::DynamicArrayState* rs::jsapi::DynamicArray::GetState(JSContext* cx, JS::HandleObject obj) {
+    JSAutoRequest ar(cx);    
     auto state = JS_GetInstancePrivate(cx, obj, &DynamicArray::class_, nullptr);
     return reinterpret_cast<DynamicArrayState*>(state);
 }

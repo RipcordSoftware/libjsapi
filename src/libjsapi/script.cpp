@@ -11,6 +11,7 @@ rs::jsapi::Script::~Script() {
 }
 
 bool rs::jsapi::Script::Compile() {
+    JSAutoRequest ar(cx_);
     JS::CompileOptions options(cx_);
     script_ = JS_CompileScript(cx_, cx_.getGlobal(), code_.c_str(), code_.length(), options);
     
@@ -23,6 +24,7 @@ bool rs::jsapi::Script::Compile() {
 }
 
 bool rs::jsapi::Script::Execute() {
+    JSAutoRequest ar(cx_);
     if (!script_) {
         Compile();
     }
@@ -38,6 +40,7 @@ bool rs::jsapi::Script::Execute() {
 }
 
 bool rs::jsapi::Script::Execute(Value& result) {
+    JSAutoRequest ar(cx_);
     if (!script_) {
         Compile();
     }
