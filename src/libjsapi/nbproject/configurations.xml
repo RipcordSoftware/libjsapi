@@ -30,7 +30,6 @@
       <itemPath>dynamic_object.cpp</itemPath>
       <itemPath>function_arguments.cpp</itemPath>
       <itemPath>global.cpp</itemPath>
-      <itemPath>libjsapi.cpp</itemPath>
       <itemPath>object.cpp</itemPath>
       <itemPath>runtime.cpp</itemPath>
       <itemPath>script.cpp</itemPath>
@@ -384,8 +383,6 @@
       </item>
       <item path="global.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="libjsapi.cpp" ex="false" tool="1" flavor2="0">
-      </item>
       <item path="libjsapi.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="object.cpp" ex="false" tool="1" flavor2="0">
@@ -702,8 +699,6 @@
       <item path="global.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="global.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="libjsapi.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="libjsapi.h" ex="false" tool="3" flavor2="0">
       </item>
