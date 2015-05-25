@@ -266,6 +266,12 @@ const JS::HandleValue rs::jsapi::Value::toFunction() const {
     return value_;
 }
 
+bool rs::jsapi::Value::CallFunction(const FunctionArguments& args) {
+    ToValueRef();
+    JS::RootedValue result(cx_);
+    return JS_CallFunctionValue(cx_, JS::NullPtr(), value_, args, &result);
+}
+
 bool rs::jsapi::Value::CallFunction(const FunctionArguments& args, Value& result) {
     ToValueRef();
     return JS_CallFunctionValue(cx_, JS::NullPtr(), value_, args, result);

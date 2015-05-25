@@ -122,6 +122,7 @@ public:
     JSObject* toObject() const;
     const JS::HandleValue toFunction() const;
     
+    bool CallFunction(const FunctionArguments&);
     bool CallFunction(const FunctionArguments&, Value&);
 
     std::string ToString() const;
