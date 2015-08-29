@@ -38,7 +38,7 @@ protected:
         
     }
     
-    static bool Echo(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result);
+    static void Echo(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result);
 };
 
 class CallNativeFunctionTestException : public std::exception {
@@ -52,13 +52,12 @@ private:
     const std::string msg_;
 };
 
-bool CallNativeFunctionTests::Echo(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result) {
+void CallNativeFunctionTests::Echo(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result) {
     if (args.size() > 0) {
         result = args[0];
     } else {    
         result = JS::NullHandleValue;
     }
-    return true;
 }
 
 TEST_F(CallNativeFunctionTests, test1) {

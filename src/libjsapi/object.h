@@ -29,6 +29,7 @@
 
 #include <functional>
 #include <unordered_map>
+#include <string>
 #include <vector>
 
 namespace rs {
@@ -39,11 +40,11 @@ class Value;
 
 class Object final {
 public:
-    typedef std::function<void(const char* name, Value& value)> GetCallback;
-    typedef std::function<void(const char* name, const Value& value)> SetCallback;
-    typedef std::function<void()> FinalizeCallback;
-    typedef std::function<void(const std::vector<Value>&, Value&)> FunctionCallback;
-    typedef std::unordered_map<std::string, FunctionCallback> Functions;
+    using GetCallback = std::function<void(const char* name, Value& value)>;
+    using SetCallback = std::function<void(const char* name, const Value& value)>;
+    using FinalizeCallback = std::function<void()>;
+    using FunctionCallback = std::function<void(const std::vector<Value>&, Value&)>;
+    using Functions = std::unordered_map<std::string, FunctionCallback>;
     
     Object(Context& cx) = delete;
     Object(const Object&) = delete;
