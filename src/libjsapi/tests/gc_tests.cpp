@@ -44,16 +44,16 @@ protected:
     }
     
     JSObject* CreateObject(JSContext* cx) {
-        return JS_NewObject(cx, &klass_, JS::NullPtr(), JS::NullPtr());
+        return JS_NewObject(cx, &klass_, JS::NullPtr());
     }
 
     static JSClass klass_;
 };
 
 JSClass GCTests::klass_ = { 
-    "rs_jsapi_gctest_object", 0, JS_PropertyStub, JS_DeletePropertyStub,
-    JS_PropertyStub, JS_StrictPropertyStub, JS_EnumerateStub, JS_ResolveStub, 
-    JS_ConvertStub, &GCTests::Finalize
+    "rs_jsapi_gctest_object", 0, nullptr, nullptr,
+    nullptr, nullptr, nullptr, nullptr, 
+    nullptr, &GCTests::Finalize
 };
 
 int GCTests::deleted_;

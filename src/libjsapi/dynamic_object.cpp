@@ -30,14 +30,14 @@
 #include <cstring>
 
 JSClass rs::jsapi::DynamicObject::class_ = { 
-    "rs_jsapi_dynamicobject", JSCLASS_HAS_PRIVATE, JS_PropertyStub, JS_DeletePropertyStub,
-    DynamicObject::Get, DynamicObject::Set, DynamicObject::Enumerate, JS_ResolveStub, 
-    JS_ConvertStub, DynamicObject::Finalize 
+    "rs_jsapi_dynamicobject", JSCLASS_HAS_PRIVATE, nullptr, nullptr,
+    DynamicObject::Get, DynamicObject::Set, DynamicObject::Enumerate, nullptr, 
+    nullptr, DynamicObject::Finalize 
 };
 
 bool rs::jsapi::DynamicObject::Create(Context& cx, GetCallback getter, DynamicObject::SetCallback setter, EnumeratorCallback enumerator, FinalizeCallback finalize, Value& obj) {
     JSAutoRequest ar(cx);    
-    JS::RootedObject newObj(cx, JS_NewObject(cx, &class_, JS::NullPtr(), JS::NullPtr()));
+    JS::RootedObject newObj(cx, JS_NewObject(cx, &class_, JS::NullPtr()));
     
     if (newObj) {
         auto state = new DynamicObjectState { getter, setter, enumerator, finalize, 0, nullptr };
@@ -49,14 +49,13 @@ bool rs::jsapi::DynamicObject::Create(Context& cx, GetCallback getter, DynamicOb
     return newObj;
 }
 
-bool rs::jsapi::DynamicObject::Get(JSContext* cx, JS::HandleObject obj, JS::HandleId id, JS::MutableHandleValue vp) {
+bool rs::jsapi::DynamicObject::Get(JSContext* cx, JS::HandleObject obj, JSString* name, JS::MutableHandleValue vp) {
     JSAutoRequest ar(cx);    
     auto state = DynamicObject::GetState(cx, obj);
     
     if (state != nullptr && state->getter != nullptr) {
         Value value(cx);
         
-        auto name = JSID_TO_STRING(id);
         char nameBuffer[256];
         auto nameLength = JS_EncodeStringToBuffer(cx, name, nameBuffer, sizeof(nameBuffer) - 1);        
         
@@ -85,14 +84,13 @@ bool rs::jsapi::DynamicObject::Get(JSContext* cx, JS::HandleObject obj, JS::Hand
     }
 }
 
-bool rs::jsapi::DynamicObject::Set(JSContext* cx, JS::HandleObject obj, JS::HandleId id, bool strict, JS::MutableHandleValue vp) {
+bool rs::jsapi::DynamicObject::Set(JSContext* cx, JS::HandleObject obj, JSString* name, JS::MutableHandleValue vp) {
     JSAutoRequest ar(cx);    
     auto state = DynamicObject::GetState(cx, obj);
     
     if (state != nullptr && state->setter != nullptr) {
         Value value(cx, vp);
         
-        auto name = JSID_TO_STRING(id);
         char nameBuffer[256];
         auto nameLength = JS_EncodeStringToBuffer(cx, name, nameBuffer, sizeof(nameBuffer) - 1);
         
@@ -117,6 +115,36 @@ bool rs::jsapi::DynamicObject::Set(JSContext* cx, JS::HandleObject obj, JS::Hand
         vp.setUndefined();
         return true;
     }
+}
+
+bool rs::jsapi::DynamicObject::Get(JSContext* cx, unsigned argc, JS::Value* vp) {
+    JSAutoRequest ar(cx);
+    auto args = JS::CallArgsFromVp(argc, vp);
+    Value obj{cx, args.thisv()};
+    
+    return Get(cx, obj, args[0].toString(), args.rval());
+}
+
+bool rs::jsapi::DynamicObject::Set(JSContext* cx, unsigned argc, JS::Value* vp) {
+    JSAutoRequest ar(cx);
+    auto args = JS::CallArgsFromVp(argc, vp);
+    Value obj{cx, args.thisv()};
+    
+    return Set(cx, obj, args[0].toString(), args.rval());
+}
+
+bool rs::jsapi::DynamicObject::Get(JSContext* cx, JS::HandleObject obj, JS::HandleId id, JS::MutableHandleValue vp) {
+    JSAutoRequest ar(cx);    
+    
+    auto name = JSID_TO_STRING(id);
+    return Get(cx, obj, name, vp);
+}
+
+bool rs::jsapi::DynamicObject::Set(JSContext* cx, JS::HandleObject obj, JS::HandleId id, bool strict, JS::MutableHandleValue vp) {
+    JSAutoRequest ar(cx);    
+    
+    auto name = JSID_TO_STRING(id);
+    return Set(cx, obj, name, vp);
 }
 
 bool rs::jsapi::DynamicObject::Enumerate(JSContext* cx, JS::HandleObject obj) {

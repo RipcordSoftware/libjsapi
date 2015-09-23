@@ -48,7 +48,7 @@ public:
         JSContext* cx_;
     };
     
-    static bool NewState(JSContext* cx, void* ptr = nullptr);
+    static bool NewState(JSContext* cx, JSErrorReporter = nullptr, void* ptr = nullptr);
     static bool DeleteState(JSContext* cx);
     
     static bool BeginRequest(JSContext* cx);
@@ -59,18 +59,22 @@ public:
     static bool SetDataPtr(JSContext* cx, void* ptr);
     static void* GetDataPtr(JSContext* cx);
     
+    static void ReportError(JSContext* cx, const char* message, JSErrorReport* report);    
+    static void DetachErrorReporter(JSContext* cx);
+    
 private:
 
     struct State final {
     public:
-        State() : requestCount_(0), ptr_(nullptr) {}
+        State(JSErrorReporter errorReporter, void* ptr) : requestCount_(0), 
+                errorReporter_(errorReporter), ptr_(ptr) {}
         
         std::atomic<long> requestCount_;
+        std::atomic<JSErrorReporter> errorReporter_;
         void* ptr_;
     };
     
     static State* GetState(JSContext* cx);
-    
 };
 
 }}

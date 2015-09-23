@@ -87,5 +87,5 @@ JS::Value& rs::jsapi::FunctionArguments::operator [](int index) {
         throw FunctionArgumentsIndexException();
     }
     
-    return args_[index]; 
+    return args_[index].get(); 
 }

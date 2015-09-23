@@ -26,10 +26,12 @@
 #include "context.h"
 #include "function_arguments.h"
 
+#include "js/Conversions.h"
+
 #include <vector>
 
-rs::jsapi::Value::Value(JSContext* cx) : cx_(cx), ar_(cx), isObject_(false) {
-    new (&value_) JS::RootedValue(cx);
+rs::jsapi::Value::Value(JSContext* cx) : cx_(cx), ar_(cx), isObject_(false), value_(cx), object_(cx, nullptr) {
+
 }
 
 rs::jsapi::Value::Value(const Value& rhs) : Value(rhs.cx_) {
@@ -41,12 +43,6 @@ rs::jsapi::Value::Value(const Value& rhs) : Value(rhs.cx_) {
     }
 
 rs::jsapi::Value::~Value() {
-    using namespace JS;
-    if (isObject_) {
-        object_.~RootedObject();
-    } else {
-        value_.~RootedValue();
-    }
 }
 
 rs::jsapi::Value::Value(JSContext* cx, const char* str) : Value(cx) {
@@ -73,24 +69,20 @@ rs::jsapi::Value::Value(JSContext* cx, const JS::HandleValue& value) : Value(cx)
     set(value);
 }
 
-rs::jsapi::Value::Value(JSContext* cx, const JS::RootedObject& value) : cx_(cx), ar_(cx), isObject_(true) {
-    new (&object_) JS::RootedObject(cx);
-    set(value);
+rs::jsapi::Value::Value(JSContext* cx, const JS::RootedObject& value) : cx_(cx), ar_(cx), isObject_(true), value_(cx), object_(cx, value) {
+
 }
 
-rs::jsapi::Value::Value(JSContext* cx, JSObject* value) : cx_(cx), ar_(cx), isObject_(true) {
-    new (&object_) JS::RootedObject(cx);
-    set(value);
+rs::jsapi::Value::Value(JSContext* cx, JSObject* value) : cx_(cx), ar_(cx), isObject_(true), value_(cx), object_(cx, value) {
+
 }
 
-rs::jsapi::Value::Value(JSContext* cx, JSString* value) : cx_(cx), ar_(cx), isObject_(false) {
-    new (&value_) JS::RootedValue(cx);
-    set(value);
+rs::jsapi::Value::Value(JSContext* cx, JSString* value) : cx_(cx), ar_(cx), isObject_(false), value_(cx), object_(cx, nullptr) {
+    value_.setString(value);
 }
 
-rs::jsapi::Value::Value(JSContext* cx, const JS::HandleObject& value) : cx_(cx), ar_(cx), isObject_(true) {
-    new (&object_) JS::RootedObject(cx);
-    set(value);
+rs::jsapi::Value::Value(JSContext* cx, const JS::HandleObject& value) : cx_(cx), ar_(cx), isObject_(true), value_(cx), object_(cx, value) {
+
 }
 
 void rs::jsapi::Value::set(const Value& value) {
@@ -283,18 +275,14 @@ JSContext* rs::jsapi::Value::getContext() {
 
 void rs::jsapi::Value::InitValueRef() const {
     if (isObject_) {
-        using namespace JS;
-        object_.~RootedObject();
-        new (&value_) JS::RootedValue(cx_);
+        object_.set(nullptr);        
         isObject_ = false;
     }
 }
 
 void rs::jsapi::Value::InitObjectRef() const {        
     if (!isObject_) {
-        using namespace JS;
-        value_.~RootedValue();
-        new (&object_) RootedObject(cx_);
+        value_.setNull();
         isObject_ = true;
     }
 }

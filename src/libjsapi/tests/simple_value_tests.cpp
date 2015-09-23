@@ -228,7 +228,7 @@ TEST_F(SimpleValueTests, test16) {
 }
 
 TEST_F(SimpleValueTests, test17) {
-    rs::jsapi::Value value(rt_, JS_NewObject(rt_, nullptr, JS::NullPtr(), JS::NullPtr()));
+    rs::jsapi::Value value(rt_, JS_NewObject(rt_, nullptr, JS::NullPtr()));
     ASSERT_TRUE(value.isObject());
     ASSERT_STREQ("[object Object]", value.ToString().c_str());
     
@@ -291,7 +291,7 @@ TEST_F(SimpleValueTests, test23) {
 }
 
 TEST_F(SimpleValueTests, test24) {
-    rs::jsapi::Value obj(rt_, JS_NewObject(rt_, nullptr, JS::NullPtr(), JS::NullPtr()));
+    rs::jsapi::Value obj(rt_, JS_NewObject(rt_, nullptr, JS::NullPtr()));
         
     ASSERT_THROW({
         obj.toNumber();
@@ -324,7 +324,7 @@ TEST_F(SimpleValueTests, test25) {
 }
 
 TEST_F(SimpleValueTests, test26) {
-    rs::jsapi::Value obj(rt_, JS_NewObject(rt_, nullptr, JS::NullPtr(), JS::NullPtr()));
+    rs::jsapi::Value obj(rt_, JS_NewObject(rt_, nullptr, JS::NullPtr()));
     
     ASSERT_TRUE(obj.isObject());
     ASSERT_TRUE(obj.toObject() != nullptr);    

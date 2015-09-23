@@ -27,6 +27,7 @@
 #include <algorithm>
 
 #include "exceptions.h"
+#include "context_state.h"
 
 #ifdef __GNUC__
 #define INIT_PRIORITY(N) __attribute__ ((init_priority (N + 101)))
@@ -69,7 +70,7 @@ rs::jsapi::Runtime::Instance::~Instance() {
 rs::jsapi::Runtime::Runtime(uint32_t maxBytes, bool enableBaselineCompiler, bool enableIonCompiler) :
         threadId_(std::this_thread::get_id()),
         threadGuard_(threadId_),
-        rt_(JS_NewRuntime(maxBytes, JSUseHelperThreads::JS_USE_HELPER_THREADS)),
+        rt_(JS_NewRuntime(maxBytes)),
         cx_(*this) {
     if (enableBaselineCompiler) {
         JS_SetGlobalJitCompilerOption(rt_, JSJITCOMPILER_BASELINE_ENABLE, 1);
@@ -78,9 +79,13 @@ rs::jsapi::Runtime::Runtime(uint32_t maxBytes, bool enableBaselineCompiler, bool
             JS_SetGlobalJitCompilerOption(rt_, JSJITCOMPILER_ION_ENABLE, 1);
         }
     }
+    
+    JS_SetErrorReporter(rt_, &ReportError);
 }
 
 rs::jsapi::Runtime::~Runtime() {
+    JS_SetErrorReporter(rt_, nullptr);
+    
     cx_.DestroyContext();
     JS_DestroyRuntime(rt_);
     
@@ -149,4 +154,8 @@ bool rs::jsapi::Runtime::Evaluate(const char* script) {
 
 bool rs::jsapi::Runtime::Evaluate(const char* script, Value& result) {
     return cx_.Evaluate(script, result);
+}
+
+void rs::jsapi::Runtime::ReportError(JSContext *cx, const char *message, JSErrorReport *report) {
+    ContextState::ReportError(cx, message, report);
 }

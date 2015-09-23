@@ -24,11 +24,10 @@
 
 #include "context_state.h"
 
-bool rs::jsapi::ContextState::NewState(JSContext* cx, void* ptr) {
+bool rs::jsapi::ContextState::NewState(JSContext* cx, JSErrorReporter errorReporter, void* ptr) {
     auto state = GetState(cx);
     if (state == nullptr) {
-        auto state = new State();
-        state->ptr_ = ptr;
+        auto state = new State(errorReporter, ptr);
         JS_SetContextPrivate(cx, state);
         return true;
     } else {
@@ -104,4 +103,21 @@ void* rs::jsapi::ContextState::GetDataPtr(JSContext* cx) {
         ptr = state->ptr_;
     }
     return ptr;
+}
+
+void rs::jsapi::ContextState::ReportError(JSContext* cx, const char* message, JSErrorReport* report) {
+    auto state = GetState(cx);
+    if (state != nullptr) {
+        auto reporter = state->errorReporter_.load();
+        if (reporter != nullptr) {
+            reporter(cx, message, report);
+        }
+    }
+}
+
+void rs::jsapi::ContextState::DetachErrorReporter(JSContext* cx) {
+    auto state = GetState(cx);
+    if (state != nullptr) {
+        state->errorReporter_ = nullptr;
+    }
 }

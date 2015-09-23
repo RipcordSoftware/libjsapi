@@ -32,12 +32,12 @@ static JSClass globalClass = {
     "global",
     JSCLASS_GLOBAL_FLAGS,
     JS_PropertyStub,
-    JS_DeletePropertyStub,
+    nullptr,
     JS_PropertyStub,
     JS_StrictPropertyStub,
-    JS_EnumerateStub,
-    JS_ResolveStub,
-    JS_ConvertStub,
+    nullptr,
+    nullptr,
+    nullptr,
     nullptr, nullptr, nullptr, nullptr,
     JS_GlobalObjectTraceHook
 };
@@ -46,12 +46,10 @@ rs::jsapi::Context::Context(Runtime& rt) :
         cx_(JS_NewContext(rt.getRuntime(), 32 * 1024)),
         global_(cx_, JS_NewGlobalObject(cx_, &globalClass, nullptr, JS::DontFireOnNewGlobalHook)),
         oldCompartment_(nullptr) {
-    ContextState::NewState(cx_, this);
+    ContextState::NewState(cx_, ReportError, this);
     
     oldCompartment_ = JS_EnterCompartment(cx_, global_);
-    JS_InitStandardClasses(cx_, global_);
-    
-    JS_SetErrorReporter(cx_, &ReportError);
+    JS_InitStandardClasses(cx_, global_);    
 }
 
 rs::jsapi::Context::~Context() {
@@ -71,7 +69,7 @@ std::unique_ptr<rs::jsapi::ScriptException> rs::jsapi::Context::getError() {
 
 void rs::jsapi::Context::DestroyContext() {
     if (cx_) {
-        JS_SetErrorReporter(cx_, nullptr);
+        ContextState::DetachErrorReporter(cx_);
         
         JS_LeaveCompartment(cx_, oldCompartment_);
         oldCompartment_ = nullptr;

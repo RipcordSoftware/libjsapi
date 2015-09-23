@@ -27,9 +27,9 @@
 #include "value.h"
 
 JSClass rs::jsapi::Global::privateFunctionStateClass_ = { 
-    "rs_jsapi_global_function_object", JSCLASS_HAS_PRIVATE, JS_PropertyStub, JS_DeletePropertyStub,
-    JS_PropertyStub, JS_StrictPropertyStub, JS_EnumerateStub, JS_ResolveStub, 
-    JS_ConvertStub, Global::Finalize 
+    "rs_jsapi_global_function_object", JSCLASS_HAS_PRIVATE, nullptr, nullptr,
+    nullptr, nullptr, nullptr, nullptr, 
+    nullptr, Global::Finalize 
 };
 
 const char* rs::jsapi::Global::privateFunctionStatePropertyName_ = "__rs_jsapi__private_global_function_state";
@@ -37,17 +37,15 @@ const char* rs::jsapi::Global::privateFunctionStatePropertyName_ = "__rs_jsapi__
 bool rs::jsapi::Global::DefineProperty(Context& cx, const char* name, const Value& value, unsigned attrs) {
     JSAutoRequest ar(cx);    
     if (value.isObject()) {
-        return JS_DefineProperty(cx, cx.getGlobal(), name, value.getHandleObject(), attrs, nullptr, nullptr);
+        return JS_DefineProperty(cx, cx.getGlobal(), name, value.getHandleObject(), attrs);
     } else {    
-        return JS_DefineProperty(cx, cx.getGlobal(), name, value.getHandleValue(), attrs, nullptr, nullptr);
+        return JS_DefineProperty(cx, cx.getGlobal(), name, value.getHandleValue(), attrs);
     }
 }
 
 bool rs::jsapi::Global::DefineProperty(Context& cx, const char* name, JSNative getter, JSNative setter, unsigned attrs) {
     JSAutoRequest ar(cx);
-    return JS_DefineProperty(cx, cx.getGlobal(), name, JS::NullHandleValue, 
-        attrs | JSPROP_NATIVE_ACCESSORS,
-        reinterpret_cast<JSPropertyOp>(getter), reinterpret_cast<JSStrictPropertyOp>(setter));
+    return JS_DefineProperty(cx, cx.getGlobal(), name, JS::NullHandleValue, attrs, getter, setter);
 }
 
 bool rs::jsapi::Global::DefineFunction(Context& cx, const char* name, FunctionCallback callback, unsigned attrs) {
@@ -55,7 +53,7 @@ bool rs::jsapi::Global::DefineFunction(Context& cx, const char* name, FunctionCa
     JS::RootedFunction func(cx, JS_NewFunction(cx, CallFunction, 0, 0, JS::NullPtr(), name));
     JS::RootedObject funcObj(cx, JS_GetFunctionObject(func));
     
-    JS::RootedObject privateFuncObj(cx, JS_NewObject(cx, &privateFunctionStateClass_, JS::NullPtr(), JS::NullPtr()));
+    JS::RootedObject privateFuncObj(cx, JS_NewObject(cx, &privateFunctionStateClass_, JS::NullPtr()));
     JS_SetPrivate(privateFuncObj, new GlobalFunctionState(callback));
     JS_DefineProperty(cx, funcObj, privateFunctionStatePropertyName_, privateFuncObj, 0, nullptr, nullptr);
 

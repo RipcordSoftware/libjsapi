@@ -110,6 +110,8 @@ private:
     
     static bool AddRuntime(std::thread::id id);
     static bool RemoveRuntime(std::thread::id id);
+    
+    static void ReportError(JSContext *cx, const char *message, JSErrorReport *report);
 };
 
 }}

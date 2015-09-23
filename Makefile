@@ -1,5 +1,6 @@
 GTEST_VER=1.7.0
-MOZJS_VER=31.5.0
+MOZJS_VER=38.2.1
+MOZJS_VER_SUFFIX=.rc0
 
 build: force_true .jsapi .googletest
 	cd src/libjsapi && $(MAKE) $(MFLAGS) $(MAKEOVERRIDES) build
@@ -34,12 +35,11 @@ clean: force_true
 		curl ftp://ftp.ripcordsoftware.com/pub/mozjs-${MOZJS_VER}-travis-ci-externals-installed.tar.xz -O && \
 		tar xfJ mozjs-*; \
 	elif [ ! -d externals/mozjs-${MOZJS_VER} ]; then \
-		mkdir -p externals && \
-		cd externals && \
+		mkdir -p externals && cd externals && \
 		mkdir -p installed && \
-		if [ ! -f mozjs-${MOZJS_VER}.tar.bz2 ]; then curl https://people.mozilla.org/~sstangl/mozjs-${MOZJS_VER}.tar.bz2 -O; fi && \
-		tar xfj mozjs-${MOZJS_VER}.tar.bz2 && \
-		cd mozjs-${MOZJS_VER} && \
+		if [ ! -f mozjs-${MOZJS_VER}.tar.bz2 ]; then curl https://people.mozilla.org/~sstangl/mozjs-${MOZJS_VER}${MOZJS_VER_SUFFIX}.tar.bz2 -o mozjs-${MOZJS_VER}.tar.bz2; fi && \
+		mkdir -p mozjs-${MOZJS_VER} && cd mozjs-${MOZJS_VER} && \
+		tar xfj ../mozjs-${MOZJS_VER}.tar.bz2 --strip-components=1 && \
 		cd js/src && \
 		mkdir build_OPT.OBJ && \
 		cd build_OPT.OBJ && \

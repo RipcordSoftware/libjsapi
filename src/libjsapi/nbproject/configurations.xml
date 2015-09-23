@@ -137,7 +137,7 @@
         <ccTool>
           <standard>8</standard>
           <incDir>
-            <pElem>../../externals/installed/include/mozjs-31</pElem>
+            <pElem>../../externals/installed/include/mozjs-</pElem>
           </incDir>
           <commandLine>--coverage</commandLine>
         </ccTool>
@@ -171,7 +171,7 @@
           <commandLine>--coverage</commandLine>
         </ccTool>
         <linkerTool>
-          <additionalDep>../../externals/installed/lib/libmozjs-31.a ../../externals/installed/lib/libgtest.a ../../externals/installed/lib/libgtest_main.a</additionalDep>
+          <additionalDep>../../externals/installed/lib/libjs_static.ajs ../../externals/installed/lib/libgtest.a ../../externals/installed/lib/libgtest_main.a</additionalDep>
           <linkerLibItems>
             <linkerLibStdlibItem>PosixThreads</linkerLibStdlibItem>
             <linkerLibStdlibItem>DynamicLinking</linkerLibStdlibItem>
@@ -451,7 +451,7 @@
           <developmentMode>5</developmentMode>
           <standard>8</standard>
           <incDir>
-            <pElem>../../externals/installed/include/mozjs-31</pElem>
+            <pElem>../../externals/installed/include/mozjs-</pElem>
           </incDir>
         </ccTool>
         <fortranCompilerTool>
@@ -489,7 +489,7 @@
           </incDir>
         </ccTool>
         <linkerTool>
-          <additionalDep>../../externals/installed/lib/libmozjs-31.a ../../externals/installed/lib/libgtest.a ../../externals/installed/lib/libgtest_main.a</additionalDep>
+          <additionalDep>../../externals/installed/lib/libjs_static.ajs ../../externals/installed/lib/libgtest.a ../../externals/installed/lib/libgtest_main.a</additionalDep>
           <linkerLibItems>
             <linkerLibStdlibItem>PosixThreads</linkerLibStdlibItem>
             <linkerLibStdlibItem>DynamicLinking</linkerLibStdlibItem>
