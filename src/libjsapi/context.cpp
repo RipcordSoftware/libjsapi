@@ -71,10 +71,11 @@ void rs::jsapi::Context::DestroyContext() {
     if (cx_) {
         ContextState::DetachErrorReporter(cx_);
         
+        global_.reset();
+        
         JS_LeaveCompartment(cx_, oldCompartment_);
         oldCompartment_ = nullptr;
         
-        ContextState::FlushRequests(cx_);
         ContextState::DeleteState(cx_);
         
         JS_DestroyContext(cx_);

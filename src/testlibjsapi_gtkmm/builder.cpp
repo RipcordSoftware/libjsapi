@@ -29,7 +29,7 @@ Builder::Builder(rs::jsapi::Runtime& rt) : rt_(rt), obj_(rt), null_(rt) {
         { "getLabel", std::bind(&Builder::GetLabel, this, std::placeholders::_1, std::placeholders::_2) },
         { "getEntry", std::bind(&Builder::GetEntry, this, std::placeholders::_1, std::placeholders::_2) },
         { "getDrawingArea", std::bind(&Builder::GetDrawingArea, this, std::placeholders::_1, std::placeholders::_2) }
-    }, nullptr, obj_);
+    }, std::bind(&Builder::Finalizer, this), obj_);
 }
 
 void Builder::AddFromFile(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result) {

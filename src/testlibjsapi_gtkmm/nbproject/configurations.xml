@@ -63,7 +63,7 @@
           <commandlineTool>g++</commandlineTool>
           <incDir>
             <pElem>../libjsapi</pElem>
-            <pElem>../../externals/installed/include/mozjs-31</pElem>
+            <pElem>../../externals/installed/include/mozjs-</pElem>
           </incDir>
           <commandLine>`pkg-config gtkmm-3.0 --cflags` --coverage</commandLine>
         </ccTool>
@@ -81,7 +81,7 @@
                             OP="${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libjsapi.a">
               </makeArtifact>
             </linkerLibProjectItem>
-            <linkerLibFileItem>../../externals/installed/lib/libmozjs-31.a</linkerLibFileItem>
+            <linkerLibFileItem>../../externals/installed/lib/libjs_static.ajs</linkerLibFileItem>
             <linkerLibStdlibItem>DataCompression</linkerLibStdlibItem>
             <linkerLibStdlibItem>DynamicLinking</linkerLibStdlibItem>
           </linkerLibItems>
@@ -153,7 +153,7 @@
           <commandlineTool>g++</commandlineTool>
           <incDir>
             <pElem>../libjsapi</pElem>
-            <pElem>../../externals/installed/include/mozjs-31</pElem>
+            <pElem>../../externals/installed/include/mozjs-</pElem>
           </incDir>
           <commandLine>`pkg-config gtkmm-3.0 --cflags`</commandLine>
         </ccTool>
@@ -177,9 +177,9 @@
                             OP="${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libjsapi.a">
               </makeArtifact>
             </linkerLibProjectItem>
-            <linkerLibFileItem>../../externals/installed/lib/libmozjs-31.a</linkerLibFileItem>
             <linkerLibStdlibItem>DataCompression</linkerLibStdlibItem>
             <linkerLibStdlibItem>DynamicLinking</linkerLibStdlibItem>
+            <linkerLibFileItem>../../externals/installed/lib/libjs_static.ajs</linkerLibFileItem>
           </linkerLibItems>
           <commandLine>`pkg-config gtkmm-3.0 --libs`</commandLine>
         </linkerTool>

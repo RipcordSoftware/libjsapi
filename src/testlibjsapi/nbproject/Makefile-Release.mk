@@ -62,12 +62,12 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/testlibjsapi: ../libjsapi/dist/Releas
 
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/testlibjsapi: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
-	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/testlibjsapi ${OBJECTFILES} ${LDLIBSOPTIONS} ../../externals/installed/lib/libmozjs-31.a
+	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/testlibjsapi ${OBJECTFILES} ${LDLIBSOPTIONS} ../../externals/installed/lib/libjs_static.ajs
 
 ${OBJECTDIR}/main.o: main.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../libjsapi -I../../externals/installed/include/mozjs-31 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/main.o main.cpp
+	$(COMPILE.cc) -O2 -I../libjsapi -I../../externals/installed/include/mozjs- -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/main.o main.cpp
 
 # Subprojects
 .build-subprojects:

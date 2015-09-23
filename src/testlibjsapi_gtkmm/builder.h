@@ -45,6 +45,10 @@ public:
     operator rs::jsapi::Value&() { return obj_; }
     
 private:
+    void Finalizer() {
+        delete this;
+    }
+    
     Gtk::Widget* FindWidget(const std::vector<rs::jsapi::Value>& args);
     
     rs::jsapi::Runtime& rt_;

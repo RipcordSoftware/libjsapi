@@ -75,7 +75,7 @@ private:
     void DestroyContext();
    
     JSContext* cx_;
-    JS::RootedObject global_;
+    JS::PersistentRootedObject global_;
     JSCompartment* oldCompartment_;
     
     std::unique_ptr<ScriptException> exception_;

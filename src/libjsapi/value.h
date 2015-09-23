@@ -60,9 +60,11 @@ public:
     Value& operator=(const Value& rhs) {
         cx_ = rhs.cx_;
         if (rhs.isObject_) {
-            set(rhs.object_);
+            InitObjectRef();
+            object_ = rhs.object_;
         } else {
-            set(rhs.value_);
+            InitValueRef();
+            value_ = rhs.value_;
         }
         
         return *this;
@@ -129,11 +131,10 @@ public:
 
 protected:
     JSContext* cx_;
-    JSAutoRequest ar_;
     
     mutable bool isObject_;    
-    mutable JS::RootedValue value_;
-    mutable JS::RootedObject object_;    
+    mutable JS::PersistentRootedValue value_;
+    mutable JS::PersistentRootedObject object_;    
     
     void InitValueRef() const;
     void InitObjectRef() const;

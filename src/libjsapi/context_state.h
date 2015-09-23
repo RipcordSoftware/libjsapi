@@ -35,27 +35,9 @@ namespace jsapi {
 class ContextState final {
 public:
     
-    class AutoRequest final {
-    public:
-        AutoRequest(JSContext* cx) : cx_(cx) {
-            ContextState::BeginRequest(cx);
-        }
-        
-        ~AutoRequest() {
-            ContextState::EndRequest(cx_);
-        }
-    private:
-        JSContext* cx_;
-    };
-    
     static bool NewState(JSContext* cx, JSErrorReporter = nullptr, void* ptr = nullptr);
     static bool DeleteState(JSContext* cx);
-    
-    static bool BeginRequest(JSContext* cx);
-    static bool EndRequest(JSContext* cx);
-    
-    static bool FlushRequests(JSContext* cx);
-    
+       
     static bool SetDataPtr(JSContext* cx, void* ptr);
     static void* GetDataPtr(JSContext* cx);
     
@@ -66,10 +48,9 @@ private:
 
     struct State final {
     public:
-        State(JSErrorReporter errorReporter, void* ptr) : requestCount_(0), 
+        State(JSErrorReporter errorReporter, void* ptr) : 
                 errorReporter_(errorReporter), ptr_(ptr) {}
         
-        std::atomic<long> requestCount_;
         std::atomic<JSErrorReporter> errorReporter_;
         void* ptr_;
     };
