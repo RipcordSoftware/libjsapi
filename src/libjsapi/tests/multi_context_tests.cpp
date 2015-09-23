@@ -28,8 +28,6 @@
 
 #include "../libjsapi.h"
 
-rs::jsapi::Runtime rt_;
-
 class MultiContextTests : public ::testing::Test {
 protected:
     virtual void SetUp() {
@@ -39,6 +37,8 @@ protected:
     virtual void TearDown() {
         
     }
+    
+    rs::jsapi::Runtime rt_;
     
 public:
     static bool SanityCheckWhatMessage(const char* msg);
@@ -102,7 +102,7 @@ TEST_F(MultiContextTests, test2) {
 }
 
 TEST_F(MultiContextTests, test3) {        
-    std::thread t([]() {  
+    std::thread t([&]() {  
         ASSERT_THROW({
             rt_.NewContext();
         }, rs::jsapi::RuntimeWrongThreadException);
@@ -112,7 +112,7 @@ TEST_F(MultiContextTests, test3) {
 }
 
 TEST_F(MultiContextTests, test3b) {        
-    std::thread t([]() {  
+    std::thread t([&]() {  
         bool thrown = false;
         try {
             rt_.NewContext();
@@ -129,7 +129,7 @@ TEST_F(MultiContextTests, test3b) {
 }
 
 TEST_F(MultiContextTests, test4) {        
-    std::thread t([]() {  
+    std::thread t([&]() {  
         ASSERT_THROW({
             rs::jsapi::Context& cx = rt_;
         }, rs::jsapi::RuntimeWrongThreadException);
@@ -139,7 +139,7 @@ TEST_F(MultiContextTests, test4) {
 }
 
 TEST_F(MultiContextTests, test5) {        
-    std::thread t([]() {  
+    std::thread t([&]() {  
         ASSERT_THROW({
             rt_.getRuntime();
         }, rs::jsapi::RuntimeWrongThreadException);

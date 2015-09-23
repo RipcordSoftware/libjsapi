@@ -28,8 +28,6 @@
 
 #include "../libjsapi.h"
 
-static rs::jsapi::Runtime rt_;
-
 class MultiRuntimeTests : public ::testing::Test {
 protected:
     virtual void SetUp() {
@@ -39,6 +37,8 @@ protected:
     virtual void TearDown() {
         
     }
+    
+    rs::jsapi::Runtime rt_;
     
 public:
     static bool SanityCheckWhatMessage(const char* msg);

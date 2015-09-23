@@ -26,8 +26,6 @@
 
 #include "../libjsapi.h"
 
-rs::jsapi::Runtime rt_;
-
 class ScriptExceptionTests : public ::testing::Test {
 protected:
     virtual void SetUp() {
@@ -36,7 +34,9 @@ protected:
     
     virtual void TearDown() {
         
-    }            
+    }          
+
+    rs::jsapi::Runtime rt_;
 };
 
 TEST_F(ScriptExceptionTests, test1) {        

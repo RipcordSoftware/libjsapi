@@ -30,8 +30,6 @@
 #include <vector>
 #include <sstream>
 
-rs::jsapi::Runtime rt_;
-
 class SimpleValueTests : public ::testing::Test {
 protected:
     virtual void SetUp() {
@@ -40,7 +38,10 @@ protected:
     
     virtual void TearDown() {
         
-    }    
+    }  
+
+    rs::jsapi::Runtime rt_;
+
 public:
     static bool SanityCheckWhatMessage(const char* msg);
 };

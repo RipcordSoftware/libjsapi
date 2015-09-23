@@ -26,8 +26,6 @@
 
 #include "../libjsapi.h"
 
-rs::jsapi::Runtime rt_;
-
 class SimpleDynamicObjectTests : public ::testing::Test {
 protected:
     virtual void SetUp() {
@@ -37,6 +35,8 @@ protected:
     virtual void TearDown() {
         
     }    
+    
+    rs::jsapi::Runtime rt_;
 };
 
 class SimpleDynamicObjectTestException : public std::exception {

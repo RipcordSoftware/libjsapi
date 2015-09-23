@@ -26,8 +26,6 @@
 
 #include "../libjsapi.h"
 
-rs::jsapi::Runtime rt_;
-
 class CallNativeFunctionTests : public ::testing::Test {
 protected:
     virtual void SetUp() {
@@ -39,6 +37,8 @@ protected:
     }
     
     static void Echo(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result);
+    
+    rs::jsapi::Runtime rt_;
 };
 
 class CallNativeFunctionTestException : public std::exception {

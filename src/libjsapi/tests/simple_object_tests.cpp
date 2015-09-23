@@ -30,8 +30,6 @@
 #include <string>
 #include <sstream>
 
-rs::jsapi::Runtime rt_;
-
 class SimpleObjectTests : public ::testing::Test {
 protected:
     virtual void SetUp() {
@@ -40,7 +38,9 @@ protected:
     
     virtual void TearDown() {
         
-    }            
+    }     
+    
+    rs::jsapi::Runtime rt_;
 };
 
 class SimpleObjectTestException : public std::exception {

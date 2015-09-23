@@ -26,8 +26,6 @@
 
 #include "../libjsapi.h"
 
-rs::jsapi::Runtime rt_;
-
 class GCTests : public ::testing::Test {
 public:
     static void Finalize(JSFreeOp* fop, JSObject* obj);
@@ -48,6 +46,8 @@ protected:
     }
 
     static JSClass klass_;
+    
+    rs::jsapi::Runtime rt_;
 };
 
 JSClass GCTests::klass_ = { 
