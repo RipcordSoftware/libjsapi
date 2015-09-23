@@ -55,9 +55,11 @@ bool MultiRuntimeTests::SanityCheckWhatMessage(const char* msg) {
 }
 
 TEST_F(MultiRuntimeTests, test1) {
+#ifndef __APPLE__
     ASSERT_THROW({
         rs::jsapi::Runtime rt;
     }, rs::jsapi::RuntimeThreadInstanceException);
+#endif
 }
 
 TEST_F(MultiRuntimeTests, test2) {
