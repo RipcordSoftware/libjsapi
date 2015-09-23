@@ -37,11 +37,11 @@ rs::jsapi::Script::~Script() {
 bool rs::jsapi::Script::Compile() {
     JSAutoRequest ar(cx_);
     JS::CompileOptions options(cx_);
-    script_ = JS_CompileScript(cx_, cx_.getGlobal(), code_.c_str(), code_.length(), options);
-    
-    auto error = cx_.getError();
-    if (!!error) {
-        throw *error;
+    if (!JS_CompileScript(cx_, cx_.getGlobal(), code_.c_str(), code_.length(), options, &script_)) {    
+        auto error = cx_.getError();
+        if (!!error) {
+            throw *error;
+        }
     }
     
     return script_;

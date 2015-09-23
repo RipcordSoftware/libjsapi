@@ -129,12 +129,11 @@ public:
 
 protected:
     JSContext* cx_;
-    ContextState::AutoRequest ar_;
-    mutable bool isObject_;
-    union {
-        mutable JS::RootedValue value_;
-        mutable JS::RootedObject object_;
-    };
+    JSAutoRequest ar_;
+    
+    mutable bool isObject_;    
+    mutable JS::RootedValue value_;
+    mutable JS::RootedObject object_;    
     
     void InitValueRef() const;
     void InitObjectRef() const;

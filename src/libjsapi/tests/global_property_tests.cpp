@@ -75,7 +75,7 @@ TEST_F(GlobalPropertyTests, test3) {
     ASSERT_TRUE(rs::jsapi::Global::DefineProperty(rt_, "test3", 
         [](JSContext* cx, unsigned argc, JS::Value* vp) {
             auto args = JS::CallArgsFromVp(argc, vp);
-            args.rval().setObject(*JS_NewObject(cx, nullptr, JS::NullPtr(), JS::NullPtr()));
+            args.rval().setObject(*JS_NewObject(cx, nullptr, JS::NullPtr()));
             return true;
         },
         nullptr)

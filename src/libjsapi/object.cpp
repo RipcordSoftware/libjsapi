@@ -5,27 +5,26 @@
 #include <cstring>
 
 JSClass rs::jsapi::Object::class_ = { 
-    "rs_jsapi_object", JSCLASS_HAS_PRIVATE, JS_PropertyStub, JS_DeletePropertyStub,
-    JS_PropertyStub, JS_StrictPropertyStub, JS_EnumerateStub, JS_ResolveStub, 
-    JS_ConvertStub, Object::Finalize 
+    "rs_jsapi_object", JSCLASS_HAS_PRIVATE, nullptr, nullptr,
+    Object::Get, Object::Set, nullptr, nullptr, 
+    nullptr, Object::Finalize 
 };
 
 bool rs::jsapi::Object::Create(Context& cx, const std::vector<const char*>& properties,
         GetCallback getter, SetCallback setter, const std::vector<std::pair<const char*, FunctionCallback>>& functions,
         FinalizeCallback finalizer, Value& obj) {
     JSAutoRequest ar(cx);
-    JS::RootedObject newObj(cx, JS_NewObject(cx, &class_, JS::NullPtr(), JS::NullPtr()));    
+    JS::RootedObject newObj(cx, JS_NewObject(cx, &class_, JS::NullPtr()));
     
     if (newObj) {
         auto state = new ObjectState { getter, setter, finalizer, Functions(), 0, nullptr };
         
         for (auto p : properties) {
-            JS_DefineProperty(cx, newObj, p, JS::NullHandleValue, JSPROP_ENUMERATE, 
-                Object::Get, Object::Set);
+            JS_DefineProperty(cx, newObj, p, JS::NullHandleValue, JSPROP_ENUMERATE);
         }
 
         for (auto f : functions) {
-            JS_DefineFunction(cx, newObj, f.first, Object::CallFunction, 0, JSPROP_ENUMERATE);
+            JS_DefineFunction(cx, newObj, f.first, Object::CallFunction, 0, JSPROP_ENUMERATE | JSFUN_STUB_GSOPS);
             state->functions.emplace(f.first, f.second);
         }
         

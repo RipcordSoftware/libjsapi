@@ -30,17 +30,17 @@
 #include <cstring>
 
 JSClass rs::jsapi::DynamicArray::class_ = { 
-    "rs_jsapi_dynamicarray", JSCLASS_HAS_PRIVATE, JS_PropertyStub, JS_DeletePropertyStub,
-    DynamicArray::Get, DynamicArray::Set, JS_EnumerateStub, JS_ResolveStub, 
-    JS_ConvertStub, DynamicArray::Finalize
+    "rs_jsapi_dynamicarray", JSCLASS_HAS_PRIVATE, nullptr, nullptr,
+    DynamicArray::Get, DynamicArray::Set, nullptr, nullptr, 
+    nullptr, DynamicArray::Finalize
 };
 
 bool rs::jsapi::DynamicArray::Create(Context& cx, GetCallback getter, SetCallback setter, LengthCallback length, FinalizeCallback finalize, Value& array) {
     JSAutoRequest ar(cx);    
-    JS::RootedObject obj(cx, JS_NewObject(cx, &class_, JS::NullPtr(), JS::NullPtr()));
+    JS::RootedObject obj(cx, JS_NewObject(cx, &class_, JS::NullPtr()));
     
     if (obj) {
-        JS_DefineProperty(cx, obj, "length", 0, JSPROP_READONLY, DynamicArray::Length, nullptr);
+        JS_DefineProperty(cx, obj, "length", 0, JSPROP_READONLY, DynamicArray::Length);
         
         auto state = new DynamicArrayState { getter, setter, length, finalize, 0, nullptr };
         DynamicArray::SetState(obj, state);
@@ -104,15 +104,18 @@ void rs::jsapi::DynamicArray::Finalize(JSFreeOp* fop, JSObject* obj) {
     delete state;    
 }
 
-bool rs::jsapi::DynamicArray::Length(JSContext* cx, JS::HandleObject obj, JS::HandleId id, JS::MutableHandleValue vp) {    
+bool rs::jsapi::DynamicArray::Length(JSContext* cx, unsigned argc, JS::Value* vp) {    
     auto length = 0;
     
-    auto state = DynamicArray::GetState(cx, obj);    
+    auto args = JS::CallArgsFromVp(argc, vp);
+    Value obj{cx, args.thisv()};
+
+    auto state = DynamicArray::GetState(cx, obj);
     if (state != nullptr && state->length != nullptr) {
         length = state->length();
     }
     
-    vp.setInt32(length);
+    args.rval().setInt32(length);
     
     return true;
 }

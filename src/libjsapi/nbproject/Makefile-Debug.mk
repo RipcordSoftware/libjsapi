@@ -94,59 +94,59 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libjsapi.a: ${OBJECTFILES}
 ${OBJECTDIR}/context.o: context.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs-31 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/context.o context.cpp
+	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs- -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/context.o context.cpp
 
 ${OBJECTDIR}/context_state.o: context_state.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs-31 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/context_state.o context_state.cpp
+	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs- -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/context_state.o context_state.cpp
 
 ${OBJECTDIR}/dynamic_array.o: dynamic_array.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs-31 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/dynamic_array.o dynamic_array.cpp
+	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs- -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/dynamic_array.o dynamic_array.cpp
 
 ${OBJECTDIR}/dynamic_object.o: dynamic_object.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs-31 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/dynamic_object.o dynamic_object.cpp
+	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs- -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/dynamic_object.o dynamic_object.cpp
 
 ${OBJECTDIR}/function_arguments.o: function_arguments.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs-31 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/function_arguments.o function_arguments.cpp
+	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs- -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/function_arguments.o function_arguments.cpp
 
 ${OBJECTDIR}/global.o: global.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs-31 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/global.o global.cpp
+	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs- -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/global.o global.cpp
 
 ${OBJECTDIR}/object.o: object.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs-31 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/object.o object.cpp
+	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs- -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/object.o object.cpp
 
 ${OBJECTDIR}/runtime.o: runtime.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs-31 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/runtime.o runtime.cpp
+	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs- -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/runtime.o runtime.cpp
 
 ${OBJECTDIR}/script.o: script.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs-31 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/script.o script.cpp
+	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs- -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/script.o script.cpp
 
 ${OBJECTDIR}/value.o: value.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs-31 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/value.o value.cpp
+	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs- -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/value.o value.cpp
 
 # Subprojects
 .build-subprojects:
 
 # Build Test Targets
 .build-tests-conf: .build-conf ${TESTFILES}
-${TESTDIR}/TestFiles/f5: ../../externals/installed/lib/libmozjs-31.a
+${TESTDIR}/TestFiles/f5: ../../externals/installed/lib/libjs_static.ajs
 
 ${TESTDIR}/TestFiles/f5: ../../externals/installed/lib/libgtest.a
 
@@ -156,7 +156,7 @@ ${TESTDIR}/TestFiles/f5: ${TESTDIR}/tests/call_js_function_tests.o ${OBJECTFILES
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc} --coverage  -o ${TESTDIR}/TestFiles/f5 $^ ${LDLIBSOPTIONS} -lpthread -ldl `pkg-config --libs zlib`   
 
-${TESTDIR}/TestFiles/f6: ../../externals/installed/lib/libmozjs-31.a
+${TESTDIR}/TestFiles/f6: ../../externals/installed/lib/libjs_static.ajs
 
 ${TESTDIR}/TestFiles/f6: ../../externals/installed/lib/libgtest.a
 
@@ -166,7 +166,7 @@ ${TESTDIR}/TestFiles/f6: ${TESTDIR}/tests/call_native_function_tests.o ${OBJECTF
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc} --coverage  -o ${TESTDIR}/TestFiles/f6 $^ ${LDLIBSOPTIONS} -lpthread -ldl `pkg-config --libs zlib`   
 
-${TESTDIR}/TestFiles/f12: ../../externals/installed/lib/libmozjs-31.a
+${TESTDIR}/TestFiles/f12: ../../externals/installed/lib/libjs_static.ajs
 
 ${TESTDIR}/TestFiles/f12: ../../externals/installed/lib/libgtest.a
 
@@ -176,7 +176,7 @@ ${TESTDIR}/TestFiles/f12: ${TESTDIR}/tests/function_arguments_tests.o ${OBJECTFI
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc} --coverage  -o ${TESTDIR}/TestFiles/f12 $^ ${LDLIBSOPTIONS} -lpthread -ldl `pkg-config --libs zlib`   
 
-${TESTDIR}/TestFiles/f13: ../../externals/installed/lib/libmozjs-31.a
+${TESTDIR}/TestFiles/f13: ../../externals/installed/lib/libjs_static.ajs
 
 ${TESTDIR}/TestFiles/f13: ../../externals/installed/lib/libgtest.a
 
@@ -186,7 +186,7 @@ ${TESTDIR}/TestFiles/f13: ${TESTDIR}/tests/gc_tests.o ${OBJECTFILES:%.o=%_nomain
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc} --coverage  -o ${TESTDIR}/TestFiles/f13 $^ ${LDLIBSOPTIONS} -lpthread -ldl `pkg-config --libs zlib`   
 
-${TESTDIR}/TestFiles/f8: ../../externals/installed/lib/libmozjs-31.a
+${TESTDIR}/TestFiles/f8: ../../externals/installed/lib/libjs_static.ajs
 
 ${TESTDIR}/TestFiles/f8: ../../externals/installed/lib/libgtest.a
 
@@ -196,7 +196,7 @@ ${TESTDIR}/TestFiles/f8: ${TESTDIR}/tests/global_property_tests.o ${OBJECTFILES:
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc} --coverage  -o ${TESTDIR}/TestFiles/f8 $^ ${LDLIBSOPTIONS} -lpthread -ldl `pkg-config --libs zlib`   
 
-${TESTDIR}/TestFiles/f3: ../../externals/installed/lib/libmozjs-31.a
+${TESTDIR}/TestFiles/f3: ../../externals/installed/lib/libjs_static.ajs
 
 ${TESTDIR}/TestFiles/f3: ../../externals/installed/lib/libgtest.a
 
@@ -206,7 +206,7 @@ ${TESTDIR}/TestFiles/f3: ${TESTDIR}/tests/multi_context_tests.o ${OBJECTFILES:%.
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc} --coverage  -o ${TESTDIR}/TestFiles/f3 $^ ${LDLIBSOPTIONS} -lpthread -ldl `pkg-config --libs zlib`   
 
-${TESTDIR}/TestFiles/f4: ../../externals/installed/lib/libmozjs-31.a
+${TESTDIR}/TestFiles/f4: ../../externals/installed/lib/libjs_static.ajs
 
 ${TESTDIR}/TestFiles/f4: ../../externals/installed/lib/libgtest.a
 
@@ -216,7 +216,7 @@ ${TESTDIR}/TestFiles/f4: ${TESTDIR}/tests/multi_runtime_tests.o ${OBJECTFILES:%.
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc} --coverage  -o ${TESTDIR}/TestFiles/f4 $^ ${LDLIBSOPTIONS} -lpthread -ldl `pkg-config --libs zlib`   
 
-${TESTDIR}/TestFiles/f2: ../../externals/installed/lib/libmozjs-31.a
+${TESTDIR}/TestFiles/f2: ../../externals/installed/lib/libjs_static.ajs
 
 ${TESTDIR}/TestFiles/f2: ../../externals/installed/lib/libgtest.a
 
@@ -226,7 +226,7 @@ ${TESTDIR}/TestFiles/f2: ${TESTDIR}/tests/script_exception_tests.o ${OBJECTFILES
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc} --coverage  -o ${TESTDIR}/TestFiles/f2 $^ ${LDLIBSOPTIONS} -lpthread -ldl `pkg-config --libs zlib`   
 
-${TESTDIR}/TestFiles/f11: ../../externals/installed/lib/libmozjs-31.a
+${TESTDIR}/TestFiles/f11: ../../externals/installed/lib/libjs_static.ajs
 
 ${TESTDIR}/TestFiles/f11: ../../externals/installed/lib/libgtest.a
 
@@ -236,7 +236,7 @@ ${TESTDIR}/TestFiles/f11: ${TESTDIR}/tests/simple_dynamic_array_tests.o ${OBJECT
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc} --coverage  -o ${TESTDIR}/TestFiles/f11 $^ ${LDLIBSOPTIONS} -lpthread -ldl `pkg-config --libs zlib`   
 
-${TESTDIR}/TestFiles/f9: ../../externals/installed/lib/libmozjs-31.a
+${TESTDIR}/TestFiles/f9: ../../externals/installed/lib/libjs_static.ajs
 
 ${TESTDIR}/TestFiles/f9: ../../externals/installed/lib/libgtest.a
 
@@ -246,7 +246,7 @@ ${TESTDIR}/TestFiles/f9: ${TESTDIR}/tests/simple_dynamic_object_tests.o ${OBJECT
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc} --coverage  -o ${TESTDIR}/TestFiles/f9 $^ ${LDLIBSOPTIONS} -lpthread -ldl `pkg-config --libs zlib`   
 
-${TESTDIR}/TestFiles/f7: ../../externals/installed/lib/libmozjs-31.a
+${TESTDIR}/TestFiles/f7: ../../externals/installed/lib/libjs_static.ajs
 
 ${TESTDIR}/TestFiles/f7: ../../externals/installed/lib/libgtest.a
 
@@ -256,7 +256,7 @@ ${TESTDIR}/TestFiles/f7: ${TESTDIR}/tests/simple_object_tests.o ${OBJECTFILES:%.
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc} --coverage  -o ${TESTDIR}/TestFiles/f7 $^ ${LDLIBSOPTIONS} -lpthread -ldl `pkg-config --libs zlib`   
 
-${TESTDIR}/TestFiles/f1: ../../externals/installed/lib/libmozjs-31.a
+${TESTDIR}/TestFiles/f1: ../../externals/installed/lib/libjs_static.ajs
 
 ${TESTDIR}/TestFiles/f1: ../../externals/installed/lib/libgtest.a
 
@@ -266,7 +266,7 @@ ${TESTDIR}/TestFiles/f1: ${TESTDIR}/tests/simple_script_tests.o ${OBJECTFILES:%.
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc} --coverage  -o ${TESTDIR}/TestFiles/f1 $^ ${LDLIBSOPTIONS} -lpthread -ldl `pkg-config --libs zlib`   
 
-${TESTDIR}/TestFiles/f10: ../../externals/installed/lib/libmozjs-31.a
+${TESTDIR}/TestFiles/f10: ../../externals/installed/lib/libjs_static.ajs
 
 ${TESTDIR}/TestFiles/f10: ../../externals/installed/lib/libgtest.a
 
@@ -280,79 +280,79 @@ ${TESTDIR}/TestFiles/f10: ${TESTDIR}/tests/simple_value_tests.o ${OBJECTFILES:%.
 ${TESTDIR}/tests/call_js_function_tests.o: tests/call_js_function_tests.cpp 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs-31 -I../../externals/installed/include -I. -std=c++11 --coverage -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/call_js_function_tests.o tests/call_js_function_tests.cpp
+	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs- -I../../externals/installed/include -I. -std=c++11 --coverage -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/call_js_function_tests.o tests/call_js_function_tests.cpp
 
 
 ${TESTDIR}/tests/call_native_function_tests.o: tests/call_native_function_tests.cpp 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs-31 -I../../externals/installed/include -I. -std=c++11 --coverage -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/call_native_function_tests.o tests/call_native_function_tests.cpp
+	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs- -I../../externals/installed/include -I. -std=c++11 --coverage -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/call_native_function_tests.o tests/call_native_function_tests.cpp
 
 
 ${TESTDIR}/tests/function_arguments_tests.o: tests/function_arguments_tests.cpp 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs-31 -I../../externals/installed/include -I. -std=c++11 --coverage -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/function_arguments_tests.o tests/function_arguments_tests.cpp
+	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs- -I../../externals/installed/include -I. -std=c++11 --coverage -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/function_arguments_tests.o tests/function_arguments_tests.cpp
 
 
 ${TESTDIR}/tests/gc_tests.o: tests/gc_tests.cpp 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs-31 -I../../externals/installed/include -I. -std=c++11 --coverage -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/gc_tests.o tests/gc_tests.cpp
+	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs- -I../../externals/installed/include -I. -std=c++11 --coverage -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/gc_tests.o tests/gc_tests.cpp
 
 
 ${TESTDIR}/tests/global_property_tests.o: tests/global_property_tests.cpp 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs-31 -I../../externals/installed/include -I. -std=c++11 --coverage -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/global_property_tests.o tests/global_property_tests.cpp
+	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs- -I../../externals/installed/include -I. -std=c++11 --coverage -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/global_property_tests.o tests/global_property_tests.cpp
 
 
 ${TESTDIR}/tests/multi_context_tests.o: tests/multi_context_tests.cpp 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs-31 -I../../externals/installed/include -I. -std=c++11 --coverage -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/multi_context_tests.o tests/multi_context_tests.cpp
+	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs- -I../../externals/installed/include -I. -std=c++11 --coverage -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/multi_context_tests.o tests/multi_context_tests.cpp
 
 
 ${TESTDIR}/tests/multi_runtime_tests.o: tests/multi_runtime_tests.cpp 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs-31 -I../../externals/installed/include -I. -std=c++11 --coverage -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/multi_runtime_tests.o tests/multi_runtime_tests.cpp
+	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs- -I../../externals/installed/include -I. -std=c++11 --coverage -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/multi_runtime_tests.o tests/multi_runtime_tests.cpp
 
 
 ${TESTDIR}/tests/script_exception_tests.o: tests/script_exception_tests.cpp 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs-31 -I../../externals/installed/include -I. -std=c++11 --coverage -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/script_exception_tests.o tests/script_exception_tests.cpp
+	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs- -I../../externals/installed/include -I. -std=c++11 --coverage -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/script_exception_tests.o tests/script_exception_tests.cpp
 
 
 ${TESTDIR}/tests/simple_dynamic_array_tests.o: tests/simple_dynamic_array_tests.cpp 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs-31 -I../../externals/installed/include -I. -std=c++11 --coverage -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/simple_dynamic_array_tests.o tests/simple_dynamic_array_tests.cpp
+	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs- -I../../externals/installed/include -I. -std=c++11 --coverage -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/simple_dynamic_array_tests.o tests/simple_dynamic_array_tests.cpp
 
 
 ${TESTDIR}/tests/simple_dynamic_object_tests.o: tests/simple_dynamic_object_tests.cpp 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs-31 -I../../externals/installed/include -I. -std=c++11 --coverage -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/simple_dynamic_object_tests.o tests/simple_dynamic_object_tests.cpp
+	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs- -I../../externals/installed/include -I. -std=c++11 --coverage -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/simple_dynamic_object_tests.o tests/simple_dynamic_object_tests.cpp
 
 
 ${TESTDIR}/tests/simple_object_tests.o: tests/simple_object_tests.cpp 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs-31 -I../../externals/installed/include -I. -std=c++11 --coverage -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/simple_object_tests.o tests/simple_object_tests.cpp
+	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs- -I../../externals/installed/include -I. -std=c++11 --coverage -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/simple_object_tests.o tests/simple_object_tests.cpp
 
 
 ${TESTDIR}/tests/simple_script_tests.o: tests/simple_script_tests.cpp 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs-31 -I../../externals/installed/include -I. -std=c++11 --coverage -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/simple_script_tests.o tests/simple_script_tests.cpp
+	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs- -I../../externals/installed/include -I. -std=c++11 --coverage -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/simple_script_tests.o tests/simple_script_tests.cpp
 
 
 ${TESTDIR}/tests/simple_value_tests.o: tests/simple_value_tests.cpp 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs-31 -I../../externals/installed/include -I. -std=c++11 --coverage -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/simple_value_tests.o tests/simple_value_tests.cpp
+	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs- -I../../externals/installed/include -I. -std=c++11 --coverage -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/simple_value_tests.o tests/simple_value_tests.cpp
 
 
 ${OBJECTDIR}/context_nomain.o: ${OBJECTDIR}/context.o context.cpp 
@@ -363,7 +363,7 @@ ${OBJECTDIR}/context_nomain.o: ${OBJECTDIR}/context.o context.cpp
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -I../../externals/installed/include/mozjs-31 -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/context_nomain.o context.cpp;\
+	    $(COMPILE.cc) -g -I../../externals/installed/include/mozjs- -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/context_nomain.o context.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/context.o ${OBJECTDIR}/context_nomain.o;\
 	fi
@@ -376,7 +376,7 @@ ${OBJECTDIR}/context_state_nomain.o: ${OBJECTDIR}/context_state.o context_state.
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -I../../externals/installed/include/mozjs-31 -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/context_state_nomain.o context_state.cpp;\
+	    $(COMPILE.cc) -g -I../../externals/installed/include/mozjs- -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/context_state_nomain.o context_state.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/context_state.o ${OBJECTDIR}/context_state_nomain.o;\
 	fi
@@ -389,7 +389,7 @@ ${OBJECTDIR}/dynamic_array_nomain.o: ${OBJECTDIR}/dynamic_array.o dynamic_array.
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -I../../externals/installed/include/mozjs-31 -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/dynamic_array_nomain.o dynamic_array.cpp;\
+	    $(COMPILE.cc) -g -I../../externals/installed/include/mozjs- -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/dynamic_array_nomain.o dynamic_array.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/dynamic_array.o ${OBJECTDIR}/dynamic_array_nomain.o;\
 	fi
@@ -402,7 +402,7 @@ ${OBJECTDIR}/dynamic_object_nomain.o: ${OBJECTDIR}/dynamic_object.o dynamic_obje
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -I../../externals/installed/include/mozjs-31 -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/dynamic_object_nomain.o dynamic_object.cpp;\
+	    $(COMPILE.cc) -g -I../../externals/installed/include/mozjs- -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/dynamic_object_nomain.o dynamic_object.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/dynamic_object.o ${OBJECTDIR}/dynamic_object_nomain.o;\
 	fi
@@ -415,7 +415,7 @@ ${OBJECTDIR}/function_arguments_nomain.o: ${OBJECTDIR}/function_arguments.o func
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -I../../externals/installed/include/mozjs-31 -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/function_arguments_nomain.o function_arguments.cpp;\
+	    $(COMPILE.cc) -g -I../../externals/installed/include/mozjs- -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/function_arguments_nomain.o function_arguments.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/function_arguments.o ${OBJECTDIR}/function_arguments_nomain.o;\
 	fi
@@ -428,7 +428,7 @@ ${OBJECTDIR}/global_nomain.o: ${OBJECTDIR}/global.o global.cpp
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -I../../externals/installed/include/mozjs-31 -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/global_nomain.o global.cpp;\
+	    $(COMPILE.cc) -g -I../../externals/installed/include/mozjs- -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/global_nomain.o global.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/global.o ${OBJECTDIR}/global_nomain.o;\
 	fi
@@ -441,7 +441,7 @@ ${OBJECTDIR}/object_nomain.o: ${OBJECTDIR}/object.o object.cpp
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -I../../externals/installed/include/mozjs-31 -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/object_nomain.o object.cpp;\
+	    $(COMPILE.cc) -g -I../../externals/installed/include/mozjs- -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/object_nomain.o object.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/object.o ${OBJECTDIR}/object_nomain.o;\
 	fi
@@ -454,7 +454,7 @@ ${OBJECTDIR}/runtime_nomain.o: ${OBJECTDIR}/runtime.o runtime.cpp
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -I../../externals/installed/include/mozjs-31 -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/runtime_nomain.o runtime.cpp;\
+	    $(COMPILE.cc) -g -I../../externals/installed/include/mozjs- -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/runtime_nomain.o runtime.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/runtime.o ${OBJECTDIR}/runtime_nomain.o;\
 	fi
@@ -467,7 +467,7 @@ ${OBJECTDIR}/script_nomain.o: ${OBJECTDIR}/script.o script.cpp
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -I../../externals/installed/include/mozjs-31 -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/script_nomain.o script.cpp;\
+	    $(COMPILE.cc) -g -I../../externals/installed/include/mozjs- -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/script_nomain.o script.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/script.o ${OBJECTDIR}/script_nomain.o;\
 	fi
@@ -480,7 +480,7 @@ ${OBJECTDIR}/value_nomain.o: ${OBJECTDIR}/value.o value.cpp
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -I../../externals/installed/include/mozjs-31 -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/value_nomain.o value.cpp;\
+	    $(COMPILE.cc) -g -I../../externals/installed/include/mozjs- -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/value_nomain.o value.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/value.o ${OBJECTDIR}/value_nomain.o;\
 	fi
