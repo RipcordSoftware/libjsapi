@@ -231,7 +231,7 @@ function draw(pickColor, superSamples)
   {
     var Cr = Cr_init;
 
-    for ( var x=0, width = img.width; x<width; ++x, Cr += Cr_step ) {
+    for ( var x=0, width = img.width, data = img.data; x<width; ++x, Cr += Cr_step ) {
       var color = [0, 0, 0, 255];
 
       for ( var s=0; s<superSamples; ++s ) {
@@ -243,10 +243,10 @@ function draw(pickColor, superSamples)
 
       color = divRGB(color, superSamples);
 
-      img.data[off++] = color[0];
-      img.data[off++] = color[1];
-      img.data[off++] = color[2];
-      img.data[off++] = 255;
+      data[off++] = color[0];
+      data[off++] = color[1];
+      data[off++] = color[2];
+      data[off++] = 255;
     }
   }
 
@@ -254,13 +254,14 @@ function draw(pickColor, superSamples)
   {
     var Cr = Cr_init;
 
-    for ( var x=0, width=img.width; x<width; ++x, Cr += Cr_step ) {
+    for ( var x=0, width=img.width, data = img.data; x<width; ++x, Cr += Cr_step ) {
       var p = iterateEquation(Cr, Ci, escapeRadius, steps);
       var color = pickColor(steps, p[0], p[1], p[2]);
-      img.data[off++] = color[0];
-      img.data[off++] = color[1];
-      img.data[off++] = color[2];
-      img.data[off++] = 255;
+      
+      data[off++] = color[0];
+      data[off++] = color[1];
+      data[off++] = color[2];
+      data[off++] = 255;
     }
   }
 
@@ -268,11 +269,11 @@ function draw(pickColor, superSamples)
   {
     var off = y*img.width;
 
-    for ( var x=0, width=img.width; x<width; ++x ) {
-      img.data[off++] = color[0];
-      img.data[off++] = color[1];
-      img.data[off++] = color[2];
-      img.data[off++] = color[3];
+    for ( var x=0, width=img.width, data = img.data; x<width; ++x ) {
+      data[off++] = color[0];
+      data[off++] = color[1];
+      data[off++] = color[2];
+      data[off++] = color[3];
     }
   }
 
@@ -284,10 +285,10 @@ function draw(pickColor, superSamples)
     var sy = 0;
     var drawLineFunc = superSamples>1? drawLineSuperSampled : drawLine;
     
-    for (var sy = 0, height = window.getHeight(); sy < height; ++sy) {
+    for (var sy = 0, height = window.getHeight(), width = img.width; sy < height; ++sy) {
         drawLineFunc(Ci, 0, xRange[0], dx);
         Ci += Ci_step;
-        pixels += img.width;
+        pixels += width;
         area.putImageData(img, 0, sy);
     }
     
