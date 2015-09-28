@@ -117,22 +117,6 @@ bool rs::jsapi::DynamicObject::Set(JSContext* cx, JS::HandleObject obj, JSString
     }
 }
 
-bool rs::jsapi::DynamicObject::Get(JSContext* cx, unsigned argc, JS::Value* vp) {
-    JSAutoRequest ar(cx);
-    auto args = JS::CallArgsFromVp(argc, vp);
-    Value obj{cx, args.thisv()};
-    
-    return Get(cx, obj, args[0].toString(), args.rval());
-}
-
-bool rs::jsapi::DynamicObject::Set(JSContext* cx, unsigned argc, JS::Value* vp) {
-    JSAutoRequest ar(cx);
-    auto args = JS::CallArgsFromVp(argc, vp);
-    Value obj{cx, args.thisv()};
-    
-    return Set(cx, obj, args[0].toString(), args.rval());
-}
-
 bool rs::jsapi::DynamicObject::Get(JSContext* cx, JS::HandleObject obj, JS::HandleId id, JS::MutableHandleValue vp) {
     JSAutoRequest ar(cx);    
     
@@ -159,7 +143,7 @@ bool rs::jsapi::DynamicObject::Enumerate(JSContext* cx, JS::HandleObject obj) {
         if (status) {
             for (auto p : props) {
                 JS_DefineProperty(cx, obj, p.c_str(), JS::NullHandleValue, JSPROP_ENUMERATE, 
-                    DynamicObject::Get, DynamicObject::Set);
+                    nullptr, nullptr);
             }
             
             for (auto f : funcs) {
