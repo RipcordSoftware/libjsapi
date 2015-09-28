@@ -89,7 +89,7 @@ public:
     
     bool operator !() const { return isObject() ? toObject() == nullptr : false; }
     
-    JSContext* getContext();
+    JSContext* getContext() const;
     const JS::HandleValue getHandleValue() const { ToValueRef(); return value_; }
     const JS::HandleObject getHandleObject() const { ToObjectRef(); return object_; }
     
@@ -130,7 +130,7 @@ public:
     std::string ToString() const;
 
 protected:
-    JSContext* cx_;
+    mutable JSContext* cx_;
     
     mutable bool isObject_;    
     mutable JS::PersistentRootedValue value_;

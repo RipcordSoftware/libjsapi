@@ -270,7 +270,7 @@ bool rs::jsapi::Value::CallFunction(const FunctionArguments& args, Value& result
     return JS_CallFunctionValue(cx_, JS::NullPtr(), value_, args, result);
 }
 
-JSContext* rs::jsapi::Value::getContext() { 
+JSContext* rs::jsapi::Value::getContext() const { 
     return cx_; 
 }
 
