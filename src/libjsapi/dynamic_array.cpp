@@ -51,6 +51,19 @@ bool rs::jsapi::DynamicArray::Create(Context& cx, GetCallback getter, SetCallbac
     return obj;
 }
 
+bool rs::jsapi::DynamicArray::IsDynamicArray(const Value& value) {
+    auto isArray = value.isObject() && !value.isNull();
+    if (isArray) {
+        auto obj = value.toObject();
+        isArray = obj;
+        if (isArray) {
+            auto klass = JS_GetClass(obj);
+            isArray = klass && klass->name && std::strcmp(klass->name, class_.name) == 0;
+        }
+    }
+    return isArray; 
+}
+
 bool rs::jsapi::DynamicArray::Get(JSContext* cx, JS::HandleObject obj, JS::HandleId id, JS::MutableHandleValue vp) {
     JSAutoRequest ar(cx);    
     auto state = DynamicArray::GetState(cx, obj);

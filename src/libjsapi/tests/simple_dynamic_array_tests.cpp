@@ -359,3 +359,42 @@ TEST_F(SimpleDynamicArrayTests, test13) {
     
     ASSERT_TRUE(thrown);        
 }
+
+TEST_F(SimpleDynamicArrayTests, test14) {
+    auto context = rt_.NewContext();
+    
+    rs::jsapi::Value array(*context);
+    rs::jsapi::DynamicArray::Create(*context,
+        [](int index, rs::jsapi::Value& value) { value = 42; },
+        nullptr,
+        []() { return 1; },
+        nullptr,
+        array);
+    ASSERT_TRUE(!!array);    
+    ASSERT_TRUE(rs::jsapi::DynamicArray::IsDynamicArray(array));
+    
+    rs::jsapi::Value nullObj(*context, JS::NullHandleValue);    
+    ASSERT_FALSE(rs::jsapi::DynamicArray::IsDynamicArray(nullObj));
+    
+    rs::jsapi::Value undefinedObj(*context, JS::UndefinedHandleValue);    
+    ASSERT_FALSE(rs::jsapi::DynamicArray::IsDynamicArray(undefinedObj));
+    
+    rs::jsapi::Value numValue(*context, 123);    
+    ASSERT_FALSE(rs::jsapi::DynamicArray::IsDynamicArray(numValue));
+    
+    rs::jsapi::Value strValue(*context, "123");    
+    ASSERT_FALSE(rs::jsapi::DynamicArray::IsDynamicArray(strValue));
+    
+    rs::jsapi::Value obj(*context);
+    rs::jsapi::DynamicObject::Create(
+        *context,
+        [](const char* name, rs::jsapi::Value& value) {            
+            value = 42;
+        }, 
+        nullptr, 
+        nullptr,
+        nullptr,
+        obj);
+    ASSERT_TRUE(!!obj);
+    ASSERT_FALSE(rs::jsapi::DynamicArray::IsDynamicArray(obj));
+}

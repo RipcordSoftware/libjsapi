@@ -49,6 +49,8 @@ public:
     static bool SetPrivate(Value&, uint64_t, void*);
     static bool GetPrivate(const Value&, uint64_t&, void*&);
     
+    static bool IsDynamicArray(const Value&);
+    
 private:
     struct DynamicArrayState { GetCallback getter; SetCallback setter; LengthCallback length; FinalizeCallback finalize; uint64_t data; void* ptr; };
     
