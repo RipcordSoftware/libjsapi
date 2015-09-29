@@ -35,7 +35,7 @@ JSClass rs::jsapi::DynamicArray::class_ = {
     nullptr, DynamicArray::Finalize
 };
 
-bool rs::jsapi::DynamicArray::Create(Context& cx, GetCallback getter, SetCallback setter, LengthCallback length, FinalizeCallback finalize, Value& array) {
+bool rs::jsapi::DynamicArray::Create(JSContext* cx, GetCallback getter, SetCallback setter, LengthCallback length, FinalizeCallback finalize, Value& array) {
     JSAutoRequest ar(cx);    
     JS::RootedObject obj(cx, JS_NewObject(cx, &class_, JS::NullPtr()));
     

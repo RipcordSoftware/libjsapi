@@ -49,7 +49,7 @@ public:
     Object(Context& cx) = delete;
     Object(const Object&) = delete;
     
-    static bool Create(Context& cx, 
+    static bool Create(JSContext*, 
         const std::vector<const char*>& properties,
         GetCallback getter, SetCallback setter,
         const std::vector<std::pair<const char*, FunctionCallback>>& functions,

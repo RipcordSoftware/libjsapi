@@ -44,7 +44,7 @@ public:
     typedef std::function<bool(std::vector<std::string>& props, std::vector<std::pair<std::string, JSNative>>& funcs)> EnumeratorCallback;
     typedef std::function<void()> FinalizeCallback;
     
-    static bool Create(Context& cx, GetCallback getter, SetCallback setter, EnumeratorCallback enumerator, FinalizeCallback finalize, Value& obj);
+    static bool Create(JSContext*, GetCallback getter, SetCallback setter, EnumeratorCallback enumerator, FinalizeCallback finalize, Value& obj);
     
     static bool SetPrivate(Value&, uint64_t, void*);
     static bool GetPrivate(const Value&, uint64_t&, void*&);

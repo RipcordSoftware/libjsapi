@@ -10,7 +10,7 @@ JSClass rs::jsapi::Object::class_ = {
     nullptr, Object::Finalize 
 };
 
-bool rs::jsapi::Object::Create(Context& cx, const std::vector<const char*>& properties,
+bool rs::jsapi::Object::Create(JSContext* cx, const std::vector<const char*>& properties,
         GetCallback getter, SetCallback setter, const std::vector<std::pair<const char*, FunctionCallback>>& functions,
         FinalizeCallback finalizer, Value& obj) {
     JSAutoRequest ar(cx);
