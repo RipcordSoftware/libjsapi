@@ -36,6 +36,19 @@ bool rs::jsapi::Object::Create(JSContext* cx, const std::vector<const char*>& pr
     return newObj;
 }
 
+bool rs::jsapi::Object::IsObject(const Value& value) {
+    auto isObject = value.isObject() && !value.isNull();
+    if (isObject) {
+        auto obj = value.toObject();
+        isObject = obj;
+        if (isObject) {
+            auto klass = JS_GetClass(obj);
+            isObject = klass && klass->name && std::strcmp(klass->name, class_.name) == 0;
+        }
+    }
+    return isObject; 
+}
+
 bool rs::jsapi::Object::Get(JSContext* cx, JS::HandleObject obj, JS::HandleId id, JS::MutableHandleValue vp) {
     JSAutoRequest ar(cx);
     auto state = Object::GetState(cx, obj);    

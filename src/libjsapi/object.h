@@ -59,6 +59,8 @@ public:
     static bool SetPrivate(Value&, uint64_t, void*);
     static bool GetPrivate(const Value&, uint64_t&, void*&);
     
+    static bool IsObject(const Value&);
+    
 private:
     struct ObjectState { 
         GetCallback getter; 

@@ -49,6 +49,8 @@ public:
     static bool SetPrivate(Value&, uint64_t, void*);
     static bool GetPrivate(const Value&, uint64_t&, void*&);
     
+    static bool IsDynamicObject(const Value&);
+    
 private:
     struct DynamicObjectState { GetCallback getter; SetCallback setter; EnumeratorCallback enumerator; FinalizeCallback finalize; uint64_t data; void* ptr; };
     

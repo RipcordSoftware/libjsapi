@@ -49,6 +49,19 @@ bool rs::jsapi::DynamicObject::Create(JSContext* cx, GetCallback getter, Dynamic
     return newObj;
 }
 
+bool rs::jsapi::DynamicObject::IsDynamicObject(const Value& value) {
+    auto isObject = value.isObject() && !value.isNull();
+    if (isObject) {
+        auto obj = value.toObject();
+        isObject = obj;
+        if (isObject) {
+            auto klass = JS_GetClass(obj);
+            isObject = klass && klass->name && std::strcmp(klass->name, class_.name) == 0;
+        }
+    }
+    return isObject; 
+}
+
 bool rs::jsapi::DynamicObject::Get(JSContext* cx, JS::HandleObject obj, JSString* name, JS::MutableHandleValue vp) {
     JSAutoRequest ar(cx);    
     auto state = DynamicObject::GetState(cx, obj);
