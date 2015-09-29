@@ -50,7 +50,10 @@ clean: force_true
 	fi
 
 .googletest: force_true
-	if [ ! -d externals/gtest-${GTEST_VER}/lib/.libs ]; then \
+		if [ "${CI}" = "true" ]; then \
+			curl ftp://ftp.ripcordsoftware.com/pub/gtest-${GTEST_VER}-travis-ci-externals-installed.tar.xz -O && \
+			tar xfJ gtest-*; \
+		elif [ ! -d externals/gtest-${GTEST_VER}/lib/.libs ]; then \
 		mkdir -p externals && \
 		cd externals && \
 		if [ ! -f gtest-${GTEST_VER}.zip ]; then curl https://googletest.googlecode.com/files/gtest-${GTEST_VER}.zip -O; fi && \
