@@ -25,7 +25,7 @@ std::string LoadScript(int argc, char** argv) {
         script += ";\n";
     }
     
-    return std::move(script);
+    return script;
 }
 
 int main(int argc, char** argv) {  
