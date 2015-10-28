@@ -226,3 +226,26 @@ TEST_F(ScriptExceptionTests, test9) {
         rt_.Call("yoyoyoyo", result);
     }, rs::jsapi::ScriptException);         
 }
+
+TEST_F(ScriptExceptionTests, test10) {
+    auto script = R"((function(){ return function() { abc(); } })();)";
+    rs::jsapi::Value func(rt_);
+    rt_.Evaluate(script, func);
+    
+    ASSERT_THROW({
+        rs::jsapi::FunctionArguments args{rt_};
+        func.CallFunction(args);
+    }, rs::jsapi::ScriptException);         
+}
+
+TEST_F(ScriptExceptionTests, test11) {
+    auto script = R"((function(){ return function() { abc(); } })();)";
+    rs::jsapi::Value func(rt_);    
+    rt_.Evaluate(script, func);
+    
+    ASSERT_THROW({
+        rs::jsapi::FunctionArguments args{rt_};
+        rs::jsapi::Value result(rt_);
+        func.CallFunction(args, result);
+    }, rs::jsapi::ScriptException);         
+}

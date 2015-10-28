@@ -119,17 +119,41 @@ bool rs::jsapi::Context::Call(const char* name, Value& result) {
 }
 
 bool rs::jsapi::Context::Call(const char* name, const FunctionArguments& args) {
-    Value result(*this);        
+    Value result(*this);
     return Call(name, args, result);
 }
 
 bool rs::jsapi::Context::Call(const char* name, const FunctionArguments& args, Value& result) {
-    JSAutoRequest ar(cx_);    
+    JSAutoRequest ar(cx_);
     auto status = JS_CallFunctionName(cx_, global_, name, args, result);    
     
     auto error = getError();
     if (!!error) {
         throw *error;
+    }
+    
+    return status;
+}
+
+bool rs::jsapi::Context::Call(Value& value, const FunctionArguments& args) {    
+    auto cx = value.getContext();
+    rs::jsapi::Value result{cx};
+    return Context::Call(value, args, result);
+}
+
+bool rs::jsapi::Context::Call(Value& value, const FunctionArguments& args, Value& result) {
+    auto status = false;
+    
+    auto cx = value.getContext();
+    auto that = static_cast<Context*>(ContextState::GetDataPtr(cx));
+    if (that) {
+        JSAutoRequest ar{cx};
+        status = JS_CallFunctionValue(cx, that->global_, value, args, result);
+        
+        auto error = that->getError();
+        if (!!error) {
+            throw *error;
+        }
     }
     
     return status;

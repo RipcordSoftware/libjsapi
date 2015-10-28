@@ -52,6 +52,8 @@ public:
     bool Call(const char* name, const FunctionArguments& args);
     bool Call(const char* name, Value& result);
     bool Call(const char* name, const FunctionArguments& args, Value& result);
+    static bool Call(Value& value, const FunctionArguments& args);
+    static bool Call(Value& value, const FunctionArguments& args, Value& result);
     
     Context(const Context&) = delete;
     Context& operator =(const Context&) = delete;
