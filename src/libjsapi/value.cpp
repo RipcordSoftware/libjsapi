@@ -259,14 +259,14 @@ const JS::HandleValue rs::jsapi::Value::toFunction() const {
     return value_;
 }
 
-bool rs::jsapi::Value::CallFunction(const FunctionArguments& args) {
+bool rs::jsapi::Value::CallFunction(const FunctionArguments& args, bool throwOnError) {
     ToValueRef();
-    return Context::Call(*this, args);
+    return Context::Call(*this, args, throwOnError);
 }
 
-bool rs::jsapi::Value::CallFunction(const FunctionArguments& args, Value& result) {
+bool rs::jsapi::Value::CallFunction(const FunctionArguments& args, Value& result, bool throwOnError) {
     ToValueRef();
-    return Context::Call(*this, args, result);
+    return Context::Call(*this, args, result, throwOnError);
 }
 
 JSContext* rs::jsapi::Value::getContext() const { 

@@ -235,7 +235,13 @@ TEST_F(ScriptExceptionTests, test10) {
     ASSERT_THROW({
         rs::jsapi::FunctionArguments args{rt_};
         func.CallFunction(args);
-    }, rs::jsapi::ScriptException);         
+    }, rs::jsapi::ScriptException);
+    
+    // check the previous exception has been cleared
+    script = R"((function(){ return 42; })();)";
+    rs::jsapi::Value result(rt_);
+    rt_.Evaluate(script, result);
+    ASSERT_EQ(42, result.toNumber());
 }
 
 TEST_F(ScriptExceptionTests, test11) {
@@ -247,5 +253,41 @@ TEST_F(ScriptExceptionTests, test11) {
         rs::jsapi::FunctionArguments args{rt_};
         rs::jsapi::Value result(rt_);
         func.CallFunction(args, result);
-    }, rs::jsapi::ScriptException);         
+    }, rs::jsapi::ScriptException);
+    
+    // check the previous exception has been cleared
+    script = R"((function(){ return 42; })();)";
+    rs::jsapi::Value result(rt_);
+    rt_.Evaluate(script, result);
+    ASSERT_EQ(42, result.toNumber());
+}
+
+TEST_F(ScriptExceptionTests, test12) {
+    auto script = R"((function(){ return function() { abc(); } })();)";
+    rs::jsapi::Value func(rt_);
+    rt_.Evaluate(script, func);
+    
+    rs::jsapi::FunctionArguments args{rt_};
+    func.CallFunction(args, false);
+    
+    // check the previous exception has been cleared
+    script = R"((function(){ return 42; })();)";
+    rs::jsapi::Value result(rt_);
+    rt_.Evaluate(script, result);
+    ASSERT_EQ(42, result.toNumber());
+}
+
+TEST_F(ScriptExceptionTests, test13) {
+    auto script = R"((function(){ return function() { abc(); } })();)";
+    rs::jsapi::Value func(rt_);
+    rt_.Evaluate(script, func);
+    
+    rs::jsapi::FunctionArguments args{rt_};
+    rs::jsapi::Value result(rt_);
+    func.CallFunction(args, result, false);
+    
+    // check the previous exception has been cleared
+    script = R"((function(){ return 42; })();)";
+    rt_.Evaluate(script, result);
+    ASSERT_EQ(42, result.toNumber());
 }

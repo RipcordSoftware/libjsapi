@@ -23,6 +23,9 @@
 **/
 
 #include "context.h"
+
+#include <cstring>
+
 #include "runtime.h"
 #include "value.h"
 #include "function_arguments.h"
@@ -91,7 +94,7 @@ bool rs::jsapi::Context::Evaluate(const char* script) {
 bool rs::jsapi::Context::Evaluate(const char* script, Value& result) {
     JSAutoRequest ar(cx_);    
     JS::CompileOptions options(cx_);
-    auto status = JS::Evaluate(cx_, global_, options, script, ::strlen(script), result);
+    auto status = JS::Evaluate(cx_, global_, options, script, std::strlen(script), result);
     
     auto error = getError();
     if (!!error) {
@@ -135,13 +138,13 @@ bool rs::jsapi::Context::Call(const char* name, const FunctionArguments& args, V
     return status;
 }
 
-bool rs::jsapi::Context::Call(Value& value, const FunctionArguments& args) {    
+bool rs::jsapi::Context::Call(Value& value, const FunctionArguments& args, bool throwOnError) {    
     auto cx = value.getContext();
     rs::jsapi::Value result{cx};
-    return Context::Call(value, args, result);
+    return Context::Call(value, args, result, throwOnError);
 }
 
-bool rs::jsapi::Context::Call(Value& value, const FunctionArguments& args, Value& result) {
+bool rs::jsapi::Context::Call(Value& value, const FunctionArguments& args, Value& result, bool throwOnError) {
     auto status = false;
     
     auto cx = value.getContext();
@@ -151,7 +154,7 @@ bool rs::jsapi::Context::Call(Value& value, const FunctionArguments& args, Value
         status = JS_CallFunctionValue(cx, that->global_, value, args, result);
         
         auto error = that->getError();
-        if (!!error) {
+        if (throwOnError && !!error) {
             throw *error;
         }
     }

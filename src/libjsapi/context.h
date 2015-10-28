@@ -25,7 +25,6 @@
 #ifndef RS_JSAPI_CONTEXT_H
 #define RS_JSAPI_CONTEXT_H
 
-#include <string>
 #include <memory>
 
 #include <jsapi.h>
@@ -52,8 +51,8 @@ public:
     bool Call(const char* name, const FunctionArguments& args);
     bool Call(const char* name, Value& result);
     bool Call(const char* name, const FunctionArguments& args, Value& result);
-    static bool Call(Value& value, const FunctionArguments& args);
-    static bool Call(Value& value, const FunctionArguments& args, Value& result);
+    static bool Call(Value& value, const FunctionArguments& args, bool throwOnError = true);
+    static bool Call(Value& value, const FunctionArguments& args, Value& result, bool throwOnError = true);
     
     Context(const Context&) = delete;
     Context& operator =(const Context&) = delete;
