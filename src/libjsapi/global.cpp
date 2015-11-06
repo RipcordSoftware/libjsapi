@@ -25,6 +25,7 @@
 #include "global.h"
 #include "context.h"
 #include "value.h"
+#include "vector_utils.h"
 
 JSClass rs::jsapi::Global::privateFunctionStateClass_ = { 
     "rs_jsapi_global_function_object", JSCLASS_HAS_PRIVATE, nullptr, nullptr,
@@ -67,7 +68,9 @@ bool rs::jsapi::Global::CallFunction(JSContext* cx, unsigned argc, JS::Value* vp
     auto state = Global::GetFunctionState(&args.callee(), cx, privateFunctionStatePropertyName_);
     if (state) {
         try {
-            std::vector<Value> vArgs;
+            static thread_local std::vector<Value> vArgs;
+
+            VectorUtils::ScopedVectorCleaner<Value> clean(vArgs);
             for (int i = 0; i < argc; ++i) {
                 vArgs.emplace_back(cx, args.get(i));
             }

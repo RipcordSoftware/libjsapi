@@ -16,6 +16,7 @@
       <itemPath>runtime.h</itemPath>
       <itemPath>script.h</itemPath>
       <itemPath>value.h</itemPath>
+      <itemPath>vector_utils.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -436,6 +437,8 @@
       </item>
       <item path="value.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="vector_utils.h" ex="false" tool="3" flavor2="0">
+      </item>
     </conf>
     <conf name="Release" type="3">
       <toolsSet>
@@ -752,6 +755,8 @@
       <item path="value.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="value.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="vector_utils.h" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
   </confs>
