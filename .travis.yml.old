@@ -1,0 +1,28 @@
+language: cpp
+compiler: gcc
+script: make all && make test && ./coverage.sh
+
+before_install:
+# g++ 4.8.1
+- sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+- sudo apt-get update -qq
+
+install:
+# g++4.8.1
+- sudo apt-get install -qq g++-4.8 zlib1g-dev lcov ruby rubygems
+- export CC="gcc-4.8"
+- export CXX="g++-4.8"
+- pushd ~
+- mkdir Downloads
+- cd Downloads
+- curl http://ftp.uk.debian.org/debian/pool/main/l/lcov/lcov_1.11.orig.tar.gz -O
+- tar xfz lcov_1.11.orig.tar.gz
+- sudo make -C lcov-1.11/ install
+- popd
+- gem install coveralls-lcov
+- sudo rm -f /usr/bin/g++
+- sudo rm -f /usr/bin/gcc
+- sudo rm -f /usr/bin/gcov
+- sudo ln -s /usr/bin/g++-4.8 /usr/bin/g++
+- sudo ln -s /usr/bin/gcc-4.8 /usr/bin/gcc
+- sudo ln -s /usr/bin/gcov-4.8 /usr/bin/gcov
