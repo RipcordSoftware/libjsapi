@@ -26,8 +26,8 @@ clean: force_true
 		tar xfz autoconf-2.13.tar.gz && \
 		cd autoconf-2.13 && \
 		./configure --prefix=${PWD}/externals/installed && \
-		make && \
-		make install; \
+		$(MAKE) && \
+		$(MAKE) install; \
 	fi
 
 .jsapi: .autoconf-2.13 force_true
@@ -45,8 +45,8 @@ clean: force_true
 		cd build_OPT.OBJ && \
 		export PATH=${PWD}/externals/installed/bin:${PATH} && \
 		../configure --prefix=${PWD}/externals/installed --disable-shared-js --disable-tests --enable-exact-rooting && \
-		make -j 2 && \
-		make install; \
+		$(MAKE) -j 2 && \
+		$(MAKE) install; \
 	fi
 
 .googletest: force_true
@@ -60,7 +60,7 @@ clean: force_true
 		unzip gtest-${GTEST_VER}.zip && \
 		cd gtest-${GTEST_VER} && \
 		./configure && \
-		make -j 2 && \
+		$(MAKE) -j 2 && \
                 if [ ! -d "../installed/include" ]; then mkdir -p ../installed/include; fi && \
                 if [ ! -d "../installed/lib" ]; then mkdir -p ../installed/lib; fi && \
 		cp -Rf include/* ../installed/include && \
