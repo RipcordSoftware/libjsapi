@@ -2,19 +2,16 @@ GTEST_VER=1.7.0
 MOZJS_VER=38.2.1
 MOZJS_VER_SUFFIX=.rc0
 
-build: force_true .jsapi .googletest
-	cd src/libjsapi && $(MAKE) $(MFLAGS) $(MAKEOVERRIDES) build
+.PHONY: build all test clean .autoconf-2.13 .jsapi .googletest
+.NOTPARALLEL: test
 
-all: force_true .jsapi .googletest
-	cd src/libjsapi && $(MAKE) $(MFLAGS) $(MAKEOVERRIDES) all
+build all test: .jsapi .googletest
+	cd src/libjsapi && $(MAKE) $@
 
-test: force_true .jsapi .googletest
-	cd src/libjsapi && $(MAKE) $(MFLAGS) $(MAKEOVERRIDES) test
+clean:
+	cd src/libjsapi && $(MAKE) $@
 
-clean: force_true
-	cd src/libjsapi && $(MAKE) $(MFLAGS) $(MAKEOVERRIDES) clean
-
-.autoconf-2.13: force_true
+.autoconf-2.13:
 	if [ "${CI}" = "true" ]; then \
 		curl ftp://ftp.ripcordsoftware.com/pub/autoconf-2.13-travis-ci-externals-installed.tar.xz -O && \
 		tar xfJ autoconf-*; \
@@ -30,7 +27,7 @@ clean: force_true
 		$(MAKE) install; \
 	fi
 
-.jsapi: .autoconf-2.13 force_true
+.jsapi: .autoconf-2.13
 	if [ "${CI}" = "true" ]; then \
 		curl ftp://ftp.ripcordsoftware.com/pub/mozjs-${MOZJS_VER}-travis-ci-externals-installed.tar.xz -O && \
 		tar xfJ mozjs-*; \
@@ -45,27 +42,25 @@ clean: force_true
 		cd build_OPT.OBJ && \
 		export PATH=${PWD}/externals/installed/bin:${PATH} && \
 		../configure --prefix=${PWD}/externals/installed --disable-shared-js --disable-tests --enable-exact-rooting && \
-		$(MAKE) -j 2 && \
+		$(MAKE) && \
 		$(MAKE) install; \
 	fi
 
-.googletest: force_true
-		if [ "${CI}" = "true" ]; then \
-			curl ftp://ftp.ripcordsoftware.com/pub/gtest-${GTEST_VER}-travis-ci-externals-installed.tar.xz -O && \
-			tar xfJ gtest-*; \
-		elif [ ! -d externals/gtest-${GTEST_VER}/lib/.libs ]; then \
+.googletest:
+	if [ "${CI}" = "true" ]; then \
+		curl ftp://ftp.ripcordsoftware.com/pub/gtest-${GTEST_VER}-travis-ci-externals-installed.tar.xz -O && \
+		tar xfJ gtest-*; \
+	elif [ ! -d externals/gtest-${GTEST_VER}/lib/.libs ]; then \
 		mkdir -p externals && \
 		cd externals && \
-		if [ ! -f gtest-${GTEST_VER}.zip ]; then curl https://googletest.googlecode.com/files/gtest-${GTEST_VER}.zip -O; fi && \
+		if [ ! -f gtest-${GTEST_VER}.zip ]; then curl ftp://ftp.ripcordsoftware.com/pub/gtest-${GTEST_VER}.zip -O; fi && \
 		unzip gtest-${GTEST_VER}.zip && \
 		cd gtest-${GTEST_VER} && \
 		./configure && \
-		$(MAKE) -j 2 && \
+		$(MAKE) && \
                 if [ ! -d "../installed/include" ]; then mkdir -p ../installed/include; fi && \
                 if [ ! -d "../installed/lib" ]; then mkdir -p ../installed/lib; fi && \
 		cp -Rf include/* ../installed/include && \
 		cp -Rf lib/.libs/* ../installed/lib; \
 	fi
 
-force_true:
-	true
