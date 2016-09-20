@@ -83,7 +83,7 @@
             </linkerLibProjectItem>
             <linkerLibFileItem>../../externals/installed/lib/libjs_static.ajs</linkerLibFileItem>
             <linkerLibStdlibItem>DataCompression</linkerLibStdlibItem>
-            <linkerLibStdlibItem>DynamicLinking</linkerLibStdlibItem>
+            <linkerOptionItem>$(LDLIBS)</linkerOptionItem>
           </linkerLibItems>
           <commandLine>`pkg-config gtkmm-3.0 --libs`</commandLine>
         </linkerTool>
@@ -178,8 +178,8 @@
               </makeArtifact>
             </linkerLibProjectItem>
             <linkerLibStdlibItem>DataCompression</linkerLibStdlibItem>
-            <linkerLibStdlibItem>DynamicLinking</linkerLibStdlibItem>
             <linkerLibFileItem>../../externals/installed/lib/libjs_static.ajs</linkerLibFileItem>
+            <linkerOptionItem>$(LDLIBS)</linkerOptionItem>
           </linkerLibItems>
           <commandLine>`pkg-config gtkmm-3.0 --libs`</commandLine>
         </linkerTool>

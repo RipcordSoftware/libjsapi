@@ -1,6 +1,8 @@
-GTEST_VER=1.7.0
-MOZJS_VER=38.2.1
-MOZJS_VER_SUFFIX=.rc0
+GTEST_VER:=1.7.0
+MOZJS_VER:=38.2.1
+MOZJS_VER_SUFFIX:=.rc0
+
+MOZJS_CONFIG_FLAGS:=--disable-shared-js --disable-tests --enable-exact-rooting --enable-install-strip --without-intl-api
 
 .PHONY: build all test clean .autoconf-2.13 .jsapi .googletest
 .NOTPARALLEL: test
@@ -41,7 +43,7 @@ clean:
 		mkdir build_OPT.OBJ && \
 		cd build_OPT.OBJ && \
 		export PATH=${PWD}/externals/installed/bin:${PATH} && \
-		../configure --prefix=${PWD}/externals/installed --disable-shared-js --disable-tests --enable-exact-rooting && \
+		../configure --prefix=${PWD}/externals/installed $(MOZJS_CONFIG_FLAGS) && \
 		$(MAKE) && \
 		$(MAKE) install; \
 	fi

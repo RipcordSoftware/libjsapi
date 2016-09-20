@@ -175,8 +175,8 @@
           <additionalDep>../../externals/installed/lib/libjs_static.ajs ../../externals/installed/lib/libgtest.a ../../externals/installed/lib/libgtest_main.a</additionalDep>
           <linkerLibItems>
             <linkerLibStdlibItem>PosixThreads</linkerLibStdlibItem>
-            <linkerLibStdlibItem>DynamicLinking</linkerLibStdlibItem>
             <linkerOptionItem>`pkg-config --libs zlib`</linkerOptionItem>
+            <linkerOptionItem>$(LDLIBS)</linkerOptionItem>
           </linkerLibItems>
           <commandLine>--coverage</commandLine>
         </linkerTool>
@@ -495,8 +495,8 @@
           <additionalDep>../../externals/installed/lib/libjs_static.ajs ../../externals/installed/lib/libgtest.a ../../externals/installed/lib/libgtest_main.a</additionalDep>
           <linkerLibItems>
             <linkerLibStdlibItem>PosixThreads</linkerLibStdlibItem>
-            <linkerLibStdlibItem>DynamicLinking</linkerLibStdlibItem>
             <linkerOptionItem>`pkg-config --libs zlib`</linkerOptionItem>
+            <linkerOptionItem>$(LDLIBS)</linkerOptionItem>
           </linkerLibItems>
         </linkerTool>
       </folder>

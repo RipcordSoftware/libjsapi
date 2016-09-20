@@ -62,7 +62,7 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=../libjsapi/dist/Release/GNU-Linux-x86/libjsapi.a -lz -ldl ../../externals/installed/lib/libjs_static.ajs
+LDLIBSOPTIONS=../libjsapi/dist/Release/GNU-Linux-x86/libjsapi.a -lz ../../externals/installed/lib/libjs_static.ajs $(LDLIBS)
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}

@@ -52,7 +52,7 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=../libjsapi/dist/Release/GNU-Linux-x86/libjsapi.a -lpthread -lz -ldl
+LDLIBSOPTIONS=../libjsapi/dist/Release/GNU-Linux-x86/libjsapi.a -lpthread -lz $(LDLIBS)
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
