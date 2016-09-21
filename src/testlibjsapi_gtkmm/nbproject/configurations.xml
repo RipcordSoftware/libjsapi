@@ -65,7 +65,7 @@
             <pElem>../libjsapi</pElem>
             <pElem>../../externals/installed/include/mozjs-</pElem>
           </incDir>
-          <commandLine>`pkg-config gtkmm-3.0 --cflags` --coverage</commandLine>
+          <commandLine>`pkg-config gtkmm-3.0 --cflags` $(COVERAGE_FLAGS)</commandLine>
         </ccTool>
         <linkerTool>
           <linkerLibItems>

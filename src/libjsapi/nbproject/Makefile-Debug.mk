@@ -69,8 +69,8 @@ TESTFILES= \
 CFLAGS=
 
 # CC Compiler Flags
-CCFLAGS=--coverage
-CXXFLAGS=--coverage
+CCFLAGS=$(COVERAGE_FLAGS)
+CXXFLAGS=$(COVERAGE_FLAGS)
 
 # Fortran Compiler Flags
 FFLAGS=
@@ -154,7 +154,7 @@ ${TESTDIR}/TestFiles/f5: ../../externals/installed/lib/libgtest_main.a
 
 ${TESTDIR}/TestFiles/f5: ${TESTDIR}/tests/call_js_function_tests.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
-	${LINK.cc} --coverage  -o ${TESTDIR}/TestFiles/f5 $^ ${LDLIBSOPTIONS} -lpthread `pkg-config --libs zlib` $(LDLIBS)   
+	${LINK.cc} $(COVERAGE_FLAGS)  -o ${TESTDIR}/TestFiles/f5 $^ ${LDLIBSOPTIONS} -lpthread `pkg-config --libs zlib` $(LDLIBS)   
 
 ${TESTDIR}/TestFiles/f6: ../../externals/installed/lib/libjs_static.ajs
 
@@ -164,7 +164,7 @@ ${TESTDIR}/TestFiles/f6: ../../externals/installed/lib/libgtest_main.a
 
 ${TESTDIR}/TestFiles/f6: ${TESTDIR}/tests/call_native_function_tests.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
-	${LINK.cc} --coverage  -o ${TESTDIR}/TestFiles/f6 $^ ${LDLIBSOPTIONS} -lpthread `pkg-config --libs zlib` $(LDLIBS)   
+	${LINK.cc} $(COVERAGE_FLAGS)  -o ${TESTDIR}/TestFiles/f6 $^ ${LDLIBSOPTIONS} -lpthread `pkg-config --libs zlib` $(LDLIBS)   
 
 ${TESTDIR}/TestFiles/f12: ../../externals/installed/lib/libjs_static.ajs
 
@@ -174,7 +174,7 @@ ${TESTDIR}/TestFiles/f12: ../../externals/installed/lib/libgtest_main.a
 
 ${TESTDIR}/TestFiles/f12: ${TESTDIR}/tests/function_arguments_tests.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
-	${LINK.cc} --coverage  -o ${TESTDIR}/TestFiles/f12 $^ ${LDLIBSOPTIONS} -lpthread `pkg-config --libs zlib` $(LDLIBS)   
+	${LINK.cc} $(COVERAGE_FLAGS)  -o ${TESTDIR}/TestFiles/f12 $^ ${LDLIBSOPTIONS} -lpthread `pkg-config --libs zlib` $(LDLIBS)   
 
 ${TESTDIR}/TestFiles/f13: ../../externals/installed/lib/libjs_static.ajs
 
@@ -184,7 +184,7 @@ ${TESTDIR}/TestFiles/f13: ../../externals/installed/lib/libgtest_main.a
 
 ${TESTDIR}/TestFiles/f13: ${TESTDIR}/tests/gc_tests.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
-	${LINK.cc} --coverage  -o ${TESTDIR}/TestFiles/f13 $^ ${LDLIBSOPTIONS} -lpthread `pkg-config --libs zlib` $(LDLIBS)   
+	${LINK.cc} $(COVERAGE_FLAGS)  -o ${TESTDIR}/TestFiles/f13 $^ ${LDLIBSOPTIONS} -lpthread `pkg-config --libs zlib` $(LDLIBS)   
 
 ${TESTDIR}/TestFiles/f8: ../../externals/installed/lib/libjs_static.ajs
 
@@ -194,7 +194,7 @@ ${TESTDIR}/TestFiles/f8: ../../externals/installed/lib/libgtest_main.a
 
 ${TESTDIR}/TestFiles/f8: ${TESTDIR}/tests/global_property_tests.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
-	${LINK.cc} --coverage  -o ${TESTDIR}/TestFiles/f8 $^ ${LDLIBSOPTIONS} -lpthread `pkg-config --libs zlib` $(LDLIBS)   
+	${LINK.cc} $(COVERAGE_FLAGS)  -o ${TESTDIR}/TestFiles/f8 $^ ${LDLIBSOPTIONS} -lpthread `pkg-config --libs zlib` $(LDLIBS)   
 
 ${TESTDIR}/TestFiles/f3: ../../externals/installed/lib/libjs_static.ajs
 
@@ -204,7 +204,7 @@ ${TESTDIR}/TestFiles/f3: ../../externals/installed/lib/libgtest_main.a
 
 ${TESTDIR}/TestFiles/f3: ${TESTDIR}/tests/multi_context_tests.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
-	${LINK.cc} --coverage  -o ${TESTDIR}/TestFiles/f3 $^ ${LDLIBSOPTIONS} -lpthread `pkg-config --libs zlib` $(LDLIBS)   
+	${LINK.cc} $(COVERAGE_FLAGS)  -o ${TESTDIR}/TestFiles/f3 $^ ${LDLIBSOPTIONS} -lpthread `pkg-config --libs zlib` $(LDLIBS)   
 
 ${TESTDIR}/TestFiles/f4: ../../externals/installed/lib/libjs_static.ajs
 
@@ -214,7 +214,7 @@ ${TESTDIR}/TestFiles/f4: ../../externals/installed/lib/libgtest_main.a
 
 ${TESTDIR}/TestFiles/f4: ${TESTDIR}/tests/multi_runtime_tests.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
-	${LINK.cc} --coverage  -o ${TESTDIR}/TestFiles/f4 $^ ${LDLIBSOPTIONS} -lpthread `pkg-config --libs zlib` $(LDLIBS)   
+	${LINK.cc} $(COVERAGE_FLAGS)  -o ${TESTDIR}/TestFiles/f4 $^ ${LDLIBSOPTIONS} -lpthread `pkg-config --libs zlib` $(LDLIBS)   
 
 ${TESTDIR}/TestFiles/f2: ../../externals/installed/lib/libjs_static.ajs
 
@@ -224,7 +224,7 @@ ${TESTDIR}/TestFiles/f2: ../../externals/installed/lib/libgtest_main.a
 
 ${TESTDIR}/TestFiles/f2: ${TESTDIR}/tests/script_exception_tests.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
-	${LINK.cc} --coverage  -o ${TESTDIR}/TestFiles/f2 $^ ${LDLIBSOPTIONS} -lpthread `pkg-config --libs zlib` $(LDLIBS)   
+	${LINK.cc} $(COVERAGE_FLAGS)  -o ${TESTDIR}/TestFiles/f2 $^ ${LDLIBSOPTIONS} -lpthread `pkg-config --libs zlib` $(LDLIBS)   
 
 ${TESTDIR}/TestFiles/f11: ../../externals/installed/lib/libjs_static.ajs
 
@@ -234,7 +234,7 @@ ${TESTDIR}/TestFiles/f11: ../../externals/installed/lib/libgtest_main.a
 
 ${TESTDIR}/TestFiles/f11: ${TESTDIR}/tests/simple_dynamic_array_tests.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
-	${LINK.cc} --coverage  -o ${TESTDIR}/TestFiles/f11 $^ ${LDLIBSOPTIONS} -lpthread `pkg-config --libs zlib` $(LDLIBS)   
+	${LINK.cc} $(COVERAGE_FLAGS)  -o ${TESTDIR}/TestFiles/f11 $^ ${LDLIBSOPTIONS} -lpthread `pkg-config --libs zlib` $(LDLIBS)   
 
 ${TESTDIR}/TestFiles/f9: ../../externals/installed/lib/libjs_static.ajs
 
@@ -244,7 +244,7 @@ ${TESTDIR}/TestFiles/f9: ../../externals/installed/lib/libgtest_main.a
 
 ${TESTDIR}/TestFiles/f9: ${TESTDIR}/tests/simple_dynamic_object_tests.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
-	${LINK.cc} --coverage  -o ${TESTDIR}/TestFiles/f9 $^ ${LDLIBSOPTIONS} -lpthread `pkg-config --libs zlib` $(LDLIBS)   
+	${LINK.cc} $(COVERAGE_FLAGS)  -o ${TESTDIR}/TestFiles/f9 $^ ${LDLIBSOPTIONS} -lpthread `pkg-config --libs zlib` $(LDLIBS)   
 
 ${TESTDIR}/TestFiles/f7: ../../externals/installed/lib/libjs_static.ajs
 
@@ -254,7 +254,7 @@ ${TESTDIR}/TestFiles/f7: ../../externals/installed/lib/libgtest_main.a
 
 ${TESTDIR}/TestFiles/f7: ${TESTDIR}/tests/simple_object_tests.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
-	${LINK.cc} --coverage  -o ${TESTDIR}/TestFiles/f7 $^ ${LDLIBSOPTIONS} -lpthread `pkg-config --libs zlib` $(LDLIBS)   
+	${LINK.cc} $(COVERAGE_FLAGS)  -o ${TESTDIR}/TestFiles/f7 $^ ${LDLIBSOPTIONS} -lpthread `pkg-config --libs zlib` $(LDLIBS)   
 
 ${TESTDIR}/TestFiles/f1: ../../externals/installed/lib/libjs_static.ajs
 
@@ -264,7 +264,7 @@ ${TESTDIR}/TestFiles/f1: ../../externals/installed/lib/libgtest_main.a
 
 ${TESTDIR}/TestFiles/f1: ${TESTDIR}/tests/simple_script_tests.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
-	${LINK.cc} --coverage  -o ${TESTDIR}/TestFiles/f1 $^ ${LDLIBSOPTIONS} -lpthread `pkg-config --libs zlib` $(LDLIBS)   
+	${LINK.cc} $(COVERAGE_FLAGS)  -o ${TESTDIR}/TestFiles/f1 $^ ${LDLIBSOPTIONS} -lpthread `pkg-config --libs zlib` $(LDLIBS)   
 
 ${TESTDIR}/TestFiles/f10: ../../externals/installed/lib/libjs_static.ajs
 
@@ -274,85 +274,85 @@ ${TESTDIR}/TestFiles/f10: ../../externals/installed/lib/libgtest_main.a
 
 ${TESTDIR}/TestFiles/f10: ${TESTDIR}/tests/simple_value_tests.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
-	${LINK.cc} --coverage  -o ${TESTDIR}/TestFiles/f10 $^ ${LDLIBSOPTIONS} -lpthread `pkg-config --libs zlib` $(LDLIBS)   
+	${LINK.cc} $(COVERAGE_FLAGS)  -o ${TESTDIR}/TestFiles/f10 $^ ${LDLIBSOPTIONS} -lpthread `pkg-config --libs zlib` $(LDLIBS)   
 
 
 ${TESTDIR}/tests/call_js_function_tests.o: tests/call_js_function_tests.cpp 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs- -I../../externals/installed/include -I. -std=c++11 --coverage -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/call_js_function_tests.o tests/call_js_function_tests.cpp
+	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs- -I../../externals/installed/include -I. -std=c++11 $(COVERAGE_FLAGS) -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/call_js_function_tests.o tests/call_js_function_tests.cpp
 
 
 ${TESTDIR}/tests/call_native_function_tests.o: tests/call_native_function_tests.cpp 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs- -I../../externals/installed/include -I. -std=c++11 --coverage -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/call_native_function_tests.o tests/call_native_function_tests.cpp
+	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs- -I../../externals/installed/include -I. -std=c++11 $(COVERAGE_FLAGS) -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/call_native_function_tests.o tests/call_native_function_tests.cpp
 
 
 ${TESTDIR}/tests/function_arguments_tests.o: tests/function_arguments_tests.cpp 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs- -I../../externals/installed/include -I. -std=c++11 --coverage -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/function_arguments_tests.o tests/function_arguments_tests.cpp
+	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs- -I../../externals/installed/include -I. -std=c++11 $(COVERAGE_FLAGS) -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/function_arguments_tests.o tests/function_arguments_tests.cpp
 
 
 ${TESTDIR}/tests/gc_tests.o: tests/gc_tests.cpp 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs- -I../../externals/installed/include -I. -std=c++11 --coverage -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/gc_tests.o tests/gc_tests.cpp
+	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs- -I../../externals/installed/include -I. -std=c++11 $(COVERAGE_FLAGS) -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/gc_tests.o tests/gc_tests.cpp
 
 
 ${TESTDIR}/tests/global_property_tests.o: tests/global_property_tests.cpp 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs- -I../../externals/installed/include -I. -std=c++11 --coverage -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/global_property_tests.o tests/global_property_tests.cpp
+	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs- -I../../externals/installed/include -I. -std=c++11 $(COVERAGE_FLAGS) -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/global_property_tests.o tests/global_property_tests.cpp
 
 
 ${TESTDIR}/tests/multi_context_tests.o: tests/multi_context_tests.cpp 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs- -I../../externals/installed/include -I. -std=c++11 --coverage -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/multi_context_tests.o tests/multi_context_tests.cpp
+	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs- -I../../externals/installed/include -I. -std=c++11 $(COVERAGE_FLAGS) -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/multi_context_tests.o tests/multi_context_tests.cpp
 
 
 ${TESTDIR}/tests/multi_runtime_tests.o: tests/multi_runtime_tests.cpp 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs- -I../../externals/installed/include -I. -std=c++11 --coverage -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/multi_runtime_tests.o tests/multi_runtime_tests.cpp
+	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs- -I../../externals/installed/include -I. -std=c++11 $(COVERAGE_FLAGS) -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/multi_runtime_tests.o tests/multi_runtime_tests.cpp
 
 
 ${TESTDIR}/tests/script_exception_tests.o: tests/script_exception_tests.cpp 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs- -I../../externals/installed/include -I. -std=c++11 --coverage -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/script_exception_tests.o tests/script_exception_tests.cpp
+	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs- -I../../externals/installed/include -I. -std=c++11 $(COVERAGE_FLAGS) -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/script_exception_tests.o tests/script_exception_tests.cpp
 
 
 ${TESTDIR}/tests/simple_dynamic_array_tests.o: tests/simple_dynamic_array_tests.cpp 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs- -I../../externals/installed/include -I. -std=c++11 --coverage -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/simple_dynamic_array_tests.o tests/simple_dynamic_array_tests.cpp
+	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs- -I../../externals/installed/include -I. -std=c++11 $(COVERAGE_FLAGS) -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/simple_dynamic_array_tests.o tests/simple_dynamic_array_tests.cpp
 
 
 ${TESTDIR}/tests/simple_dynamic_object_tests.o: tests/simple_dynamic_object_tests.cpp 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs- -I../../externals/installed/include -I. -std=c++11 --coverage -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/simple_dynamic_object_tests.o tests/simple_dynamic_object_tests.cpp
+	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs- -I../../externals/installed/include -I. -std=c++11 $(COVERAGE_FLAGS) -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/simple_dynamic_object_tests.o tests/simple_dynamic_object_tests.cpp
 
 
 ${TESTDIR}/tests/simple_object_tests.o: tests/simple_object_tests.cpp 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs- -I../../externals/installed/include -I. -std=c++11 --coverage -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/simple_object_tests.o tests/simple_object_tests.cpp
+	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs- -I../../externals/installed/include -I. -std=c++11 $(COVERAGE_FLAGS) -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/simple_object_tests.o tests/simple_object_tests.cpp
 
 
 ${TESTDIR}/tests/simple_script_tests.o: tests/simple_script_tests.cpp 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs- -I../../externals/installed/include -I. -std=c++11 --coverage -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/simple_script_tests.o tests/simple_script_tests.cpp
+	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs- -I../../externals/installed/include -I. -std=c++11 $(COVERAGE_FLAGS) -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/simple_script_tests.o tests/simple_script_tests.cpp
 
 
 ${TESTDIR}/tests/simple_value_tests.o: tests/simple_value_tests.cpp 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs- -I../../externals/installed/include -I. -std=c++11 --coverage -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/simple_value_tests.o tests/simple_value_tests.cpp
+	$(COMPILE.cc) -g -I../../externals/installed/include/mozjs- -I../../externals/installed/include -I. -std=c++11 $(COVERAGE_FLAGS) -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/simple_value_tests.o tests/simple_value_tests.cpp
 
 
 ${OBJECTDIR}/context_nomain.o: ${OBJECTDIR}/context.o context.cpp 

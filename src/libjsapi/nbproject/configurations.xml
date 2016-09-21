@@ -140,7 +140,7 @@
           <incDir>
             <pElem>../../externals/installed/include/mozjs-</pElem>
           </incDir>
-          <commandLine>--coverage</commandLine>
+          <commandLine>$(COVERAGE_FLAGS)</commandLine>
         </ccTool>
         <archiverTool>
           <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libjsapi.a</output>
@@ -169,7 +169,7 @@
           <incDir>
             <pElem>../../externals/installed/include</pElem>
           </incDir>
-          <commandLine>--coverage</commandLine>
+          <commandLine>$(COVERAGE_FLAGS)</commandLine>
         </ccTool>
         <linkerTool>
           <additionalDep>../../externals/installed/lib/libjs_static.ajs ../../externals/installed/lib/libgtest.a ../../externals/installed/lib/libgtest_main.a</additionalDep>
@@ -178,7 +178,7 @@
             <linkerOptionItem>`pkg-config --libs zlib`</linkerOptionItem>
             <linkerOptionItem>$(LDLIBS)</linkerOptionItem>
           </linkerLibItems>
-          <commandLine>--coverage</commandLine>
+          <commandLine>$(COVERAGE_FLAGS)</commandLine>
         </linkerTool>
       </folder>
       <folder path="TestFiles/f1">

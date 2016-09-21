@@ -52,8 +52,8 @@ OBJECTFILES= \
 CFLAGS=
 
 # CC Compiler Flags
-CCFLAGS=`pkg-config gtkmm-3.0 --cflags` --coverage 
-CXXFLAGS=`pkg-config gtkmm-3.0 --cflags` --coverage 
+CCFLAGS=`pkg-config gtkmm-3.0 --cflags` $(COVERAGE_FLAGS) 
+CXXFLAGS=`pkg-config gtkmm-3.0 --cflags` $(COVERAGE_FLAGS) 
 
 # Fortran Compiler Flags
 FFLAGS=

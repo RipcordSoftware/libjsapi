@@ -41,7 +41,7 @@
             <pElem>../libjsapi</pElem>
             <pElem>../../externals/installed/include/mozjs-</pElem>
           </incDir>
-          <commandLine>--coverage</commandLine>
+          <commandLine>$(COVERAGE_FLAGS)</commandLine>
         </ccTool>
         <linkerTool>
           <linkerLibItems>

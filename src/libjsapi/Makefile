@@ -51,6 +51,8 @@ CCADMIN=CCadmin
 
 LDLIBS:=$(shell echo 'int main(){}' | $(CXX) -x c++ -o /dev/null -ldl - > /dev/null 2>&1 && echo '-ldl')
 
+COVERAGE_FLAGS:=$(shell echo 'int main(){}' | $(CXX) -x c++ -o /dev/null --coverage - > /dev/null 2>&1 && echo '--coverage')
+
 # build
 build: .build-post
 

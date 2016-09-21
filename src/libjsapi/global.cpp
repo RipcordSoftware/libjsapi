@@ -68,7 +68,11 @@ bool rs::jsapi::Global::CallFunction(JSContext* cx, unsigned argc, JS::Value* vp
     auto state = Global::GetFunctionState(&args.callee(), cx, privateFunctionStatePropertyName_);
     if (state) {
         try {
+#if __clang_major__ < 4
+            std::vector<Value> vArgs;
+#else
             static thread_local std::vector<Value> vArgs;
+#endif
 
             VectorUtils::ScopedVectorCleaner<Value> clean(vArgs);
             for (int i = 0; i < argc; ++i) {
