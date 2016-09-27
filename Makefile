@@ -49,6 +49,7 @@ clean:
 		../configure --prefix=$(INSTALLED) $(MOZJS_CONFIG_FLAGS) && \
 		$(MAKE) && \
 		$(MAKE) install && \
+		cp -f dist/sdk/lib/libmozglue.a $(INSTALLED)/lib && \
 		pushd $(INSTALLED)/include && ((test -L mozjs && rm mozjs) || true) && ln -s mozjs-?? mozjs && popd; \
 	fi
 
