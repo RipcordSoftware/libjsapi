@@ -36,7 +36,7 @@ clean:
 	elif [ ! -d externals/mozjs-${MOZJS_VER} ]; then \
 		mkdir -p externals && cd externals && \
 		mkdir -p installed && \
-		if [ ! -f mozjs-${MOZJS_VER}.tar.bz2 ]; then curl https://people.mozilla.org/~sstangl/mozjs-${MOZJS_VER}${MOZJS_VER_SUFFIX}.tar.bz2 -o mozjs-${MOZJS_VER}.tar.bz2; fi && \
+		if [ ! -f mozjs-${MOZJS_VER}.tar.bz2 ]; then curl -L https://people-mozilla.org/~sstangl/mozjs-${MOZJS_VER}${MOZJS_VER_SUFFIX}.tar.bz2 -o mozjs-${MOZJS_VER}.tar.bz2; fi && \
 		mkdir -p mozjs-${MOZJS_VER} && cd mozjs-${MOZJS_VER} && \
 		tar xfj ../mozjs-${MOZJS_VER}.tar.bz2 --strip-components=1 && \
 		cd js/src && \
