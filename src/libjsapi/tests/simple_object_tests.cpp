@@ -69,7 +69,7 @@ TEST_F(SimpleObjectTests, test2) {
     rs::jsapi::Object::Create(*context, {"hello"}, rs::jsapi::Object::GetCallback(), rs::jsapi::Object::SetCallback(), {}, nullptr, obj);
     ASSERT_TRUE(!!obj);
     
-    JS::Rooted<JSPropertyDescriptor> desc(*context);
+    JS::Rooted<JSPropertyDescriptor> desc(context->getContext());
     JS::MutableHandle<JSPropertyDescriptor> descHandle(&desc);
     ASSERT_TRUE(JS_GetPropertyDescriptor(*context, obj, "hello", descHandle));
     ASSERT_TRUE(desc.get().attrs & JSPROP_ENUMERATE != 0);
@@ -82,7 +82,7 @@ TEST_F(SimpleObjectTests, test3) {
     rs::jsapi::Object::Create(*context, {"hello", "pi", "lorem", "the_answer"}, rs::jsapi::Object::GetCallback(), rs::jsapi::Object::SetCallback(), {}, nullptr, obj);
     ASSERT_TRUE(!!obj);
     
-    JS::Rooted<JSPropertyDescriptor> desc(*context);
+    JS::Rooted<JSPropertyDescriptor> desc(context->getContext());
     JS::MutableHandle<JSPropertyDescriptor> descHandle(&desc);
     ASSERT_TRUE(JS_GetPropertyDescriptor(*context, obj, "hello", descHandle));
     ASSERT_TRUE(desc.get().attrs & JSPROP_ENUMERATE != 0);
@@ -272,7 +272,7 @@ TEST_F(SimpleObjectTests, test9) {
         obj);
     ASSERT_TRUE(!!obj);
     
-    JS::Rooted<JSPropertyDescriptor> desc(*context);
+    JS::Rooted<JSPropertyDescriptor> desc(context->getContext());
     JS::MutableHandle<JSPropertyDescriptor> descHandle(&desc);
     ASSERT_TRUE(JS_GetPropertyDescriptor(*context, obj, "myfunc", descHandle));
     ASSERT_TRUE(desc.get().attrs & JSPROP_ENUMERATE != 0);

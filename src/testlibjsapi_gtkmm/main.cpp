@@ -55,15 +55,10 @@ int main(int argc, char** argv) {
             });
 
         rt.Evaluate(script.c_str());
-            
-        //rs::jsapi::Script scr(rt, script.c_str());
-        //scr.Compile();
-        //scr.Execute();
     } catch (const rs::jsapi::ScriptException& ex) {
-        std::cerr << 
+        std::cerr <<
             "ERROR: line " << ex.lineno << std::endl <<
-            ex.what() << std::endl <<
-            ex.linebuf << std::endl;        
+            ex.what() << std::endl;
     }
     
     return 0;

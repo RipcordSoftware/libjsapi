@@ -28,7 +28,7 @@
 #include "value.h"
 
 rs::jsapi::Script::Script(Context& cx, const char* code) : 
-    cx_(cx), code_(code), script_(cx) {
+    cx_(cx), code_(code), script_(cx.getContext()) {
 }
 
 rs::jsapi::Script::~Script() {
@@ -37,7 +37,7 @@ rs::jsapi::Script::~Script() {
 bool rs::jsapi::Script::Compile() {
     JSAutoRequest ar(cx_);
     JS::CompileOptions options(cx_);
-    if (!JS_CompileScript(cx_, cx_.getGlobal(), code_.c_str(), code_.length(), options, &script_)) {    
+    if (!JS_CompileScript(cx_, code_.c_str(), code_.length(), options, &script_)) {    
         auto error = cx_.getError();
         if (!!error) {
             throw *error;
@@ -53,7 +53,7 @@ bool rs::jsapi::Script::Execute() {
         Compile();
     }
     
-    auto status = JS_ExecuteScript(cx_, cx_.getGlobal(), script_);
+    auto status = JS_ExecuteScript(cx_, script_);
     
     auto error = cx_.getError();
     if (!!error) {
@@ -69,7 +69,7 @@ bool rs::jsapi::Script::Execute(Value& result) {
         Compile();
     }
     
-    auto status = JS_ExecuteScript(cx_, cx_.getGlobal(), script_, result);    
+    auto status = JS_ExecuteScript(cx_, script_, result);    
     
     auto error = cx_.getError();
     if (!!error) {

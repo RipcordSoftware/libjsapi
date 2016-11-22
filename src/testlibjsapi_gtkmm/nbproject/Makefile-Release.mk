@@ -74,62 +74,62 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/testlibjsapi_gtkmm: ../../externals/i
 
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/testlibjsapi_gtkmm: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
-	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/testlibjsapi_gtkmm ${OBJECTFILES} ${LDLIBSOPTIONS} `pkg-config gtkmm-3.0 --libs`
+	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/testlibjsapi_gtkmm ${OBJECTFILES} ${LDLIBSOPTIONS} `pkg-config gtkmm-3.0 --libs` -Wl,--whole-archive ../../externals/installed/lib/libmozglue.a -Wl,--no-whole-archive
 
 ${OBJECTDIR}/application.o: application.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../libjsapi -I../../externals/installed/include/mozjs- -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/application.o application.cpp
+	$(COMPILE.cc) -O2 -I../libjsapi -I../../externals/installed/include/mozjs -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/application.o application.cpp
 
 ${OBJECTDIR}/builder.o: builder.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../libjsapi -I../../externals/installed/include/mozjs- -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/builder.o builder.cpp
+	$(COMPILE.cc) -O2 -I../libjsapi -I../../externals/installed/include/mozjs -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/builder.o builder.cpp
 
 ${OBJECTDIR}/button.o: button.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../libjsapi -I../../externals/installed/include/mozjs- -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/button.o button.cpp
+	$(COMPILE.cc) -O2 -I../libjsapi -I../../externals/installed/include/mozjs -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/button.o button.cpp
 
 ${OBJECTDIR}/check_button.o: check_button.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../libjsapi -I../../externals/installed/include/mozjs- -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/check_button.o check_button.cpp
+	$(COMPILE.cc) -O2 -I../libjsapi -I../../externals/installed/include/mozjs -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/check_button.o check_button.cpp
 
 ${OBJECTDIR}/drawing_area.o: drawing_area.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../libjsapi -I../../externals/installed/include/mozjs- -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/drawing_area.o drawing_area.cpp
+	$(COMPILE.cc) -O2 -I../libjsapi -I../../externals/installed/include/mozjs -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/drawing_area.o drawing_area.cpp
 
 ${OBJECTDIR}/entry.o: entry.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../libjsapi -I../../externals/installed/include/mozjs- -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/entry.o entry.cpp
+	$(COMPILE.cc) -O2 -I../libjsapi -I../../externals/installed/include/mozjs -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/entry.o entry.cpp
 
 ${OBJECTDIR}/image_surface.o: image_surface.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../libjsapi -I../../externals/installed/include/mozjs- -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/image_surface.o image_surface.cpp
+	$(COMPILE.cc) -O2 -I../libjsapi -I../../externals/installed/include/mozjs -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/image_surface.o image_surface.cpp
 
 ${OBJECTDIR}/label.o: label.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../libjsapi -I../../externals/installed/include/mozjs- -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/label.o label.cpp
+	$(COMPILE.cc) -O2 -I../libjsapi -I../../externals/installed/include/mozjs -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/label.o label.cpp
 
 ${OBJECTDIR}/main.o: main.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../libjsapi -I../../externals/installed/include/mozjs- -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/main.o main.cpp
+	$(COMPILE.cc) -O2 -I../libjsapi -I../../externals/installed/include/mozjs -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/main.o main.cpp
 
 ${OBJECTDIR}/widget.o: widget.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../libjsapi -I../../externals/installed/include/mozjs- -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/widget.o widget.cpp
+	$(COMPILE.cc) -O2 -I../libjsapi -I../../externals/installed/include/mozjs -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/widget.o widget.cpp
 
 ${OBJECTDIR}/window.o: window.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../libjsapi -I../../externals/installed/include/mozjs- -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/window.o window.cpp
+	$(COMPILE.cc) -O2 -I../libjsapi -I../../externals/installed/include/mozjs -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/window.o window.cpp
 
 # Subprojects
 .build-subprojects:

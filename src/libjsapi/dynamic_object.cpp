@@ -37,7 +37,7 @@ JSClass rs::jsapi::DynamicObject::class_ = {
 
 bool rs::jsapi::DynamicObject::Create(JSContext* cx, GetCallback getter, DynamicObject::SetCallback setter, EnumeratorCallback enumerator, FinalizeCallback finalize, Value& obj) {
     JSAutoRequest ar(cx);    
-    JS::RootedObject newObj(cx, JS_NewObject(cx, &class_, JS::NullPtr()));
+    JS::RootedObject newObj(cx, JS_NewObject(cx, &class_));
     
     if (newObj) {
         auto state = new DynamicObjectState { getter, setter, enumerator, finalize, 0, nullptr };
@@ -137,8 +137,9 @@ bool rs::jsapi::DynamicObject::Get(JSContext* cx, JS::HandleObject obj, JS::Hand
     return Get(cx, obj, name, vp);
 }
 
-bool rs::jsapi::DynamicObject::Set(JSContext* cx, JS::HandleObject obj, JS::HandleId id, bool strict, JS::MutableHandleValue vp) {
+bool rs::jsapi::DynamicObject::Set(JSContext* cx, JS::HandleObject obj, JS::HandleId id, JS::MutableHandleValue vp, JS::ObjectOpResult& result) {
     JSAutoRequest ar(cx);    
+    result.succeed();
     
     auto name = JSID_TO_STRING(id);
     return Set(cx, obj, name, vp);

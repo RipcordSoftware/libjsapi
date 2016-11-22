@@ -193,7 +193,7 @@ TEST_F(ScriptExceptionTests, test7) {
 
     ASSERT_STRCASEEQ("ReferenceError: abc is not defined", message.c_str());
     ASSERT_EQ(1, lineno);
-    ASSERT_EQ(8, column);
+    ASSERT_EQ(9, column);
 }
 
 TEST_F(ScriptExceptionTests, test7b) {
@@ -211,7 +211,7 @@ TEST_F(ScriptExceptionTests, test7b) {
 
     ASSERT_STRCASEEQ("ReferenceError: abc is not defined", message.c_str());
     ASSERT_EQ(1, lineno);
-    ASSERT_EQ(8, column);
+    ASSERT_EQ(9, column);
 }
 
 TEST_F(ScriptExceptionTests, test8) {

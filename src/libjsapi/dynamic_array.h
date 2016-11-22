@@ -55,7 +55,7 @@ private:
     struct DynamicArrayState { GetCallback getter; SetCallback setter; LengthCallback length; FinalizeCallback finalize; uint64_t data; void* ptr; };
     
     static bool Get(JSContext*, JS::HandleObject, JS::HandleId, JS::MutableHandleValue);
-    static bool Set(JSContext*, JS::HandleObject, JS::HandleId, bool, JS::MutableHandleValue);
+    static bool Set(JSContext*, JS::HandleObject, JS::HandleId, JS::MutableHandleValue, JS::ObjectOpResult&);
     static void Finalize(JSFreeOp* fop, JSObject* obj);
     static bool Length(JSContext*, unsigned, JS::Value*);
     

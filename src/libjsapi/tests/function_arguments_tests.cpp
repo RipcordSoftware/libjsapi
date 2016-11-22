@@ -96,12 +96,12 @@ TEST_F(FunctionArgumentsTests, test4) {
 TEST_F(FunctionArgumentsTests, test5) {
     rs::jsapi::FunctionArguments args(rt_);   
     
-    JS::RootedObject obj(rt_);
+    JS::RootedObject obj(rt_.getRuntime());
     args.Append(obj);
     ASSERT_EQ(1, args.getLength());
     ASSERT_FALSE(args.Empty());
     
-    JS::RootedValue value(rt_);
+    JS::RootedValue value(rt_.getRuntime());
     args.Append(value);
     ASSERT_EQ(2, args.getLength());
     ASSERT_FALSE(args.Empty());

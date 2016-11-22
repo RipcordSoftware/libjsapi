@@ -37,7 +37,7 @@ JSClass rs::jsapi::DynamicArray::class_ = {
 
 bool rs::jsapi::DynamicArray::Create(JSContext* cx, GetCallback getter, SetCallback setter, LengthCallback length, FinalizeCallback finalize, Value& array) {
     JSAutoRequest ar(cx);    
-    JS::RootedObject obj(cx, JS_NewObject(cx, &class_, JS::NullPtr()));
+    JS::RootedObject obj(cx, JS_NewObject(cx, &class_));
     
     if (obj) {
         JS_DefineProperty(cx, obj, "length", 0, JSPROP_READONLY, DynamicArray::Length);
@@ -86,9 +86,11 @@ bool rs::jsapi::DynamicArray::Get(JSContext* cx, JS::HandleObject obj, JS::Handl
     }
 }
 
-bool rs::jsapi::DynamicArray::Set(JSContext* cx, JS::HandleObject obj, JS::HandleId id, bool strict, JS::MutableHandleValue vp) {
+bool rs::jsapi::DynamicArray::Set(JSContext* cx, JS::HandleObject obj, JS::HandleId id, JS::MutableHandleValue vp, JS::ObjectOpResult& result) {
     JSAutoRequest ar(cx);    
     auto state = DynamicArray::GetState(cx, obj);
+
+    result.succeed();
     
     if (state != nullptr && state->setter != nullptr && JSID_IS_INT(id)) {
         try {

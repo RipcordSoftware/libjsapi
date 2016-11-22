@@ -61,10 +61,8 @@ public:
         filename(error->filename != nullptr ? error->filename : ""), 
         lineno(error->lineno),
         column(error->column), 
-        linebuf(error->linebuf != nullptr ? error->linebuf : ""),
-        tokenOffset(error->tokenptr - error->linebuf),
-        uclinebuf(error->uclinebuf != nullptr ? error->uclinebuf : u""),
-        uctokenOffset(error->uctokenptr - error->uclinebuf),
+        uclinebuf(error->linebuf() != nullptr ? error->linebuf() : u""),
+        uctokenOffset(error->tokenOffset()),
         errorNumber(error->errorNumber),
         exnType(error->exnType) {
     }
@@ -77,8 +75,6 @@ public:
     const std::string filename;
     const unsigned lineno;
     const unsigned column;
-    const std::string linebuf;
-    const unsigned tokenOffset;
     const std::u16string uclinebuf;
     const unsigned uctokenOffset;
     const unsigned errorNumber;

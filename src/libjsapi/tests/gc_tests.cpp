@@ -42,7 +42,7 @@ protected:
     }
     
     JSObject* CreateObject(JSContext* cx) {
-        return JS_NewObject(cx, &klass_, JS::NullPtr());
+        return JS_NewObject(cx, &klass_);
     }
 
     static JSClass klass_;

@@ -51,10 +51,10 @@ bool rs::jsapi::Global::DefineProperty(Context& cx, const char* name, JSNative g
 
 bool rs::jsapi::Global::DefineFunction(Context& cx, const char* name, FunctionCallback callback, unsigned attrs) {
     JSAutoRequest ar(cx);
-    JS::RootedFunction func(cx, JS_NewFunction(cx, CallFunction, 0, 0, JS::NullPtr(), name));
-    JS::RootedObject funcObj(cx, JS_GetFunctionObject(func));
+    JS::RootedFunction func(cx.getContext(), JS_NewFunction(cx, CallFunction, 0, 0, name));
+    JS::RootedObject funcObj(cx.getContext(), JS_GetFunctionObject(func));
     
-    JS::RootedObject privateFuncObj(cx, JS_NewObject(cx, &privateFunctionStateClass_, JS::NullPtr()));
+    JS::RootedObject privateFuncObj(cx.getContext(), JS_NewObject(cx, &privateFunctionStateClass_));
     JS_SetPrivate(privateFuncObj, new GlobalFunctionState(callback));
     JS_DefineProperty(cx, funcObj, privateFunctionStatePropertyName_, privateFuncObj, 0, nullptr, nullptr);
 

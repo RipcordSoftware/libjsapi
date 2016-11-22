@@ -211,7 +211,7 @@ TEST_F(SimpleValueTests, test14) {
 TEST_F(SimpleValueTests, test15) {
     rs::jsapi::Value value(rt_, "hello world");            
     
-    JS::RootedString rv(rt_, value.toString());
+    JS::RootedString rv(rt_.getRuntime(), value.toString());
     auto len = JS_GetStringLength(rv);
     ASSERT_EQ(11, len);
     
@@ -222,14 +222,14 @@ TEST_F(SimpleValueTests, test15) {
 }
 
 TEST_F(SimpleValueTests, test16) {
-    JS::RootedObject obj(rt_);
+    JS::RootedObject obj(rt_.getRuntime());
     
     rs::jsapi::Value value(rt_, obj);
     ASSERT_TRUE(value.isObject());
 }
 
 TEST_F(SimpleValueTests, test17) {
-    rs::jsapi::Value value(rt_, JS_NewObject(rt_, nullptr, JS::NullPtr()));
+    rs::jsapi::Value value(rt_, JS_NewObject(rt_, nullptr));
     ASSERT_TRUE(value.isObject());
     ASSERT_STREQ("[object Object]", value.ToString().c_str());
     
@@ -240,7 +240,7 @@ TEST_F(SimpleValueTests, test17) {
 }
 
 TEST_F(SimpleValueTests, test18) {
-    JS::RootedObject obj(rt_, JS_NewArrayObject(rt_, 0));
+    JS::RootedObject obj(rt_.getRuntime(), JS_NewArrayObject(rt_, 0));
     
     rs::jsapi::Value value(rt_, obj);
     ASSERT_TRUE(value.isArray());
@@ -250,7 +250,7 @@ TEST_F(SimpleValueTests, test18) {
 TEST_F(SimpleValueTests, test19) {
     rs::jsapi::Value value(rt_);
     
-    JS::RootedObject obj(rt_);
+    JS::RootedObject obj(rt_.getRuntime());
     value.set(obj);
     ASSERT_TRUE(value.isObject());
 }
@@ -258,7 +258,7 @@ TEST_F(SimpleValueTests, test19) {
 TEST_F(SimpleValueTests, test20) {
     rs::jsapi::Value value(rt_, 42);
     
-    JS::RootedObject obj(rt_);
+    JS::RootedObject obj(rt_.getRuntime());
     value.set(obj);
     ASSERT_TRUE(value.isObject());
     ASSERT_FALSE(value.isNumber());
@@ -267,7 +267,7 @@ TEST_F(SimpleValueTests, test20) {
 TEST_F(SimpleValueTests, test21) {
     rs::jsapi::Value value(rt_, "hello world");
     
-    JS::RootedObject obj(rt_);
+    JS::RootedObject obj(rt_.getRuntime());
     value.set(obj);
     ASSERT_TRUE(value.isObject());
     ASSERT_FALSE(value.isString());
@@ -276,7 +276,7 @@ TEST_F(SimpleValueTests, test21) {
 TEST_F(SimpleValueTests, test22) {
     rs::jsapi::Value value(rt_, true);
     
-    JS::RootedObject obj(rt_);
+    JS::RootedObject obj(rt_.getRuntime());
     value.set(obj);
     ASSERT_TRUE(value.isObject());
     ASSERT_FALSE(value.isBoolean());
@@ -285,14 +285,14 @@ TEST_F(SimpleValueTests, test22) {
 TEST_F(SimpleValueTests, test23) {
     rs::jsapi::Value value(rt_, 3.14159);
     
-    JS::RootedObject obj(rt_);
+    JS::RootedObject obj(rt_.getRuntime());
     value.set(obj);
     ASSERT_TRUE(value.isObject());
     ASSERT_FALSE(value.isNumber());
 }
 
 TEST_F(SimpleValueTests, test24) {
-    rs::jsapi::Value obj(rt_, JS_NewObject(rt_, nullptr, JS::NullPtr()));
+    rs::jsapi::Value obj(rt_, JS_NewObject(rt_, nullptr));
         
     ASSERT_THROW({
         obj.toNumber();
@@ -325,12 +325,12 @@ TEST_F(SimpleValueTests, test25) {
 }
 
 TEST_F(SimpleValueTests, test26) {
-    rs::jsapi::Value obj(rt_, JS_NewObject(rt_, nullptr, JS::NullPtr()));
+    rs::jsapi::Value obj(rt_, JS_NewObject(rt_, nullptr));
     
     ASSERT_TRUE(obj.isObject());
     ASSERT_TRUE(obj.toObject() != nullptr);    
 
-    JS::RootedValue rv(rt_, obj);
+    JS::RootedValue rv(rt_.getRuntime(), obj);
     ASSERT_TRUE(rv.isObject());
     
     ASSERT_TRUE(obj.isObject());
@@ -343,7 +343,7 @@ TEST_F(SimpleValueTests, test27) {
     ASSERT_TRUE(obj.isArray());
     ASSERT_TRUE(obj.toObject() != nullptr);    
 
-    JS::RootedValue rv(rt_, obj);
+    JS::RootedValue rv(rt_.getRuntime(), obj);
     ASSERT_TRUE(rv.isObject());
     
     ASSERT_TRUE(obj.isArray());

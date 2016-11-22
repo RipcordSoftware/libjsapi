@@ -63,7 +63,7 @@
           <commandlineTool>g++</commandlineTool>
           <incDir>
             <pElem>../libjsapi</pElem>
-            <pElem>../../externals/installed/include/mozjs-</pElem>
+            <pElem>../../externals/installed/include/mozjs</pElem>
           </incDir>
           <commandLine>`pkg-config gtkmm-3.0 --cflags` $(COVERAGE_FLAGS)</commandLine>
         </ccTool>
@@ -85,7 +85,7 @@
             <linkerLibStdlibItem>DataCompression</linkerLibStdlibItem>
             <linkerOptionItem>$(LDLIBS)</linkerOptionItem>
           </linkerLibItems>
-          <commandLine>`pkg-config gtkmm-3.0 --libs`</commandLine>
+          <commandLine>`pkg-config gtkmm-3.0 --libs` -Wl,--whole-archive ../../externals/installed/lib/libmozglue.a -Wl,--no-whole-archive</commandLine>
         </linkerTool>
       </compileType>
       <item path="application.cpp" ex="false" tool="1" flavor2="0">
@@ -153,7 +153,7 @@
           <commandlineTool>g++</commandlineTool>
           <incDir>
             <pElem>../libjsapi</pElem>
-            <pElem>../../externals/installed/include/mozjs-</pElem>
+            <pElem>../../externals/installed/include/mozjs</pElem>
           </incDir>
           <commandLine>`pkg-config gtkmm-3.0 --cflags`</commandLine>
         </ccTool>
@@ -181,7 +181,7 @@
             <linkerLibFileItem>../../externals/installed/lib/libjs_static.ajs</linkerLibFileItem>
             <linkerOptionItem>$(LDLIBS)</linkerOptionItem>
           </linkerLibItems>
-          <commandLine>`pkg-config gtkmm-3.0 --libs`</commandLine>
+          <commandLine>`pkg-config gtkmm-3.0 --libs` -Wl,--whole-archive ../../externals/installed/lib/libmozglue.a -Wl,--no-whole-archive</commandLine>
         </linkerTool>
       </compileType>
       <item path="application.cpp" ex="false" tool="1" flavor2="0">

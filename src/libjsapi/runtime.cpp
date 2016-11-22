@@ -22,6 +22,8 @@
  * THE SOFTWARE.
 **/
 
+#include <js/Initialization.h>
+
 #include "runtime.h"
 
 #include <algorithm>

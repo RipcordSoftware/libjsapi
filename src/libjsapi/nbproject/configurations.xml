@@ -138,7 +138,7 @@
         <ccTool>
           <standard>8</standard>
           <incDir>
-            <pElem>../../externals/installed/include/mozjs-</pElem>
+            <pElem>../../externals/installed/include/mozjs</pElem>
           </incDir>
           <commandLine>$(COVERAGE_FLAGS)</commandLine>
         </ccTool>
@@ -178,7 +178,7 @@
             <linkerOptionItem>`pkg-config --libs zlib`</linkerOptionItem>
             <linkerOptionItem>$(LDLIBS)</linkerOptionItem>
           </linkerLibItems>
-          <commandLine>$(COVERAGE_FLAGS)</commandLine>
+          <commandLine>$(COVERAGE_FLAGS) -Wl,--whole-archive ../../externals/installed/lib/libmozglue.a -Wl,--no-whole-archive</commandLine>
         </linkerTool>
       </folder>
       <folder path="TestFiles/f1">
@@ -454,7 +454,7 @@
           <developmentMode>5</developmentMode>
           <standard>8</standard>
           <incDir>
-            <pElem>../../externals/installed/include/mozjs-</pElem>
+            <pElem>../../externals/installed/include/mozjs</pElem>
           </incDir>
         </ccTool>
         <fortranCompilerTool>
@@ -498,6 +498,7 @@
             <linkerOptionItem>`pkg-config --libs zlib`</linkerOptionItem>
             <linkerOptionItem>$(LDLIBS)</linkerOptionItem>
           </linkerLibItems>
+          <commandLine>-Wl,--whole-archive ../../externals/installed/lib/libmozglue.a -Wl,--no-whole-archive</commandLine>
         </linkerTool>
       </folder>
       <folder path="TestFiles/f1">

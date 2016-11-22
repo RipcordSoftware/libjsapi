@@ -39,7 +39,7 @@
           <standard>8</standard>
           <incDir>
             <pElem>../libjsapi</pElem>
-            <pElem>../../externals/installed/include/mozjs-</pElem>
+            <pElem>../../externals/installed/include/mozjs</pElem>
           </incDir>
           <commandLine>$(COVERAGE_FLAGS)</commandLine>
         </ccTool>
@@ -61,7 +61,7 @@
             <linkerLibStdlibItem>DataCompression</linkerLibStdlibItem>
             <linkerOptionItem>$(LDLIBS)</linkerOptionItem>
           </linkerLibItems>
-          <commandLine>../../externals/installed/lib/libjs_static.ajs</commandLine>
+          <commandLine>../../externals/installed/lib/libjs_static.ajs -Wl,--whole-archive ../../externals/installed/lib/libmozglue.a -Wl,--no-whole-archive</commandLine>
         </linkerTool>
       </compileType>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
@@ -82,7 +82,7 @@
           <standard>8</standard>
           <incDir>
             <pElem>../libjsapi</pElem>
-            <pElem>../../externals/installed/include/mozjs-</pElem>
+            <pElem>../../externals/installed/include/mozjs</pElem>
           </incDir>
         </ccTool>
         <fortranCompilerTool>
@@ -109,7 +109,7 @@
             <linkerLibStdlibItem>DataCompression</linkerLibStdlibItem>
             <linkerOptionItem>$(LDLIBS)</linkerOptionItem>
           </linkerLibItems>
-          <commandLine>../../externals/installed/lib/libjs_static.ajs</commandLine>
+          <commandLine>../../externals/installed/lib/libjs_static.ajs -Wl,--whole-archive ../..externals/installed/lib/libmozglue.a -Wl,--no-whole-archive</commandLine>
         </linkerTool>
       </compileType>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">

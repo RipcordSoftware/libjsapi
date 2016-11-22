@@ -39,7 +39,7 @@ bool rs::jsapi::Object::Create(JSContext* cx, const std::vector<const char*>& pr
         GetCallback getter, SetCallback setter, const std::vector<std::pair<const char*, FunctionCallback>>& functions,
         FinalizeCallback finalizer, Value& obj) {
     JSAutoRequest ar(cx);
-    JS::RootedObject newObj(cx, JS_NewObject(cx, &class_, JS::NullPtr()));
+    JS::RootedObject newObj(cx, JS_NewObject(cx, &class_));
     
     if (newObj) {
         auto state = new ObjectState { getter, setter, finalizer, Functions(), 0, nullptr };
@@ -109,8 +109,10 @@ bool rs::jsapi::Object::Get(JSContext* cx, JS::HandleObject obj, JS::HandleId id
     }
 }
 
-bool rs::jsapi::Object::Set(JSContext* cx, JS::HandleObject obj, JS::HandleId id, bool strict, JS::MutableHandleValue vp) {
+bool rs::jsapi::Object::Set(JSContext* cx, JS::HandleObject obj, JS::HandleId id, JS::MutableHandleValue vp, JS::ObjectOpResult& result) {
     JSAutoRequest ar(cx);
+    result.succeed();
+
     auto state = Object::GetState(cx, obj);
     if (state != nullptr && state->setter != nullptr) {
         Value value(cx, vp);

@@ -201,11 +201,15 @@ bool rs::jsapi::Value::isUndefined() const {
 }
 
 bool rs::jsapi::Value::isArray() const {     
+    auto isArray = false;
+    
     if (isObject_) {
-        return object_ && JS_IsArrayObject(cx_, object_);
+        object_ && JS_IsArrayObject(cx_, object_, &isArray);
     } else {
-        return value_.toObjectOrNull() != nullptr && JS_IsArrayObject(cx_, value_);
+        value_.toObjectOrNull() != nullptr && JS_IsArrayObject(cx_, value_, &isArray);
     }
+    
+    return isArray;
 }
 
 bool rs::jsapi::Value::isFunction() const { 

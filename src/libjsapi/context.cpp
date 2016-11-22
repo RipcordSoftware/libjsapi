@@ -33,16 +33,7 @@
 // The class of the global object.
 static JSClass globalClass = {
     "global",
-    JSCLASS_GLOBAL_FLAGS,
-    JS_PropertyStub,
-    nullptr,
-    JS_PropertyStub,
-    JS_StrictPropertyStub,
-    nullptr,
-    nullptr,
-    nullptr,
-    nullptr, nullptr, nullptr, nullptr,
-    JS_GlobalObjectTraceHook
+    JSCLASS_GLOBAL_FLAGS
 };
 
 rs::jsapi::Context::Context(Runtime& rt) : 
@@ -94,7 +85,7 @@ bool rs::jsapi::Context::Evaluate(const char* script) {
 bool rs::jsapi::Context::Evaluate(const char* script, Value& result) {
     JSAutoRequest ar(cx_);    
     JS::CompileOptions options(cx_);
-    auto status = JS::Evaluate(cx_, global_, options, script, std::strlen(script), result);
+    auto status = JS::Evaluate(cx_, options, script, std::strlen(script), result);
     
     auto error = getError();
     if (!!error) {
