@@ -3,7 +3,7 @@
 [![License](http://img.shields.io/:license-mit-blue.svg)](http://doge.mit-license.org)
 
 # libjsapi
-A SpiderMonkey 38 (Mozilla) JSAPI wrapper for C++ 11.
+A SpiderMonkey 45 (Mozilla) JSAPI wrapper for C++ 11.
 
 The JSAPI interface to the SpiderMonkey JavaScript VM can be difficult to integrate into 
 applications without an intermediate abstraction layer managing object creation, object lifetimes and 
