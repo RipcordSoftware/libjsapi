@@ -62,7 +62,7 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=../libjsapi/dist/Debug/GNU-Linux-x86/libjsapi.a ../../externals/installed/lib/libjs_static.ajs -lz $(LDLIBS)
+LDLIBSOPTIONS=../libjsapi/dist/Debug/GNU-Linux-x86/libjsapi.a ../../externals/installed/lib/libjs_static.ajs -Wl,--whole-archive ../../externals/installed/lib/libmozglue.a -Wl,--no-whole-archive `pkg-config gtkmm-3.0 --libs` -lz  $(LDLIBS)  
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
@@ -70,11 +70,9 @@ LDLIBSOPTIONS=../libjsapi/dist/Debug/GNU-Linux-x86/libjsapi.a ../../externals/in
 
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/testlibjsapi_gtkmm: ../libjsapi/dist/Debug/GNU-Linux-x86/libjsapi.a
 
-${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/testlibjsapi_gtkmm: ../../externals/installed/lib/libjs_static.ajs
-
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/testlibjsapi_gtkmm: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
-	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/testlibjsapi_gtkmm ${OBJECTFILES} ${LDLIBSOPTIONS} `pkg-config gtkmm-3.0 --libs` -Wl,--whole-archive ../../externals/installed/lib/libmozglue.a -Wl,--no-whole-archive
+	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/testlibjsapi_gtkmm ${OBJECTFILES} ${LDLIBSOPTIONS}
 
 ${OBJECTDIR}/application.o: application.cpp 
 	${MKDIR} -p ${OBJECTDIR}

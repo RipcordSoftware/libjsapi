@@ -57,11 +57,12 @@
                             OP="${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libjsapi.a">
               </makeArtifact>
             </linkerLibProjectItem>
+            <linkerOptionItem>../../externals/installed/lib/libjs_static.ajs</linkerOptionItem>
+            <linkerOptionItem>-Wl,--whole-archive ../../externals/installed/lib/libmozglue.a -Wl,--no-whole-archive</linkerOptionItem>
             <linkerLibStdlibItem>PosixThreads</linkerLibStdlibItem>
             <linkerLibStdlibItem>DataCompression</linkerLibStdlibItem>
             <linkerOptionItem>$(LDLIBS)</linkerOptionItem>
           </linkerLibItems>
-          <commandLine>../../externals/installed/lib/libjs_static.ajs -Wl,--whole-archive ../../externals/installed/lib/libmozglue.a -Wl,--no-whole-archive</commandLine>
         </linkerTool>
       </compileType>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
@@ -105,11 +106,12 @@
                             OP="${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libjsapi.a">
               </makeArtifact>
             </linkerLibProjectItem>
+            <linkerOptionItem>../../externals/installed/lib/libjs_static.ajs</linkerOptionItem>
+            <linkerOptionItem>-Wl,--whole-archive ../../externals/installed/lib/libmozglue.a -Wl,--no-whole-archive</linkerOptionItem>
             <linkerLibStdlibItem>PosixThreads</linkerLibStdlibItem>
             <linkerLibStdlibItem>DataCompression</linkerLibStdlibItem>
             <linkerOptionItem>$(LDLIBS)</linkerOptionItem>
           </linkerLibItems>
-          <commandLine>../../externals/installed/lib/libjs_static.ajs -Wl,--whole-archive ../..externals/installed/lib/libmozglue.a -Wl,--no-whole-archive</commandLine>
         </linkerTool>
       </compileType>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
