@@ -9,7 +9,7 @@ MOZJS_CONFIG_FLAGS:=--disable-jemalloc --disable-shared-js --disable-tests --ena
 EXTERNALS:=$(CURDIR)/externals
 INSTALLED:=$(EXTERNALS)/installed
 
-.PHONY: build all test clean .autoconf-2.13 .jsapi .googletest
+.PHONY: build all test clean .jsapi .googletest
 .NOTPARALLEL: test
 
 build all test: .jsapi .googletest
@@ -18,22 +18,7 @@ build all test: .jsapi .googletest
 clean:
 	cd src/libjsapi && $(MAKE) $@
 
-.autoconf-2.13:
-	if [ "${CI}" = "true" ]; then \
-		curl ftp://ftp.ripcordsoftware.com/pub/autoconf-2.13-travis-ci-externals-installed.tar.xz -O && \
-		tar xfJ autoconf-*; \
-	elif [ ! -d externals/autoconf-2.13 ]; then \
-		mkdir -p $(EXTERNALS) && cd $(EXTERNALS) && \
-		mkdir -p $(INSTALLED) && \
-		curl http://ftp.gnu.org/gnu/autoconf/autoconf-2.13.tar.gz -O && \
-		tar xfz autoconf-2.13.tar.gz && \
-		cd autoconf-2.13 && \
-		./configure --prefix=$(INSTALLED) && \
-		$(MAKE) && \
-		$(MAKE) install; \
-	fi
-
-.jsapi: .autoconf-2.13
+.jsapi:
 	if [ "${CI}" = "true" ]; then \
 		curl ftp://ftp.ripcordsoftware.com/pub/mozjs-$(MOZJS_VER)-travis-ci-externals-installed.tar.xz -O && \
 		tar xfJ mozjs-*; \
@@ -65,8 +50,8 @@ clean:
 		cd gtest-$(GTEST_VER) && \
 		./configure && \
 		$(MAKE) && \
-                if [ ! -d "../installed/include" ]; then mkdir -p ../installed/include; fi && \
-                if [ ! -d "../installed/lib" ]; then mkdir -p ../installed/lib; fi && \
+		if [ ! -d "../installed/include" ]; then mkdir -p ../installed/include; fi && \
+		if [ ! -d "../installed/lib" ]; then mkdir -p ../installed/lib; fi && \
 		cp -Rf include/* ../installed/include && \
 		cp -Rf lib/.libs/* ../installed/lib; \
 	fi
