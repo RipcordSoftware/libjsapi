@@ -12,6 +12,7 @@ EXTERNALS:=$(CURDIR)/externals
 INSTALLED:=$(EXTERNALS)/installed
 INSTALLED_INC:=$(INSTALLED)/include
 INSTALLED_LIB:=$(INSTALLED)/lib
+INSTALLED_DIRS:=$(EXTERNALS) $(INSTALLED) $(INSTALLED_INC) $(INSTALLED_LIB)
 
 MOZJS_ARCHIVE_NAME:=mozjs-$(MOZJS_VER).tar.bz2
 MOZJS_ARCHIVE_PATH:=$(EXTERNALS)/$(MOZJS_ARCHIVE_NAME)
@@ -26,7 +27,7 @@ GTEST_H:=$(INSTALLED_INC)/gtest/gtest.h
 GTEST_LIB:=$(INSTALLED_LIB)/libgtest.a
 
 .PHONY: build all test clean .jsapi .googletest
-.PRECIOUS: $(MOZJS_ARCHIVE_PATH) $(GTEST_ARCHIVE_PATH) $(MOZJS_H) $(MOZJS_LIB) $(GTEST_H) $(GTEST_LIB)
+.PRECIOUS: $(MOZJS_ARCHIVE_PATH) $(GTEST_ARCHIVE_PATH) $(MOZJS_LIB) $(GTEST_LIB)
 .NOTPARALLEL: test
 
 build all test: .jsapi .googletest
@@ -35,45 +36,39 @@ build all test: .jsapi .googletest
 clean:
 	cd src/libjsapi && $(MAKE) $@
 
-.jsapi: $(MOZJS_H) $(MOZJS_LIB)
+.jsapi: $(MOZJS_LIB)
 
-.googletest: $(GTEST_H) $(GTEST_LIB)
+.googletest: $(GTEST_LIB)
 
-$(MOZJS_H) $(MOZJS_LIB): $(MOZJS_ARCHIVE_PATH) $(EXTERNALS)
+$(MOZJS_LIB): $(MOZJS_ARCHIVE_PATH)
+	mkdir -p $(INSTALLED_DIRS) && \
 	cd $(MOZJS_BUILD_PATH) && \
 	$(MAKE) && \
 	$(MAKE) install && \
-	cp -f dist/sdk/lib/libmozglue.a $(INSTALLED_LIB) && \
+	cp -fp dist/sdk/lib/libmozglue.a $(INSTALLED_LIB) && \
 	cd $(INSTALLED_INC) && \
-	((test -L mozjs && rm mozjs) || true) && ln -s mozjs-?? mozjs && \
-	touch $(MOZJS_H) $(MOZJS_LIB)
+	((test -L mozjs && rm mozjs) || true) && ln -s mozjs-?? mozjs
 
-$(MOZJS_ARCHIVE_PATH): $(EXTERNALS) $(INSTALLED)
+$(MOZJS_ARCHIVE_PATH):
+	mkdir -p $(INSTALLED_DIRS) && \
 	cd $(EXTERNALS) && \
-	(test -f $(CACHE_PATH)/$(MOZJS_ARCHIVE_NAME) && cp -f $(CACHE_PATH)/$(MOZJS_ARCHIVE_NAME) .) || curl -L https://people-mozilla.org/~sfink/mozjs-$(MOZJS_VER)$(MOZJS_VER_SUFFIX).tar.bz2 -o $(MOZJS_ARCHIVE_NAME) && \
+	(test -f $(CACHE_PATH)/$(MOZJS_ARCHIVE_NAME) && cp -fp $(CACHE_PATH)/$(MOZJS_ARCHIVE_NAME) .) || curl -L https://people-mozilla.org/~sfink/mozjs-$(MOZJS_VER)$(MOZJS_VER_SUFFIX).tar.bz2 -o $(MOZJS_ARCHIVE_NAME) && \
 	mkdir -p $(MOZJS_SOURCE_PATH) && cd $(MOZJS_SOURCE_PATH) && \
 	tar xfj ../$(MOZJS_ARCHIVE_NAME) --strip-components=1 && \
 	mkdir -p $(MOZJS_BUILD_PATH) && cd $(MOZJS_BUILD_PATH) && \
-	../configure --prefix=$(INSTALLED) $(MOZJS_CONFIG_FLAGS) && \
-	touch $@
+	../configure --prefix=$(INSTALLED) $(MOZJS_CONFIG_FLAGS)
 
-$(GTEST_H) $(GTEST_LIB): $(GTEST_ARCHIVE_PATH) $(INSTALLED)
+$(GTEST_LIB): $(GTEST_ARCHIVE_PATH)
+	mkdir -p $(INSTALLED_DIRS) && \
 	cd $(EXTERNALS)/gtest-$(GTEST_VER) && \
 	$(MAKE) && \
-	cp -Rf include/* $(INSTALLED_INC) && \
-	cp -Rf lib/.libs/* $(INSTALLED_LIB) && \
-	touch $(GTEST_H) $(GTEST_LIB)
+	cp -Rfp include/* $(INSTALLED_INC) && \
+	cp -Rfp lib/.libs/* $(INSTALLED_LIB)
 
-$(GTEST_ARCHIVE_PATH): $(EXTERNALS)
+$(GTEST_ARCHIVE_PATH):
+	mkdir -p $(INSTALLED_DIRS) && \
 	cd $(EXTERNALS) && \
-	(test -f $(CACHE_PATH)/$(GTEST_ARCHIVE_NAME) && cp -f $(CACHE_PATH)/$(GTEST_ARCHIVE_NAME) .) || curl ftp://ftp.ripcordsoftware.com/pub/gtest-$(GTEST_VER).zip -o $(GTEST_ARCHIVE_NAME) && \
+	(test -f $(CACHE_PATH)/$(GTEST_ARCHIVE_NAME) && cp -fp $(CACHE_PATH)/$(GTEST_ARCHIVE_NAME) .) || curl ftp://ftp.ripcordsoftware.com/pub/gtest-$(GTEST_VER).zip -o $(GTEST_ARCHIVE_NAME) && \
 	unzip -o $(GTEST_ARCHIVE_NAME) && \
 	cd gtest-$(GTEST_VER) && \
-	./configure && \
-	touch $@
-
-$(EXTERNALS) $(INSTALLED):
-	mkdir -p $(EXTERNALS)
-	mkdir -p $(INSTALLED)
-	mkdir -p $(INSTALLED_INC)
-	mkdir -p $(INSTALLED_LIB)
+	./configure
