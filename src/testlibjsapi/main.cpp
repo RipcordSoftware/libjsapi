@@ -24,11 +24,14 @@
 
 #include <iostream>
 #include <thread>
+#include <vector>
 
 #include "libjsapi.h"
 
 int main() {
-    std::thread t1([]() {
+    std::vector<std::thread> threads;
+
+    threads.emplace_back([] {
         rs::jsapi::Runtime rt1;
         
         rs::jsapi::Script script1(rt1, "(function(){return 42;})();");
@@ -51,7 +54,7 @@ int main() {
         }
     });
     
-    std::thread t2([]() {
+    threads.emplace_back([] {
         rs::jsapi::Runtime rt2;
         
         rs::jsapi::Script script2(rt2, "(function(){return 3.14159;})();");
@@ -78,8 +81,7 @@ int main() {
         }
     });
     
-    t1.join();
-    t2.join();
-
-    return 0;
+    for (auto& thread : threads) {
+        thread.join();
+    }
 }
