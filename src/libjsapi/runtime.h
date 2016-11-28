@@ -90,6 +90,7 @@ private:
         ~Instance();
         
     private:
+        static std::atomic<bool> initCalled_;
         static std::atomic<int> count_;
         static std::mutex m_;
     };  

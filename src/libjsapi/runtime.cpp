@@ -27,6 +27,7 @@
 #include "runtime.h"
 
 #include <algorithm>
+#include <cstdlib>
 
 #include "exceptions.h"
 #include "context_state.h"
@@ -37,6 +38,7 @@
 #error "Unable to set static initiaiization order on this platform. If you wish to fix this for your compiler please PR the change."
 #endif
 
+std::atomic<bool> rs::jsapi::Runtime::Instance::initCalled_ INIT_PRIORITY(0);
 std::atomic<int> rs::jsapi::Runtime::Instance::count_ INIT_PRIORITY(0);
 std::mutex rs::jsapi::Runtime::Instance::m_ INIT_PRIORITY(0);
 
@@ -50,23 +52,36 @@ rs::jsapi::Runtime::RuntimeThreadGuard::RuntimeThreadGuard(std::thread::id id) {
 }
 
 rs::jsapi::Runtime::Instance::Instance() {
-    if (count_ == 0) {
+    if (count_ == 0 && !initCalled_) {
         std::lock_guard<std::mutex> lk(m_);
-        if (count_ == 0) {
+        if (count_ == 0 && !initCalled_) {
             JS_Init();
-            count_ += 1;
+            
+            // create the first runtime and context and then destroy them, we
+            // need to do it here to ensure they are done on the same thread
+            auto rt = JS_NewRuntime(8 * 1024 * 1024);
+            auto cx = JS_NewContext(rt, 32 * 1024);
+            JS_DestroyContext(cx);
+            JS_DestroyRuntime(rt);
+            
+            // shutdown JS at process end
+            std::atexit([] { JS_ShutDown(); });
+
+            // keep track of the number of instances
+            ++count_;
+
+            // don't allow init to be called more than once
+            initCalled_= true;
+        } else {
+            ++count_;
         }
     } else {
-        count_ += 1;
+        ++count_;
     }   
 }
 
-rs::jsapi::Runtime::Instance::~Instance() {
-    count_ -= 1;
-    
-    if (count_ == 0) {
-        JS_ShutDown();
-    }
+rs::jsapi::Runtime::Instance::~Instance() {    
+    --count_;
 }
 
 rs::jsapi::Runtime::Runtime(uint32_t maxBytes, bool enableBaselineCompiler, bool enableIonCompiler) :
