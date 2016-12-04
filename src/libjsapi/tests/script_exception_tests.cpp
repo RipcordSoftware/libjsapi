@@ -36,41 +36,41 @@ protected:
         
     }          
 
-    rs::jsapi::Runtime rt_;
+    rs::jsapi::Context context_;
 };
 
 TEST_F(ScriptExceptionTests, test1) {        
     ASSERT_THROW({                
-        rs::jsapi::Script script(rt_, "!)(*\")(!*\"!");
+        rs::jsapi::Script script(context_, "!)(*\")(!*\"!");
         script.Compile();
     }, rs::jsapi::ScriptException);        
 }
 
 TEST_F(ScriptExceptionTests, test1b) {        
     ASSERT_THROW({                
-        rs::jsapi::Script script(rt_, "!)(*\")(!*\"!");
+        rs::jsapi::Script script(context_, "!)(*\")(!*\"!");
         script.Execute();
     }, rs::jsapi::ScriptException);        
 }
 
 TEST_F(ScriptExceptionTests, test1c) {        
     ASSERT_THROW({                
-        rs::jsapi::Script script(rt_, "!)(*\")(!*\"!");
+        rs::jsapi::Script script(context_, "!)(*\")(!*\"!");
         
-        rs::jsapi::Value result(rt_);
+        rs::jsapi::Value result(context_);
         script.Execute(result);
     }, rs::jsapi::ScriptException);        
 }
 
 TEST_F(ScriptExceptionTests, test1d) {        
     ASSERT_THROW({                
-        rt_.Evaluate("!)(*\")(!*\"!");
+        context_.Evaluate("!)(*\")(!*\"!");
     }, rs::jsapi::ScriptException);        
 }
 
 TEST_F(ScriptExceptionTests, test2) {        
     ASSERT_THROW({                
-        rs::jsapi::Script script(rt_, "var xyz = abc;");
+        rs::jsapi::Script script(context_, "var xyz = abc;");
         script.Compile();
         script.Execute();
     }, rs::jsapi::ScriptException);        
@@ -78,34 +78,34 @@ TEST_F(ScriptExceptionTests, test2) {
 
 TEST_F(ScriptExceptionTests, test2b) {        
     ASSERT_THROW({                
-        rt_.Evaluate("var xyz = abc;");
+        context_.Evaluate("var xyz = abc;");
     }, rs::jsapi::ScriptException);        
 }
 
 TEST_F(ScriptExceptionTests, test3) {        
     ASSERT_THROW({                
-        rs::jsapi::Script script(rt_, "(function(){return abc;})()");
+        rs::jsapi::Script script(context_, "(function(){return abc;})()");
         script.Compile();
-        rs::jsapi::Value result(rt_);
+        rs::jsapi::Value result(context_);
         script.Execute(result);
     }, rs::jsapi::ScriptException);        
 }
 
 TEST_F(ScriptExceptionTests, test3b) {        
     ASSERT_THROW({                
-        rt_.Evaluate("(function(){return abc;})()");
+        context_.Evaluate("(function(){return abc;})()");
     }, rs::jsapi::ScriptException);        
 }
 
 TEST_F(ScriptExceptionTests, test4) {        
     ASSERT_THROW({                
-        rs::jsapi::Script script(rt_, "!)(*\")(!*\"!");
+        rs::jsapi::Script script(context_, "!)(*\")(!*\"!");
         script.Compile();
     }, rs::jsapi::ScriptException);        
     
-    rs::jsapi::Script script(rt_, "(function(){return 42;})()");
+    rs::jsapi::Script script(context_, "(function(){return 42;})()");
     script.Compile();
-    rs::jsapi::Value result(rt_);
+    rs::jsapi::Value result(context_);
     script.Execute(result);
     ASSERT_TRUE(result.isNumber());
     ASSERT_EQ(42, result.toNumber());
@@ -113,25 +113,25 @@ TEST_F(ScriptExceptionTests, test4) {
 
 TEST_F(ScriptExceptionTests, test4b) {        
     ASSERT_THROW({                
-        rt_.Evaluate("!)(*\")(!*\"!");
+        context_.Evaluate("!)(*\")(!*\"!");
     }, rs::jsapi::ScriptException);        
     
-    rs::jsapi::Value result(rt_);
-    rt_.Evaluate("(function(){return 42;})()", result);        
+    rs::jsapi::Value result(context_);
+    context_.Evaluate("(function(){return 42;})()", result);        
     ASSERT_EQ(result.isNumber(), true);
     ASSERT_EQ(42, result.toNumber());
 }
 
 TEST_F(ScriptExceptionTests, test5) {        
     ASSERT_THROW({                
-        rs::jsapi::Script script(rt_, "var xyz = abc;");
+        rs::jsapi::Script script(context_, "var xyz = abc;");
         script.Compile();
         script.Execute();
     }, rs::jsapi::ScriptException);  
     
-    rs::jsapi::Script script(rt_, "(function(){return 42;})()");
+    rs::jsapi::Script script(context_, "(function(){return 42;})()");
     script.Compile();
-    rs::jsapi::Value result(rt_);
+    rs::jsapi::Value result(context_);
     script.Execute(result);
     ASSERT_EQ(result.isNumber(), true);
     ASSERT_EQ(42, result.toNumber());
@@ -139,39 +139,39 @@ TEST_F(ScriptExceptionTests, test5) {
 
 TEST_F(ScriptExceptionTests, test5b) {        
     ASSERT_THROW({                
-        rt_.Evaluate("var xyz = abc;");
+        context_.Evaluate("var xyz = abc;");
     }, rs::jsapi::ScriptException);  
     
-    rs::jsapi::Value result(rt_);
-    rt_.Evaluate("(function(){return 42;})()", result);        
+    rs::jsapi::Value result(context_);
+    context_.Evaluate("(function(){return 42;})()", result);        
     ASSERT_EQ(result.isNumber(), true);
     ASSERT_EQ(42, result.toNumber());
 }
 
 TEST_F(ScriptExceptionTests, test6) {        
     ASSERT_THROW({                
-        rs::jsapi::Script script(rt_, "(function(){return abc;})()");
+        rs::jsapi::Script script(context_, "(function(){return abc;})()");
         script.Compile();
-        rs::jsapi::Value result(rt_);
+        rs::jsapi::Value result(context_);
         script.Execute(result);
     }, rs::jsapi::ScriptException);      
     
-    rs::jsapi::Script script(rt_, "(function(){return 42;})()");
+    rs::jsapi::Script script(context_, "(function(){return 42;})()");
     script.Compile();
-    rs::jsapi::Value result(rt_);
+    rs::jsapi::Value result(context_);
     script.Execute(result);
     ASSERT_TRUE(result.isNumber());
     ASSERT_EQ(42, result.toNumber());
 }
 
 TEST_F(ScriptExceptionTests, test6b) {        
-    ASSERT_THROW({                
-        rs::jsapi::Value result(rt_);
-        rt_.Evaluate("(function(){return abc;})()", result);
+    ASSERT_THROW({
+        rs::jsapi::Value result(context_);
+        context_.Evaluate("(function(){return abc;})()", result);
     }, rs::jsapi::ScriptException);      
     
-    rs::jsapi::Value result(rt_);
-    rt_.Evaluate("(function(){return 42;})()", result);
+    rs::jsapi::Value result(context_);
+    context_.Evaluate("(function(){return 42;})()", result);
     ASSERT_TRUE(result.isNumber());
     ASSERT_EQ(42, result.toNumber());
 }
@@ -182,7 +182,7 @@ TEST_F(ScriptExceptionTests, test7) {
     unsigned column = 0;
 
     try {
-        rs::jsapi::Script script(rt_, "var xyz = abc;");
+        rs::jsapi::Script script(context_, "var xyz = abc;");
         script.Compile();
         script.Execute();   
     } catch (const rs::jsapi::ScriptException& e) {
@@ -202,7 +202,7 @@ TEST_F(ScriptExceptionTests, test7b) {
     unsigned column = 0;
 
     try {
-        rt_.Evaluate("var xyz = abc;");
+        context_.Evaluate("var xyz = abc;");
     } catch (const rs::jsapi::ScriptException& e) {
         message = e.what();
         lineno = e.lineno;
@@ -216,78 +216,78 @@ TEST_F(ScriptExceptionTests, test7b) {
 
 TEST_F(ScriptExceptionTests, test8) {
     ASSERT_THROW({                        
-        rt_.Call("yoyoyoyo");
+        context_.Call("yoyoyoyo");
     }, rs::jsapi::ScriptException);         
 }
 
 TEST_F(ScriptExceptionTests, test9) {
     ASSERT_THROW({
-        rs::jsapi::Value result(rt_);
-        rt_.Call("yoyoyoyo", result);
+        rs::jsapi::Value result(context_);
+        context_.Call("yoyoyoyo", result);
     }, rs::jsapi::ScriptException);         
 }
 
 TEST_F(ScriptExceptionTests, test10) {
     auto script = R"((function(){ return function() { abc(); } })();)";
-    rs::jsapi::Value func(rt_);
-    rt_.Evaluate(script, func);
+    rs::jsapi::Value func(context_);
+    context_.Evaluate(script, func);
     
     ASSERT_THROW({
-        rs::jsapi::FunctionArguments args{rt_};
+        rs::jsapi::FunctionArguments args{context_};
         func.CallFunction(args);
     }, rs::jsapi::ScriptException);
     
     // check the previous exception has been cleared
     script = R"((function(){ return 42; })();)";
-    rs::jsapi::Value result(rt_);
-    rt_.Evaluate(script, result);
+    rs::jsapi::Value result(context_);
+    context_.Evaluate(script, result);
     ASSERT_EQ(42, result.toNumber());
 }
 
 TEST_F(ScriptExceptionTests, test11) {
     auto script = R"((function(){ return function() { abc(); } })();)";
-    rs::jsapi::Value func(rt_);    
-    rt_.Evaluate(script, func);
+    rs::jsapi::Value func(context_);    
+    context_.Evaluate(script, func);
     
     ASSERT_THROW({
-        rs::jsapi::FunctionArguments args{rt_};
-        rs::jsapi::Value result(rt_);
+        rs::jsapi::FunctionArguments args{context_};
+        rs::jsapi::Value result(context_);
         func.CallFunction(args, result);
     }, rs::jsapi::ScriptException);
     
     // check the previous exception has been cleared
     script = R"((function(){ return 42; })();)";
-    rs::jsapi::Value result(rt_);
-    rt_.Evaluate(script, result);
+    rs::jsapi::Value result(context_);
+    context_.Evaluate(script, result);
     ASSERT_EQ(42, result.toNumber());
 }
 
 TEST_F(ScriptExceptionTests, test12) {
     auto script = R"((function(){ return function() { abc(); } })();)";
-    rs::jsapi::Value func(rt_);
-    rt_.Evaluate(script, func);
+    rs::jsapi::Value func(context_);
+    context_.Evaluate(script, func);
     
-    rs::jsapi::FunctionArguments args{rt_};
+    rs::jsapi::FunctionArguments args{context_};
     func.CallFunction(args, false);
     
     // check the previous exception has been cleared
     script = R"((function(){ return 42; })();)";
-    rs::jsapi::Value result(rt_);
-    rt_.Evaluate(script, result);
+    rs::jsapi::Value result(context_);
+    context_.Evaluate(script, result);
     ASSERT_EQ(42, result.toNumber());
 }
 
 TEST_F(ScriptExceptionTests, test13) {
     auto script = R"((function(){ return function() { abc(); } })();)";
-    rs::jsapi::Value func(rt_);
-    rt_.Evaluate(script, func);
+    rs::jsapi::Value func(context_);
+    context_.Evaluate(script, func);
     
-    rs::jsapi::FunctionArguments args{rt_};
-    rs::jsapi::Value result(rt_);
+    rs::jsapi::FunctionArguments args{context_};
+    rs::jsapi::Value result(context_);
     func.CallFunction(args, result, false);
     
     // check the previous exception has been cleared
     script = R"((function(){ return 42; })();)";
-    rt_.Evaluate(script, result);
+    context_.Evaluate(script, result);
     ASSERT_EQ(42, result.toNumber());
 }

@@ -22,42 +22,36 @@
  * THE SOFTWARE.
 **/
 
-#ifndef WINDOW_H
-#define	WINDOW_H
+#ifndef RS_JSAPI_CONTEXT_THREAD_GUARD_H
+#define RS_JSAPI_CONTEXT_THREAD_GUARD_H
 
-#include <gtkmm.h>
+#include <atomic>
+#include <thread>
+#include <mutex>
+#include <vector>
 
-#include "libjsapi.h"
+namespace rs {
+namespace jsapi {
 
-#include "widget.h"
-
-class Window {
+class ContextThreadGuard {
 public:
-    Window(rs::jsapi::Context& cx, Gtk::Window* window);        
+    ContextThreadGuard() : ContextThreadGuard(std::this_thread::get_id()) {}
+    ContextThreadGuard(std::thread::id id);
     
-    void SetDefaultSize(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result);    
-    void SetTitle(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result);    
-    void SetBorderWidth(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result);    
-    void GetLabel(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result);    
-    void AddLabel(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result);    
-    void AddButton(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result);
-    
-    operator Gtk::Window&() { return *window_; }
-    operator rs::jsapi::Value&() { return obj_; }
-    
-    static Gtk::Window* getWindowFromValue(const rs::jsapi::Value&);
-    
-private:
-    void Finalizer() {
-        delete this;
+    ~ContextThreadGuard() {
+        RemoveThread();
     }
     
-    void GetCallback(const char* name, rs::jsapi::Value& value);
+    static bool AddThread(std::thread::id id);
+    static bool RemoveThread(std::thread::id id);
+    static bool RemoveThread();
     
-    rs::jsapi::Context& cx_;
-    rs::jsapi::Value obj_;
-    Gtk::Window* window_;  
-    Widget widget_;
+private:
+    static std::vector<std::thread::id> activeThreads_;
+    static std::mutex activeThreadsLock_;    
 };
 
-#endif	/* WINDOW_H */
+}}
+
+#endif	/* RS_JSAPI_CONTEXT_THREAD_GUARD_H */
+

@@ -34,13 +34,12 @@ protected:
     
     virtual void TearDown() {
         
-    }            
-    
-    rs::jsapi::Runtime rt_;
+    }
 };
 
 TEST_F(GlobalPropertyTests, test1) {
-    ASSERT_TRUE(rs::jsapi::Global::DefineProperty(rt_, "test1", 
+    rs::jsapi::Context cx;
+    ASSERT_TRUE(rs::jsapi::Global::DefineProperty(cx, "test1", 
         [](JSContext* cx, unsigned argc, JS::Value* vp) {
             auto args = JS::CallArgsFromVp(argc, vp);
             args.rval().setInt32(42);
@@ -49,14 +48,15 @@ TEST_F(GlobalPropertyTests, test1) {
         nullptr)
     );
         
-    rs::jsapi::Value result(rt_);
-    rt_.Evaluate("(function(){return test1;})();", result);
+    rs::jsapi::Value result(cx);
+    cx.Evaluate("(function(){return test1;})();", result);
     ASSERT_TRUE(result.isInt32());
     ASSERT_EQ(42, result.toInt32());
 }
 
 TEST_F(GlobalPropertyTests, test2) {
-    ASSERT_TRUE(rs::jsapi::Global::DefineProperty(rt_, "test2", 
+    rs::jsapi::Context cx;
+    ASSERT_TRUE(rs::jsapi::Global::DefineProperty(cx, "test2", 
         [](JSContext* cx, unsigned argc, JS::Value* vp) {
             auto args = JS::CallArgsFromVp(argc, vp);
             args.rval().setString(JS_NewStringCopyZ(cx, "hello"));
@@ -65,14 +65,15 @@ TEST_F(GlobalPropertyTests, test2) {
         nullptr)
     );
         
-    rs::jsapi::Value result(rt_);
-    rt_.Evaluate("(function(){return test2;})();", result);
+    rs::jsapi::Value result(cx);
+    cx.Evaluate("(function(){return test2;})();", result);
     ASSERT_TRUE(result.isString());
     ASSERT_STREQ("hello", result.ToString().c_str());
 }
 
 TEST_F(GlobalPropertyTests, test3) {
-    ASSERT_TRUE(rs::jsapi::Global::DefineProperty(rt_, "test3", 
+    rs::jsapi::Context cx;
+    ASSERT_TRUE(rs::jsapi::Global::DefineProperty(cx, "test3", 
         [](JSContext* cx, unsigned argc, JS::Value* vp) {
             auto args = JS::CallArgsFromVp(argc, vp);
             args.rval().setObject(*JS_NewObject(cx, nullptr));
@@ -81,24 +82,26 @@ TEST_F(GlobalPropertyTests, test3) {
         nullptr)
     );
         
-    rs::jsapi::Value result(rt_);
-    rt_.Evaluate("(function(){return test3;})();", result);
+    rs::jsapi::Value result(cx);
+    cx.Evaluate("(function(){return test3;})();", result);
     ASSERT_TRUE(result.isObject());
 }
 
 TEST_F(GlobalPropertyTests, test4) {
-    rs::jsapi::Value value(rt_, 99);
-    rs::jsapi::Global::DefineProperty(rt_, "test4", value); 
+    rs::jsapi::Context cx;
+    rs::jsapi::Value value(cx, 99);
+    rs::jsapi::Global::DefineProperty(cx, "test4", value); 
     
-    rs::jsapi::Value result(rt_);
-    rt_.Evaluate("(function(){return test4;})();", result);
+    rs::jsapi::Value result(cx);
+    cx.Evaluate("(function(){return test4;})();", result);
     ASSERT_TRUE(result.isInt32());
     ASSERT_EQ(99, result.toInt32());
 }
 
 TEST_F(GlobalPropertyTests, test5) {
-    rs::jsapi::Value obj(rt_);
-    rs::jsapi::Object::Create(rt_, 
+    rs::jsapi::Context cx;
+    rs::jsapi::Value obj(cx);
+    rs::jsapi::Object::Create(cx, 
         {}, 
         nullptr, 
         nullptr, 
@@ -107,9 +110,9 @@ TEST_F(GlobalPropertyTests, test5) {
         obj);
     ASSERT_TRUE(!!obj);
     
-    rs::jsapi::Global::DefineProperty(rt_, "test5", obj); 
+    rs::jsapi::Global::DefineProperty(cx, "test5", obj); 
         
-    rs::jsapi::Value result(rt_);
-    rt_.Evaluate("(function(){return test5;})();", result);
+    rs::jsapi::Value result(cx);
+    cx.Evaluate("(function(){return test5;})();", result);
     ASSERT_TRUE(result.isObject());
 }

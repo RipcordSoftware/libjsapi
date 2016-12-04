@@ -33,15 +33,15 @@ int main(int argc, char** argv) {
     try {
         std::string script = LoadScript(argc, argv);
 
-        rs::jsapi::Runtime rt(1024 * 1024 * 1024, true, true);
+        rs::jsapi::Context cx(1024 * 1024 * 1024, true, true);
 
-        auto app = new Application(rt, "com.ripcordsoftware.examples.gtk", 1, argv);
-        rs::jsapi::Global::DefineProperty(rt, "app", *app);
+        auto app = new Application(cx, "com.ripcordsoftware.examples.gtk", 1, argv);
+        rs::jsapi::Global::DefineProperty(cx, "app", *app);
 
-        auto builder = new Builder(rt);
-        rs::jsapi::Global::DefineProperty(rt, "builder", *builder);
+        auto builder = new Builder(cx);
+        rs::jsapi::Global::DefineProperty(cx, "builder", *builder);
         
-        rs::jsapi::Global::DefineFunction(rt, "trace", 
+        rs::jsapi::Global::DefineFunction(cx, "trace", 
             [](const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result){
                 for (auto arg : args) {
                     std::cout << arg.ToString();
@@ -54,7 +54,7 @@ int main(int argc, char** argv) {
                 return true;
             });
 
-        rt.Evaluate(script.c_str());
+        cx.Evaluate(script.c_str());
     } catch (const rs::jsapi::ScriptException& ex) {
         std::cerr <<
             "ERROR: line " << ex.lineno << std::endl <<

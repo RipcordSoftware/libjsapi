@@ -2,13 +2,13 @@
 
 #include <cstring>
 
-Label::Label(rs::jsapi::Runtime& rt, Gtk::Label* label) : rt_(rt), obj_(rt), label_(label), widget_(label, obj_) {
+Label::Label(rs::jsapi::Context& cx, Gtk::Label* label) : cx_(cx), obj_(cx), label_(label), widget_(label, obj_) {
     auto functions = widget_.GetFunctions();
 
     functions.emplace_back("setText", std::bind(&Label::SetText, this, std::placeholders::_1, std::placeholders::_2));
     functions.emplace_back("getText", std::bind(&Label::GetText, this, std::placeholders::_1, std::placeholders::_2));
 
-    rs::jsapi::Object::Create(rt, { "value", "innerHTML" }, 
+    rs::jsapi::Object::Create(cx, { "value", "innerHTML" }, 
         std::bind(&Label::GetCallback, this, std::placeholders::_1, std::placeholders::_2),
         std::bind(&Label::SetCallback, this, std::placeholders::_1, std::placeholders::_2),
         functions, std::bind(&Label::Finalizer, this), obj_);
@@ -24,7 +24,7 @@ void Label::SetCallback(const char* name, const rs::jsapi::Value& value) {
     if (std::strcmp(name, "value") == 0 || std::strcmp(name, "innerHTML") == 0) {
         std::vector<rs::jsapi::Value> args;
         args.push_back(value);
-        rs::jsapi::Value result(rt_);
+        rs::jsapi::Value result(cx_);
         SetText(args, result);
     }
 }

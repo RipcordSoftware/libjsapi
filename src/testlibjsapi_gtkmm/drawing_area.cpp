@@ -3,7 +3,7 @@
 
 #include <cstring>
 
-DrawingArea::DrawingArea(rs::jsapi::Runtime& rt, Gtk::DrawingArea* area) : rt_(rt), obj_(rt), 
+DrawingArea::DrawingArea(rs::jsapi::Context& cx, Gtk::DrawingArea* area) : cx_(cx), obj_(cx), 
         area_(area), widget_(area, obj_) {
     auto functions = widget_.GetFunctions();
     
@@ -18,7 +18,7 @@ DrawingArea::DrawingArea(rs::jsapi::Runtime& rt, Gtk::DrawingArea* area) : rt_(r
     functions.emplace_back("createImageData", std::bind(&DrawingArea::CreateImageSurface, this, std::placeholders::_1, std::placeholders::_2));
     functions.emplace_back("putImageData", std::bind(&DrawingArea::PutImageData, this, std::placeholders::_1, std::placeholders::_2));
 
-    rs::jsapi::Object::Create(rt, {}, nullptr, nullptr, 
+    rs::jsapi::Object::Create(cx, {}, nullptr, nullptr, 
         functions, std::bind(&DrawingArea::Finalizer, this), obj_);
     
     area_->signal_draw().connect(sigc::mem_fun(*this, &DrawingArea::OnGtkDraw));
@@ -63,11 +63,11 @@ bool DrawingArea::OnGtkDraw(const Cairo::RefPtr<Cairo::Context>& cr) {
     if (onDraw_.isFunction()) {
         onDrawContext_ = cr;
                
-        rs::jsapi::FunctionArguments args(rt_);
+        rs::jsapi::FunctionArguments args(cx_);
         args.Append(obj_);
         args.Append(area_->get_allocated_width());
         args.Append(area_->get_allocated_height());
-        rs::jsapi::Value result(rt_);
+        rs::jsapi::Value result(cx_);
         onDraw_.CallFunction(args, result);
         
         // TODO: if the function call throws then this will leak
@@ -105,7 +105,7 @@ void DrawingArea::CreateImageSurface(const std::vector<rs::jsapi::Value>& args, 
         }
         
         image_ = Cairo::ImageSurface::create(Cairo::Format::FORMAT_ARGB32, area_->get_allocated_width(), area_->get_allocated_height());
-        result = *(new ImageSurface(rt_, width, height, 4));
+        result = *(new ImageSurface(cx_, width, height, 4));
     }        
 }
 

@@ -22,36 +22,39 @@
  * THE SOFTWARE.
 **/
 
-#ifndef LABEL_H
-#define	LABEL_H
+#include "exceptions.h"
 
-#include "libjsapi.h"
+#include <map>
 
-#include "widget.h"
-
-class Label {
-public:
-
-    Label(rs::jsapi::Context& cx, Gtk::Label* label);
-    
-    void GetText(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result);
-    void SetText(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result);       
-    
-    operator rs::jsapi::Value&() { return obj_; }
-    
-private:
-    void Finalizer() {
-        delete this;
-    }
-    
-    void GetCallback(const char* name, rs::jsapi::Value& value);
-    void SetCallback(const char* name, const rs::jsapi::Value& value);        
-    
-    rs::jsapi::Context& cx_;
-    rs::jsapi::Value obj_;
-    Gtk::Label* label_;    
-    Widget widget_;    
+static std::map<int16_t, std::string> jsapiExceptionTypes = {
+    { JSEXN_INTERNALERR, "InternalError: " },
+    { JSEXN_EVALERR, "EvaluationError: " },
+    { JSEXN_RANGEERR, "RangeError: " },
+    { JSEXN_REFERENCEERR, "ReferenceError: " },    
+    { JSEXN_SYNTAXERR, "SyntaxError: " },
+    { JSEXN_TYPEERR, "TypeError: " },
+    { JSEXN_URIERR, "UriError: " },
+    { JSEXN_DEBUGGEEWOULDRUN, "DebuggeeWouldRun: " },
+    { JSEXN_WARN, "Warning: " }
 };
 
-#endif	/* LABEL_H */
+std::string rs::jsapi::ScriptException::U16toString(const char16_t* ptr) {
+    std::string str;
+    if (ptr) {
+        while (*ptr != '\0') {
+            str += *ptr < 128 ? (char) *ptr : '?';
+            ++ptr;
+        }
+    }
+    return str;
+}
 
+std::string rs::jsapi::ScriptException::GetExceptionMessage(const JSErrorReport* error) {
+    std::string str;
+    
+    if (error && error->ucmessage && jsapiExceptionTypes.find(error->exnType) != jsapiExceptionTypes.cend()) {
+        str = jsapiExceptionTypes[error->exnType] + U16toString(error->ucmessage);
+    }
+    
+    return str;
+}

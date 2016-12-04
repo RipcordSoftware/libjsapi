@@ -34,155 +34,153 @@ protected:
     
     virtual void TearDown() {
         
-    }    
-    
-    rs::jsapi::Runtime rt_;
+    }
 };
 
 TEST_F(CallJSFunctionTests, test1) {
-    auto context = rt_.NewContext();
-    context->Evaluate("var myfunc=function(){return 42;};");
+    rs::jsapi::Context cx;
+    cx.Evaluate("var myfunc=function(){return 42;};");
     
-    rs::jsapi::Value result(*context);
-    context->Call("myfunc", result);
+    rs::jsapi::Value result(cx);
+    cx.Call("myfunc", result);
     
     ASSERT_TRUE(result.isNumber());
     ASSERT_EQ(42, result.toNumber());
 }
 
 TEST_F(CallJSFunctionTests, test2) {
-    auto context = rt_.NewContext();
-    context->Evaluate("var myfunc1=function(){return 42;};");
-    context->Evaluate("var myfunc2=function(){return 69;};");
+    rs::jsapi::Context cx;
+    cx.Evaluate("var myfunc1=function(){return 42;};");
+    cx.Evaluate("var myfunc2=function(){return 69;};");
     
-    rs::jsapi::Value result1(*context);
-    context->Call("myfunc1", result1);
+    rs::jsapi::Value result1(cx);
+    cx.Call("myfunc1", result1);
     
     ASSERT_TRUE(result1.isNumber());
     ASSERT_EQ(42, result1.toNumber());
     
-    rs::jsapi::Value result2(*context);
-    context->Call("myfunc2", result2);
+    rs::jsapi::Value result2(cx);
+    cx.Call("myfunc2", result2);
     
     ASSERT_TRUE(result2.isNumber());
     ASSERT_EQ(69, result2.toNumber());            
 }
 
 TEST_F(CallJSFunctionTests, test3) {
-    auto context = rt_.NewContext();
+    rs::jsapi::Context cx;
     
-    rs::jsapi::Value result1(*context);
-    context->Evaluate("var myfunc=function(){return 42;};(function(){return myfunc()+1;})();", result1);    
+    rs::jsapi::Value result1(cx);
+    cx.Evaluate("var myfunc=function(){return 42;};(function(){return myfunc()+1;})();", result1);    
     
     ASSERT_TRUE(result1.isNumber());
     ASSERT_EQ(43, result1.toNumber());
     
-    rs::jsapi::Value result2(*context);
-    context->Call("myfunc", result2);            
+    rs::jsapi::Value result2(cx);
+    cx.Call("myfunc", result2);            
     
     ASSERT_TRUE(result2.isNumber());
     ASSERT_EQ(42, result2.toNumber());
 }
 
 TEST_F(CallJSFunctionTests, test4) {
-    auto context = rt_.NewContext();
+    rs::jsapi::Context cx;
     
-    context->Evaluate("var count=7;var inc=function(){count++;};var get=function(){return count;};");        
+    cx.Evaluate("var count=7;var inc=function(){count++;};var get=function(){return count;};");        
     
-    rs::jsapi::Value result1(*context);
-    context->Call("get", result1);
+    rs::jsapi::Value result1(cx);
+    cx.Call("get", result1);
     
     ASSERT_TRUE(result1.isNumber());
     ASSERT_EQ(7, result1.toNumber());
     
-    context->Call("inc");
+    cx.Call("inc");
     
-    rs::jsapi::Value result2(*context);
-    context->Call("get", result2);            
+    rs::jsapi::Value result2(cx);
+    cx.Call("get", result2);            
     
     ASSERT_TRUE(result2.isNumber());
     ASSERT_EQ(8, result2.toNumber());
 }
 
 TEST_F(CallJSFunctionTests, test5) {
-    auto context = rt_.NewContext();
-    context->Evaluate("var myfunc=function(n){return n;};");
+    rs::jsapi::Context cx;
+    cx.Evaluate("var myfunc=function(n){return n;};");
     
-    rs::jsapi::FunctionArguments args(*context);
+    rs::jsapi::FunctionArguments args(cx);
     args.Append(3.14159);
     
-    rs::jsapi::Value result(*context);
-    context->Call("myfunc", args, result);
+    rs::jsapi::Value result(cx);
+    cx.Call("myfunc", args, result);
     
     ASSERT_TRUE(result.isNumber());
     ASSERT_FLOAT_EQ(3.14159, result.toNumber());    
 }
 
 TEST_F(CallJSFunctionTests, test5b) {
-    auto context = rt_.NewContext();
-    context->Evaluate("var myfunc=function(n){return n;};");
+    rs::jsapi::Context cx;
+    cx.Evaluate("var myfunc=function(n){return n;};");
     
-    rs::jsapi::FunctionArguments args(*context);
+    rs::jsapi::FunctionArguments args(cx);
     args.Append(3);
     
-    rs::jsapi::Value result(*context);
-    context->Call("myfunc", args, result);
+    rs::jsapi::Value result(cx);
+    cx.Call("myfunc", args, result);
     
     ASSERT_TRUE(result.isInt32());
     ASSERT_EQ(3, result.toInt32());       
 }
 
 TEST_F(CallJSFunctionTests, test5c) {
-    auto context = rt_.NewContext();
-    context->Evaluate("var myfunc=function(n){return n;};");
+    rs::jsapi::Context cx;
+    cx.Evaluate("var myfunc=function(n){return n;};");
     
-    rs::jsapi::FunctionArguments args(*context);
+    rs::jsapi::FunctionArguments args(cx);
     args.Append(7u);
     
-    rs::jsapi::Value result(*context);
-    context->Call("myfunc", args, result);
+    rs::jsapi::Value result(cx);
+    cx.Call("myfunc", args, result);
     
     ASSERT_TRUE(result.isNumber());
     ASSERT_EQ(7, result.toNumber());
 }
 
 TEST_F(CallJSFunctionTests, test6) {
-    auto context = rt_.NewContext();
-    context->Evaluate("var myfunc=function(n){return n;};");
+    rs::jsapi::Context cx;
+    cx.Evaluate("var myfunc=function(n){return n;};");
     
-    rs::jsapi::FunctionArguments args(*context);
+    rs::jsapi::FunctionArguments args(cx);
     args.Append("hello");
     
-    rs::jsapi::Value result(*context);
-    context->Call("myfunc", args, result);       
+    rs::jsapi::Value result(cx);
+    cx.Call("myfunc", args, result);       
     
     ASSERT_TRUE(result.isString());
     ASSERT_STRCASEEQ("hello", result.ToString().c_str());
 }
 
 TEST_F(CallJSFunctionTests, test7) {
-    auto context = rt_.NewContext();
-    context->Evaluate("var myfunc=function(n){return n;};");
+    rs::jsapi::Context cx;
+    cx.Evaluate("var myfunc=function(n){return n;};");
     
-    rs::jsapi::FunctionArguments args(*context);
+    rs::jsapi::FunctionArguments args(cx);
     args.Append(true);
     
-    rs::jsapi::Value result(*context);
-    context->Call("myfunc", args, result);       
+    rs::jsapi::Value result(cx);
+    cx.Call("myfunc", args, result);       
     
     ASSERT_TRUE(result.isBoolean());
     ASSERT_TRUE(result.toBoolean());
 }
 
 TEST_F(CallJSFunctionTests, test8) {
-    auto context = rt_.NewContext();
-    context->Evaluate("var myfunc=function(n){return n;};");
+    rs::jsapi::Context cx;
+    cx.Evaluate("var myfunc=function(n){return n;};");
     
-    rs::jsapi::FunctionArguments args(*context);
+    rs::jsapi::FunctionArguments args(cx);
     args.Append(false);
     
-    rs::jsapi::Value result(*context);
-    context->Call("myfunc", args, result);       
+    rs::jsapi::Value result(cx);
+    cx.Call("myfunc", args, result);       
     
     ASSERT_TRUE(result.isBoolean());
     ASSERT_FALSE(result.toBoolean());
@@ -191,7 +189,7 @@ TEST_F(CallJSFunctionTests, test8) {
     ASSERT_TRUE(args.Empty());
     
     args.Append(true);    
-    context->Call("myfunc", args, result);       
+    cx.Call("myfunc", args, result);       
     
     ASSERT_TRUE(result.isBoolean());
     ASSERT_TRUE(result.toBoolean());    

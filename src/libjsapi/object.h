@@ -80,6 +80,7 @@ private:
     static ObjectState* GetState(JSObject* obj);
     static void SetState(JSObject* obj, ObjectState* state);
     
+    static JSClassOps classOps_;
     static JSClass class_;
 };
 

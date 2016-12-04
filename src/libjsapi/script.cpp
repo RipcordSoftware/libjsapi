@@ -37,14 +37,14 @@ rs::jsapi::Script::~Script() {
 bool rs::jsapi::Script::Compile() {
     JSAutoRequest ar(cx_);
     JS::CompileOptions options(cx_);
-    if (!JS_CompileScript(cx_, code_.c_str(), code_.length(), options, &script_)) {    
-        auto error = cx_.getError();
-        if (!!error) {
-            throw *error;
-        }
+    auto status = JS_CompileScript(cx_, code_.c_str(), code_.length(), options, &script_);
+    
+    auto error = cx_.GetError();
+    if (!!error) {
+        throw *error;
     }
     
-    return script_;
+    return status;
 }
 
 bool rs::jsapi::Script::Execute() {
@@ -55,7 +55,7 @@ bool rs::jsapi::Script::Execute() {
     
     auto status = JS_ExecuteScript(cx_, script_);
     
-    auto error = cx_.getError();
+    auto error = cx_.GetError();
     if (!!error) {
         throw *error;
     }
@@ -71,7 +71,7 @@ bool rs::jsapi::Script::Execute(Value& result) {
     
     auto status = JS_ExecuteScript(cx_, script_, result);    
     
-    auto error = cx_.getError();
+    auto error = cx_.GetError();
     if (!!error) {
         throw *error;
     }

@@ -25,8 +25,10 @@
 #include "context.h"
 
 #include <cstring>
+#include <cstdlib>
 
-#include "runtime.h"
+#include <js/Initialization.h>
+
 #include "value.h"
 #include "function_arguments.h"
 
@@ -36,34 +38,71 @@ static JSClass globalClass = {
     JSCLASS_GLOBAL_FLAGS
 };
 
-rs::jsapi::Context::Context(Runtime& rt) : 
-        cx_(JS_NewContext(rt.getRuntime(), 32 * 1024)),
-        global_(cx_, JS_NewGlobalObject(cx_, &globalClass, nullptr, JS::DontFireOnNewGlobalHook)),
+JS::CompartmentOptions rs::jsapi::Context::options_;
+
+rs::jsapi::Context::Context(uint32_t maxBytes, bool enableBaselineCompiler, bool enableIonCompiler) : 
+        cx_(NewContext(maxBytes)),
+        global_(cx_, JS_NewGlobalObject(cx_, &globalClass, nullptr, JS::DontFireOnNewGlobalHook, options_)),
         oldCompartment_(nullptr) {
-    ContextState::NewState(cx_, ReportError, this);
+    JS::SetWarningReporter(cx_, &ReportWarning);
+
+    ContextState::NewState(cx_, ReportWarning, this);
     
     oldCompartment_ = JS_EnterCompartment(cx_, global_);
-    JS_InitStandardClasses(cx_, global_);    
+    JS_InitStandardClasses(cx_, global_);
+
+    if (enableBaselineCompiler) {
+        JS_SetGlobalJitCompilerOption(cx_, JSJITCOMPILER_BASELINE_ENABLE, 1);
+        
+        if (enableIonCompiler) {
+            JS_SetGlobalJitCompilerOption(cx_, JSJITCOMPILER_ION_ENABLE, 1);
+        }
+    } 
 }
 
 rs::jsapi::Context::~Context() {
     DestroyContext();
 }
 
-void rs::jsapi::Context::ReportError(JSContext* cx, const char* message, JSErrorReport* report) {
+void rs::jsapi::Context::ReportWarning(JSContext* cx, const char* message, JSErrorReport* report) {
     auto that = static_cast<Context*>(ContextState::GetDataPtr(cx));
     if (that != nullptr) {
         that->exception_.reset(new ScriptException(message, report));
     }
 }
 
-std::unique_ptr<rs::jsapi::ScriptException> rs::jsapi::Context::getError() {
+std::unique_ptr<rs::jsapi::ScriptException> rs::jsapi::Context::GetError() {
+    std::unique_ptr<ScriptException> error;
+    if (JS_IsExceptionPending(cx_)) {
+        error = GetContextException();
+    } else {
+        error = GetContextError();
+    }
+
+    return error;
+}
+
+std::unique_ptr<rs::jsapi::ScriptException> rs::jsapi::Context::GetContextError() {
     return std::move(exception_);
+}
+
+std::unique_ptr<rs::jsapi::ScriptException> rs::jsapi::Context::GetContextException() {
+    std::unique_ptr<rs::jsapi::ScriptException> error;
+    Value ex(cx_);
+        
+    if (JS_GetPendingException(cx_, ex)) {
+        JS_ClearPendingException(cx_);
+
+        auto report = JS_ErrorFromException(cx_, ex);
+        error.reset(new ScriptException(report));
+    }
+    
+    return error;
 }
 
 void rs::jsapi::Context::DestroyContext() {
     if (cx_) {
-        ContextState::DetachErrorReporter(cx_);
+        ContextState::DetachWarningReporter(cx_);
         
         global_.reset();
         
@@ -87,7 +126,7 @@ bool rs::jsapi::Context::Evaluate(const char* script, Value& result) {
     JS::CompileOptions options(cx_);
     auto status = JS::Evaluate(cx_, options, script, std::strlen(script), result);
     
-    auto error = getError();
+    auto error = GetError();
     if (!!error) {
         throw *error;
     }
@@ -104,7 +143,7 @@ bool rs::jsapi::Context::Call(const char* name, Value& result) {
     JSAutoRequest ar(cx_);    
     auto status = JS_CallFunctionName(cx_, global_, name, JS::HandleValueArray::empty(), result);    
     
-    auto error = getError();
+    auto error = GetError();
     if (!!error) {
         throw *error;
     }
@@ -121,7 +160,7 @@ bool rs::jsapi::Context::Call(const char* name, const FunctionArguments& args, V
     JSAutoRequest ar(cx_);
     auto status = JS_CallFunctionName(cx_, global_, name, args, result);    
     
-    auto error = getError();
+    auto error = GetError();
     if (!!error) {
         throw *error;
     }
@@ -144,11 +183,17 @@ bool rs::jsapi::Context::Call(Value& value, const FunctionArguments& args, Value
         JSAutoRequest ar{cx};
         status = JS_CallFunctionValue(cx, that->global_, value, args, result);
         
-        auto error = that->getError();
+        auto error = that->GetError();
         if (throwOnError && !!error) {
             throw *error;
         }
     }
     
     return status;
+}
+
+JSContext* rs::jsapi::Context::NewContext(uint32_t maxBytes) {
+    auto cx = JS_NewContext(maxBytes);
+    JS::InitSelfHostedCode(cx);
+    return cx;
 }

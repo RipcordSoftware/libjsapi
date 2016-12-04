@@ -29,10 +29,17 @@
 #include <vector>
 #include <cstring>
 
+JSClassOps rs::jsapi::DynamicArray::classOps_ = {
+    nullptr, nullptr,
+    DynamicArray::Get, DynamicArray::Set, 
+    nullptr, nullptr, 
+    nullptr, DynamicArray::Finalize,
+    nullptr, nullptr,
+    nullptr, nullptr
+};
+
 JSClass rs::jsapi::DynamicArray::class_ = { 
-    "rs_jsapi_dynamicarray", JSCLASS_HAS_PRIVATE, nullptr, nullptr,
-    DynamicArray::Get, DynamicArray::Set, nullptr, nullptr, 
-    nullptr, DynamicArray::Finalize
+    "rs_jsapi_dynamicarray", JSCLASS_HAS_PRIVATE, &classOps_
 };
 
 bool rs::jsapi::DynamicArray::Create(JSContext* cx, GetCallback getter, SetCallback setter, LengthCallback length, FinalizeCallback finalize, Value& array) {

@@ -34,9 +34,7 @@ protected:
     
     virtual void TearDown() {
         
-    }            
-    
-    rs::jsapi::Runtime rt_;
+    }
 };
 
 class SimpleDynamicArrayTestException : public std::exception {
@@ -51,10 +49,10 @@ private:
 };
 
 TEST_F(SimpleDynamicArrayTests, test1) {
-    auto context = rt_.NewContext();
+    rs::jsapi::Context context;
     
-    rs::jsapi::Value array(*context);    
-    rs::jsapi::DynamicArray::Create(*context,
+    rs::jsapi::Value array(context);    
+    rs::jsapi::DynamicArray::Create(context,
         [](int index, rs::jsapi::Value& value) { value = 42; },
         nullptr,
         []() { return 1; },
@@ -62,20 +60,20 @@ TEST_F(SimpleDynamicArrayTests, test1) {
         array);
     ASSERT_TRUE(!!array);
     
-    rs::jsapi::Value value(*context);
-    ASSERT_TRUE(JS_GetElement(*context, array, 0, value));
+    rs::jsapi::Value value(context);
+    ASSERT_TRUE(JS_GetElement(context, array, 0, value));
     ASSERT_EQ(42, value.toInt32());
     
     uint32_t length = -1;
-    ASSERT_TRUE(JS_GetArrayLength(*context, array, &length));
+    ASSERT_TRUE(JS_GetArrayLength(context, array, &length));
     ASSERT_EQ(1, length);    
 }
 
 TEST_F(SimpleDynamicArrayTests, test2) {
-    auto context = rt_.NewContext();
+    rs::jsapi::Context context;
     
-    rs::jsapi::Value array(*context);    
-    rs::jsapi::DynamicArray::Create(*context,
+    rs::jsapi::Value array(context);    
+    rs::jsapi::DynamicArray::Create(context,
         [](int index, rs::jsapi::Value& value) { value = index; },
         nullptr,
         []() { return 10; },
@@ -84,21 +82,21 @@ TEST_F(SimpleDynamicArrayTests, test2) {
     ASSERT_TRUE(!!array);
     
     uint32_t length = -1;
-    ASSERT_TRUE(JS_GetArrayLength(*context, array, &length));
+    ASSERT_TRUE(JS_GetArrayLength(context, array, &length));
     ASSERT_EQ(10, length);
     
     for (int i = 0; i < 10; ++i) {
-        rs::jsapi::Value value(*context);
-        ASSERT_TRUE(JS_GetElement(*context, array, i, value));
+        rs::jsapi::Value value(context);
+        ASSERT_TRUE(JS_GetElement(context, array, i, value));
         ASSERT_EQ(i, value.toInt32());
     }
 }
 
 TEST_F(SimpleDynamicArrayTests, test3) {
-    auto context = rt_.NewContext();
+    rs::jsapi::Context context;
     
-    rs::jsapi::Value array(*context);    
-    rs::jsapi::DynamicArray::Create(*context,
+    rs::jsapi::Value array(context);    
+    rs::jsapi::DynamicArray::Create(context,
         [](int index, rs::jsapi::Value& value) { value = index; },
         nullptr,
         []() { return 10; },
@@ -106,15 +104,15 @@ TEST_F(SimpleDynamicArrayTests, test3) {
         array);
     ASSERT_TRUE(!!array);
     
-    rt_.Evaluate("var myfunc = function(arr, n) { return arr[n]; };");
+    context.Evaluate("var myfunc = function(arr, n) { return arr[n]; };");
    
     for (int i = 0; i < 10; ++i) {
-        rs::jsapi::FunctionArguments args(*context);
+        rs::jsapi::FunctionArguments args(context);
         args.Append(array);
         args.Append(i);
         
-        rs::jsapi::Value result(*context);
-        rt_.Call("myfunc", args, result);
+        rs::jsapi::Value result(context);
+        context.Call("myfunc", args, result);
         
         ASSERT_TRUE(result.isInt32());
         ASSERT_EQ(i, result.toInt32());
@@ -122,13 +120,13 @@ TEST_F(SimpleDynamicArrayTests, test3) {
 }
 
 TEST_F(SimpleDynamicArrayTests, test4) {
-    auto context = rt_.NewContext();    
-    rs::jsapi::Value array(*context);
+    rs::jsapi::Context context;
+    rs::jsapi::Value array(context);
     
-    context->Evaluate("var myfunc = function(arr) { return arr.length; };");
+    context.Evaluate("var myfunc = function(arr) { return arr.length; };");
     
     for (int i = 0; i < 100; ++i) {
-        rs::jsapi::DynamicArray::Create(*context,
+        rs::jsapi::DynamicArray::Create(context,
             [](int index, rs::jsapi::Value& value) { value = index; },
             nullptr,
             [&]() { return i; },
@@ -136,11 +134,11 @@ TEST_F(SimpleDynamicArrayTests, test4) {
             array);
         ASSERT_TRUE(!!array);
 
-        rs::jsapi::FunctionArguments args(*context);
+        rs::jsapi::FunctionArguments args(context);
         args.Append(array);
         
-        rs::jsapi::Value result(*context);
-        context->Call("myfunc", args, result);
+        rs::jsapi::Value result(context);
+        context.Call("myfunc", args, result);
 
         ASSERT_TRUE(result.isInt32());
         ASSERT_EQ(i, result.toInt32());
@@ -151,11 +149,11 @@ TEST_F(SimpleDynamicArrayTests, test5) {
     auto count = 0;
     
     if (true) {
-        auto context = rt_.NewContext();
+        rs::jsapi::Context context;
         
-        rs::jsapi::Value obj(*context);
+        rs::jsapi::Value obj(context);
         rs::jsapi::DynamicArray::Create(
-            *context, 
+            context, 
             nullptr, 
             nullptr, 
             nullptr,
@@ -168,10 +166,10 @@ TEST_F(SimpleDynamicArrayTests, test5) {
 }
 
 TEST_F(SimpleDynamicArrayTests, test6) {
-    auto context = rt_.NewContext();
+    rs::jsapi::Context context;
     
-    rs::jsapi::Value array(*context);    
-    rs::jsapi::DynamicArray::Create(*context,
+    rs::jsapi::Value array(context);    
+    rs::jsapi::DynamicArray::Create(context,
         [](int index, rs::jsapi::Value& value) { value = index; },
         nullptr,
         []() { return 10; },
@@ -179,15 +177,15 @@ TEST_F(SimpleDynamicArrayTests, test6) {
         array);
     ASSERT_TRUE(!!array);
     
-    rt_.Evaluate("var myfunc = function(arr, n) { return arr[n]; };");
+    context.Evaluate("var myfunc = function(arr, n) { return arr[n]; };");
    
     for (int i = 0; i < 10; ++i) {
-        rs::jsapi::FunctionArguments args(*context);
+        rs::jsapi::FunctionArguments args(context);
         args.Append(array);
         args.Append(std::to_string(i));
         
-        rs::jsapi::Value result(*context);
-        rt_.Call("myfunc", args, result);
+        rs::jsapi::Value result(context);
+        context.Call("myfunc", args, result);
         
         ASSERT_TRUE(result.isInt32());
         ASSERT_EQ(i, result.toInt32());
@@ -195,10 +193,10 @@ TEST_F(SimpleDynamicArrayTests, test6) {
 }
 
 TEST_F(SimpleDynamicArrayTests, test7) {
-    auto context = rt_.NewContext();
+    rs::jsapi::Context context;
     
-    rs::jsapi::Value array(*context);    
-    rs::jsapi::DynamicArray::Create(*context,
+    rs::jsapi::Value array(context);    
+    rs::jsapi::DynamicArray::Create(context,
         [](int index, rs::jsapi::Value& value) { value = index; },
         nullptr,
         []() { return 10; },
@@ -206,25 +204,25 @@ TEST_F(SimpleDynamicArrayTests, test7) {
         array);
     ASSERT_TRUE(!!array);
     
-    rt_.Evaluate("var myfunc = function(arr, n) { return arr[n]; };");
+    context.Evaluate("var myfunc = function(arr, n) { return arr[n]; };");
    
     for (int i = 0; i < 10; ++i) {
-        rs::jsapi::FunctionArguments args(*context);
+        rs::jsapi::FunctionArguments args(context);
         args.Append(array);
         args.Append("abc");
         
-        rs::jsapi::Value result(*context);
-        rt_.Call("myfunc", args, result);
+        rs::jsapi::Value result(context);
+        context.Call("myfunc", args, result);
         
         ASSERT_TRUE(result.isUndefined());
     }
 }
 
 TEST_F(SimpleDynamicArrayTests, test8) {
-    auto context = rt_.NewContext();
+    rs::jsapi::Context context;
 
-    rs::jsapi::Value array(*context);
-    rs::jsapi::DynamicArray::Create(*context, 
+    rs::jsapi::Value array(context);
+    rs::jsapi::DynamicArray::Create(context, 
         nullptr, 
         nullptr, 
         nullptr,
@@ -242,9 +240,9 @@ TEST_F(SimpleDynamicArrayTests, test8) {
 }
 
 TEST_F(SimpleDynamicArrayTests, test9) {
-    auto context = rt_.NewContext();
+    rs::jsapi::Context context;
 
-    rs::jsapi::Value array(*context);
+    rs::jsapi::Value array(context);
     ASSERT_FALSE(rs::jsapi::DynamicArray::SetPrivate(array, 123456789, this));
     
     uint64_t data = 0;
@@ -255,10 +253,10 @@ TEST_F(SimpleDynamicArrayTests, test9) {
 }
 
 TEST_F(SimpleDynamicArrayTests, test10) {
-    auto context = rt_.NewContext();
+    rs::jsapi::Context context;
     
-    rs::jsapi::Value array(*context);    
-    rs::jsapi::DynamicArray::Create(*context,
+    rs::jsapi::Value array(context);    
+    rs::jsapi::DynamicArray::Create(context,
         [](int index, rs::jsapi::Value& value) { throw SimpleDynamicArrayTestException("It happened!"); },
         nullptr,
         []() { return 1; },
@@ -266,23 +264,23 @@ TEST_F(SimpleDynamicArrayTests, test10) {
         array);
     ASSERT_TRUE(!!array);
     
-    context->Evaluate("var myfunc=function(n, i){ return n[i];};");
+    context.Evaluate("var myfunc=function(n, i){ return n[i];};");
 
-    rs::jsapi::FunctionArguments args(*context);
+    rs::jsapi::FunctionArguments args(context);
     args.Append(array);
     args.Append(0);
     
     ASSERT_THROW({
-        rs::jsapi::Value result(*context);
-        context->Call("myfunc", args, result);
+        rs::jsapi::Value result(context);
+        context.Call("myfunc", args, result);
     }, rs::jsapi::ScriptException);           
 }
 
 TEST_F(SimpleDynamicArrayTests, test11) {
-    auto context = rt_.NewContext();
+    rs::jsapi::Context context;
     
-    rs::jsapi::Value array(*context);    
-    rs::jsapi::DynamicArray::Create(*context,
+    rs::jsapi::Value array(context);    
+    rs::jsapi::DynamicArray::Create(context,
         [](int index, rs::jsapi::Value& value) { throw SimpleDynamicArrayTestException("It happened!"); },
         nullptr,
         []() { return 1; },
@@ -290,16 +288,16 @@ TEST_F(SimpleDynamicArrayTests, test11) {
         array);
     ASSERT_TRUE(!!array);
     
-    context->Evaluate("var myfunc=function(n, i){ return n[i];};");
+    context.Evaluate("var myfunc=function(n, i){ return n[i];};");
 
-    rs::jsapi::FunctionArguments args(*context);
+    rs::jsapi::FunctionArguments args(context);
     args.Append(array);
     args.Append(0);
     
     bool thrown = false;
     try {
-        rs::jsapi::Value result(*context);
-        context->Call("myfunc", args, result);
+        rs::jsapi::Value result(context);
+        context.Call("myfunc", args, result);
     } catch (const rs::jsapi::ScriptException& ex) {
         thrown = true;
     }
@@ -308,10 +306,10 @@ TEST_F(SimpleDynamicArrayTests, test11) {
 }
 
 TEST_F(SimpleDynamicArrayTests, test12) {
-    auto context = rt_.NewContext();
+    rs::jsapi::Context context;
     
-    rs::jsapi::Value array(*context);    
-    rs::jsapi::DynamicArray::Create(*context,
+    rs::jsapi::Value array(context);    
+    rs::jsapi::DynamicArray::Create(context,
         nullptr,
         [](int index, const rs::jsapi::Value& value) { throw SimpleDynamicArrayTestException("It happened!"); },        
         []() { return 1; },
@@ -319,23 +317,23 @@ TEST_F(SimpleDynamicArrayTests, test12) {
         array);
     ASSERT_TRUE(!!array);
     
-    context->Evaluate("var myfunc=function(n, i){ n[i] = true;};");
+    context.Evaluate("var myfunc=function(n, i){ n[i] = true;};");
 
-    rs::jsapi::FunctionArguments args(*context);
+    rs::jsapi::FunctionArguments args(context);
     args.Append(array);
     args.Append(0);
     
     ASSERT_THROW({
-        rs::jsapi::Value result(*context);
-        context->Call("myfunc", args, result);
+        rs::jsapi::Value result(context);
+        context.Call("myfunc", args, result);
     }, rs::jsapi::ScriptException);           
 }
 
 TEST_F(SimpleDynamicArrayTests, test13) {
-    auto context = rt_.NewContext();
+    rs::jsapi::Context context;
     
-    rs::jsapi::Value array(*context);    
-    rs::jsapi::DynamicArray::Create(*context,
+    rs::jsapi::Value array(context);    
+    rs::jsapi::DynamicArray::Create(context,
         nullptr,
         [](int index, const rs::jsapi::Value& value) { throw SimpleDynamicArrayTestException("It happened!"); },        
         []() { return 1; },
@@ -343,16 +341,16 @@ TEST_F(SimpleDynamicArrayTests, test13) {
         array);
     ASSERT_TRUE(!!array);
     
-    context->Evaluate("var myfunc=function(n, i){ n[i] = true;};");
+    context.Evaluate("var myfunc=function(n, i){ n[i] = true;};");
 
-    rs::jsapi::FunctionArguments args(*context);
+    rs::jsapi::FunctionArguments args(context);
     args.Append(array);
     args.Append(0);
     
     bool thrown = false;
     try {
-        rs::jsapi::Value result(*context);
-        context->Call("myfunc", args, result);
+        rs::jsapi::Value result(context);
+        context.Call("myfunc", args, result);
     } catch (const rs::jsapi::ScriptException& ex) {
         thrown = true;
     }
@@ -361,10 +359,10 @@ TEST_F(SimpleDynamicArrayTests, test13) {
 }
 
 TEST_F(SimpleDynamicArrayTests, test14) {
-    auto context = rt_.NewContext();
+    rs::jsapi::Context context;
     
-    rs::jsapi::Value array(*context);
-    rs::jsapi::DynamicArray::Create(*context,
+    rs::jsapi::Value array(context);
+    rs::jsapi::DynamicArray::Create(context,
         [](int index, rs::jsapi::Value& value) { value = 42; },
         nullptr,
         []() { return 1; },
@@ -373,21 +371,21 @@ TEST_F(SimpleDynamicArrayTests, test14) {
     ASSERT_TRUE(!!array);    
     ASSERT_TRUE(rs::jsapi::DynamicArray::IsDynamicArray(array));
     
-    rs::jsapi::Value nullObj(*context, JS::NullHandleValue);    
+    rs::jsapi::Value nullObj(context, JS::NullHandleValue);    
     ASSERT_FALSE(rs::jsapi::DynamicArray::IsDynamicArray(nullObj));
     
-    rs::jsapi::Value undefinedObj(*context, JS::UndefinedHandleValue);    
+    rs::jsapi::Value undefinedObj(context, JS::UndefinedHandleValue);    
     ASSERT_FALSE(rs::jsapi::DynamicArray::IsDynamicArray(undefinedObj));
     
-    rs::jsapi::Value numValue(*context, 123);    
+    rs::jsapi::Value numValue(context, 123);    
     ASSERT_FALSE(rs::jsapi::DynamicArray::IsDynamicArray(numValue));
     
-    rs::jsapi::Value strValue(*context, "123");    
+    rs::jsapi::Value strValue(context, "123");    
     ASSERT_FALSE(rs::jsapi::DynamicArray::IsDynamicArray(strValue));
     
-    rs::jsapi::Value obj(*context);
+    rs::jsapi::Value obj(context);
     rs::jsapi::DynamicObject::Create(
-        *context,
+        context,
         [](const char* name, rs::jsapi::Value& value) {            
             value = 42;
         }, 

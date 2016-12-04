@@ -34,9 +34,7 @@ protected:
     
     virtual void TearDown() {
         
-    }    
-    
-    rs::jsapi::Runtime rt_;
+    }
 };
 
 class SimpleDynamicObjectTestException : public std::exception {
@@ -51,11 +49,11 @@ private:
 };
 
 TEST_F(SimpleDynamicObjectTests, test1) {
-    auto context = rt_.NewContext();    
+    rs::jsapi::Context context;
     
-    rs::jsapi::Value obj(*context);
+    rs::jsapi::Value obj(context);
     rs::jsapi::DynamicObject::Create(
-        *context,
+        context,
         [](const char* name, rs::jsapi::Value& value) {            
             value = 42;
         }, 
@@ -65,24 +63,24 @@ TEST_F(SimpleDynamicObjectTests, test1) {
         obj);
     ASSERT_TRUE(!!obj);
     
-    context->Evaluate("var myfunc=function(n){return n.hello;};");    
+    context.Evaluate("var myfunc=function(n){return n.hello;};");    
     
-    rs::jsapi::FunctionArguments args(*context);    
+    rs::jsapi::FunctionArguments args(context);    
     args.Append(obj);
     
-    rs::jsapi::Value result(*context);
-    context->Call("myfunc", args, result);
+    rs::jsapi::Value result(context);
+    context.Call("myfunc", args, result);
     
     ASSERT_TRUE(result.isInt32());
     ASSERT_FLOAT_EQ(42, result.toInt32());
 }
 
 TEST_F(SimpleDynamicObjectTests, test2) {
-    auto context = rt_.NewContext();    
+    rs::jsapi::Context context;
     
-    rs::jsapi::Value obj(*context);
+    rs::jsapi::Value obj(context);
     rs::jsapi::DynamicObject::Create(
-        *context,
+        context,
         [](const char* name, rs::jsapi::Value& value) {            
             value = "world";
         }, 
@@ -92,13 +90,13 @@ TEST_F(SimpleDynamicObjectTests, test2) {
         obj);            
     ASSERT_TRUE(!!obj);
     
-    context->Evaluate("var myfunc=function(n){return n.hello;};");    
+    context.Evaluate("var myfunc=function(n){return n.hello;};");    
     
-    rs::jsapi::FunctionArguments args(*context);    
+    rs::jsapi::FunctionArguments args(context);    
     args.Append(obj);
     
-    rs::jsapi::Value result(*context);
-    context->Call("myfunc", args, result);
+    rs::jsapi::Value result(context);
+    context.Call("myfunc", args, result);
     
     ASSERT_TRUE(result.isString());
     ASSERT_STREQ("world", result.ToString().c_str());
@@ -106,11 +104,11 @@ TEST_F(SimpleDynamicObjectTests, test2) {
 
 TEST_F(SimpleDynamicObjectTests, test3) {
     std::string longFieldName(384, '1');
-    auto context = rt_.NewContext();    
+    rs::jsapi::Context context;
     
-    rs::jsapi::Value obj(*context);
+    rs::jsapi::Value obj(context);
     rs::jsapi::DynamicObject::Create(
-        *context,
+        context,
         [](const char* name, rs::jsapi::Value& value) {            
             value = 42;
         }, 
@@ -122,26 +120,25 @@ TEST_F(SimpleDynamicObjectTests, test3) {
     
     std::stringstream script;
     script << "var myfunc=function(o){ return o['" << longFieldName << "'];};";
-    context->Evaluate(script.str().c_str());
+    context.Evaluate(script.str().c_str());
     
-    rs::jsapi::FunctionArguments args(*context);    
+    rs::jsapi::FunctionArguments args(context);    
     args.Append(obj);
     
-    rs::jsapi::Value result(*context);
-    context->Call("myfunc", args, result);
+    rs::jsapi::Value result(context);
+    context.Call("myfunc", args, result);
     
     ASSERT_TRUE(result.isInt32());
     ASSERT_FLOAT_EQ(42, result.toInt32());
 }
 
 TEST_F(SimpleDynamicObjectTests, test4) {
-    rs::jsapi::Value fieldValue(rt_);
+    rs::jsapi::Context context;
+    rs::jsapi::Value fieldValue(context);
     
-    auto context = rt_.NewContext();    
-    
-    rs::jsapi::Value obj(*context);
+    rs::jsapi::Value obj(context);
     rs::jsapi::DynamicObject::Create(
-        *context,
+        context,
         nullptr, 
         [&](const char* name, const rs::jsapi::Value& value) { 
             fieldValue.set(value); 
@@ -151,26 +148,25 @@ TEST_F(SimpleDynamicObjectTests, test4) {
         obj);        
     ASSERT_TRUE(!!obj);
         
-    rt_.Evaluate("var myfunc=function(o){ o.test = 'world';};");
+    context.Evaluate("var myfunc=function(o){ o.test = 'world';};");
     
-    rs::jsapi::FunctionArguments args(rt_);
+    rs::jsapi::FunctionArguments args(context);
     args.Append(obj);
     
-    rt_.Call("myfunc", args);
+    context.Call("myfunc", args);
     
     ASSERT_TRUE(fieldValue.isString());
     ASSERT_STREQ("world", fieldValue.ToString().c_str());
 }
 
 TEST_F(SimpleDynamicObjectTests, test5) {
+    rs::jsapi::Context context;
     std::string longFieldName(384, '1');
-    rs::jsapi::Value fieldValue(rt_);
+    rs::jsapi::Value fieldValue(context);
     
-    auto context = rt_.NewContext();    
-    
-    rs::jsapi::Value obj(*context);
+    rs::jsapi::Value obj(context);
     rs::jsapi::DynamicObject::Create(
-        *context,
+        context,
         nullptr, 
         [&](const char* name, const rs::jsapi::Value& value) { 
             fieldValue.set(value); 
@@ -182,23 +178,23 @@ TEST_F(SimpleDynamicObjectTests, test5) {
     
     std::stringstream script;
     script << "var myfunc=function(o){ o['" << longFieldName << "'] = 'world';};";
-    rt_.Evaluate(script.str().c_str());
+    context.Evaluate(script.str().c_str());
     
-    rs::jsapi::FunctionArguments args(rt_);
+    rs::jsapi::FunctionArguments args(context);
     args.Append(obj);
     
-    rt_.Call("myfunc", args);
+    context.Call("myfunc", args);
     
     ASSERT_TRUE(fieldValue.isString());
     ASSERT_STREQ("world", fieldValue.ToString().c_str());
 }
 
 TEST_F(SimpleDynamicObjectTests, test6) {
-    auto context = rt_.NewContext();    
+    rs::jsapi::Context context;
     
-    rs::jsapi::Value obj(*context);
+    rs::jsapi::Value obj(context);
     rs::jsapi::DynamicObject::Create(
-        *context,
+        context,
         nullptr, 
         nullptr, 
         [](std::vector<std::string>& props, std::vector<std::pair<std::string, JSNative>>& funcs) {
@@ -211,24 +207,24 @@ TEST_F(SimpleDynamicObjectTests, test6) {
         obj);
     ASSERT_TRUE(!!obj);
     
-    context->Evaluate("var myfunc=function(o){var fields = 0; for (var prop in o) { ++fields; } return fields;};");    
+    context.Evaluate("var myfunc=function(o){var fields = 0; for (var prop in o) { ++fields; } return fields;};");    
     
-    rs::jsapi::FunctionArguments args(*context);    
+    rs::jsapi::FunctionArguments args(context);    
     args.Append(obj);
     
-    rs::jsapi::Value result(*context);
-    context->Call("myfunc", args, result);
+    rs::jsapi::Value result(context);
+    context.Call("myfunc", args, result);
     
     ASSERT_TRUE(result.isInt32());
     ASSERT_FLOAT_EQ(3, result.toInt32());
 }
 
 TEST_F(SimpleDynamicObjectTests, test7) {
-    auto context = rt_.NewContext();    
+    rs::jsapi::Context context;
     
-    rs::jsapi::Value obj(*context);
+    rs::jsapi::Value obj(context);
     rs::jsapi::DynamicObject::Create(
-        *context,
+        context,
         nullptr, 
         nullptr, 
         [](std::vector<std::string>& props, std::vector<std::pair<std::string, JSNative>>& funcs) {
@@ -242,24 +238,24 @@ TEST_F(SimpleDynamicObjectTests, test7) {
         obj);
     ASSERT_TRUE(!!obj);
     
-    context->Evaluate("var myfunc=function(o){var fields = 0; for (var prop in o) { ++fields; } return fields;};");    
+    context.Evaluate("var myfunc=function(o){var fields = 0; for (var prop in o) { ++fields; } return fields;};");    
     
-    rs::jsapi::FunctionArguments args(*context);    
+    rs::jsapi::FunctionArguments args(context);    
     args.Append(obj);
     
-    rs::jsapi::Value result(*context);
-    context->Call("myfunc", args, result);
+    rs::jsapi::Value result(context);
+    context.Call("myfunc", args, result);
     
     ASSERT_TRUE(result.isInt32());
     ASSERT_FLOAT_EQ(4, result.toInt32());
 }
 
 TEST_F(SimpleDynamicObjectTests, test8) {
-    auto context = rt_.NewContext();    
+    rs::jsapi::Context context;
     
-    rs::jsapi::Value obj(*context);
+    rs::jsapi::Value obj(context);
     rs::jsapi::DynamicObject::Create(
-        *context,
+        context,
         nullptr, 
         nullptr, 
         [](std::vector<std::string>& props, std::vector<std::pair<std::string, JSNative>>& funcs) {
@@ -273,13 +269,13 @@ TEST_F(SimpleDynamicObjectTests, test8) {
         obj);
     ASSERT_TRUE(!!obj);
     
-    context->Evaluate("var myfunc=function(o){var fields = []; for (var prop in o) { fields.push(prop); } return fields.toString();};");    
+    context.Evaluate("var myfunc=function(o){var fields = []; for (var prop in o) { fields.push(prop); } return fields.toString();};");    
     
-    rs::jsapi::FunctionArguments args(*context);    
+    rs::jsapi::FunctionArguments args(context);    
     args.Append(obj);
     
-    rs::jsapi::Value result(*context);
-    context->Call("myfunc", args, result);
+    rs::jsapi::Value result(context);
+    context.Call("myfunc", args, result);
     
     ASSERT_TRUE(result.isString());
     ASSERT_STREQ("the_answer,pi,square,echo", result.ToString().c_str());
@@ -289,11 +285,11 @@ TEST_F(SimpleDynamicObjectTests, test9) {
     auto count = 0;
     
     if (true) {
-        auto context = rt_.NewContext();
+        rs::jsapi::Context context;
         
-        rs::jsapi::Value obj(*context);
+        rs::jsapi::Value obj(context);
         rs::jsapi::DynamicObject::Create(
-            *context, 
+            context, 
             nullptr, 
             nullptr, 
             nullptr,
@@ -306,10 +302,10 @@ TEST_F(SimpleDynamicObjectTests, test9) {
 }
 
 TEST_F(SimpleDynamicObjectTests, test10) {    
-    auto context = rt_.NewContext();
+    rs::jsapi::Context context;
 
-    rs::jsapi::Value obj(*context);
-    rs::jsapi::DynamicObject::Create(*context, 
+    rs::jsapi::Value obj(context);
+    rs::jsapi::DynamicObject::Create(context, 
         nullptr, 
         nullptr, 
         nullptr,
@@ -327,9 +323,9 @@ TEST_F(SimpleDynamicObjectTests, test10) {
 }
 
 TEST_F(SimpleDynamicObjectTests, test11) {    
-    auto context = rt_.NewContext();
+    rs::jsapi::Context context;
 
-    rs::jsapi::Value obj(*context);
+    rs::jsapi::Value obj(context);
     ASSERT_FALSE(rs::jsapi::DynamicObject::SetPrivate(obj, 123456789, this));
     
     uint64_t data = 0;
@@ -340,11 +336,11 @@ TEST_F(SimpleDynamicObjectTests, test11) {
 }
 
 TEST_F(SimpleDynamicObjectTests, test12) {
-    auto context = rt_.NewContext();    
+    rs::jsapi::Context context;
     
-    rs::jsapi::Value obj(*context);
+    rs::jsapi::Value obj(context);
     rs::jsapi::DynamicObject::Create(
-        *context,
+        context,
         [](const char* name, rs::jsapi::Value& value) {            
             throw SimpleDynamicObjectTestException("It happened!");
         }, 
@@ -354,23 +350,23 @@ TEST_F(SimpleDynamicObjectTests, test12) {
         obj);
     ASSERT_TRUE(!!obj);
     
-    context->Evaluate("var myfunc=function(n){return n.hello;};");    
+    context.Evaluate("var myfunc=function(n){return n.hello;};");    
     
-    rs::jsapi::FunctionArguments args(*context);    
+    rs::jsapi::FunctionArguments args(context);    
     args.Append(obj);            
     
     ASSERT_THROW({
-        rs::jsapi::Value result(*context);
-        context->Call("myfunc", args, result);
+        rs::jsapi::Value result(context);
+        context.Call("myfunc", args, result);
     }, rs::jsapi::ScriptException);    
 }
 
 TEST_F(SimpleDynamicObjectTests, test13) {
-    auto context = rt_.NewContext();    
+    rs::jsapi::Context context;
     
-    rs::jsapi::Value obj(*context);
+    rs::jsapi::Value obj(context);
     rs::jsapi::DynamicObject::Create(
-        *context,
+        context,
         [](const char* name, rs::jsapi::Value& value) {            
             throw SimpleDynamicObjectTestException("It happened!");
         }, 
@@ -380,16 +376,16 @@ TEST_F(SimpleDynamicObjectTests, test13) {
         obj);
     ASSERT_TRUE(!!obj);
     
-    context->Evaluate("var myfunc=function(n){return n.hello;};");    
+    context.Evaluate("var myfunc=function(n){return n.hello;};");    
     
-    rs::jsapi::FunctionArguments args(*context);    
+    rs::jsapi::FunctionArguments args(context);    
     args.Append(obj);            
     
     bool thrown = false;
     
     try {
-        rs::jsapi::Value result(*context);
-        context->Call("myfunc", args, result);
+        rs::jsapi::Value result(context);
+        context.Call("myfunc", args, result);
     } catch (const rs::jsapi::ScriptException& ex) {
         thrown = true;
     }
@@ -398,11 +394,11 @@ TEST_F(SimpleDynamicObjectTests, test13) {
 }
 
 TEST_F(SimpleDynamicObjectTests, test14) {
-    auto context = rt_.NewContext();    
+    rs::jsapi::Context context;
     
-    rs::jsapi::Value obj(*context);
+    rs::jsapi::Value obj(context);
     rs::jsapi::DynamicObject::Create(
-        *context,
+        context,
         nullptr,
         [](const char* name, const rs::jsapi::Value& value) {            
             throw SimpleDynamicObjectTestException("It happened!");
@@ -412,23 +408,23 @@ TEST_F(SimpleDynamicObjectTests, test14) {
         obj);
     ASSERT_TRUE(!!obj);
     
-    context->Evaluate("var myfunc=function(n){n.hello=null;};");    
+    context.Evaluate("var myfunc=function(n){n.hello=null;};");    
     
-    rs::jsapi::FunctionArguments args(*context);    
+    rs::jsapi::FunctionArguments args(context);    
     args.Append(obj);            
     
     ASSERT_THROW({
-        rs::jsapi::Value result(*context);
-        context->Call("myfunc", args, result);
+        rs::jsapi::Value result(context);
+        context.Call("myfunc", args, result);
     }, rs::jsapi::ScriptException);    
 }
 
 TEST_F(SimpleDynamicObjectTests, test15) {
-    auto context = rt_.NewContext();    
+    rs::jsapi::Context context;
     
-    rs::jsapi::Value obj(*context);
+    rs::jsapi::Value obj(context);
     rs::jsapi::DynamicObject::Create(
-        *context,
+        context,
         nullptr,
         [](const char* name, const rs::jsapi::Value& value) {            
             throw SimpleDynamicObjectTestException("It happened!");
@@ -438,16 +434,16 @@ TEST_F(SimpleDynamicObjectTests, test15) {
         obj);
     ASSERT_TRUE(!!obj);
     
-    context->Evaluate("var myfunc=function(n){n.hello=null;};");    
+    context.Evaluate("var myfunc=function(n){n.hello=null;};");    
     
-    rs::jsapi::FunctionArguments args(*context);    
+    rs::jsapi::FunctionArguments args(context);    
     args.Append(obj);            
     
     bool thrown = false;
     
     try {
-        rs::jsapi::Value result(*context);
-        context->Call("myfunc", args, result);
+        rs::jsapi::Value result(context);
+        context.Call("myfunc", args, result);
     } catch (const rs::jsapi::ScriptException& ex) {
         thrown = true;
     }
@@ -456,11 +452,11 @@ TEST_F(SimpleDynamicObjectTests, test15) {
 }
 
 TEST_F(SimpleDynamicObjectTests, test16) {
-    auto context = rt_.NewContext();
+    rs::jsapi::Context context;
     
-    rs::jsapi::Value obj(*context);
+    rs::jsapi::Value obj(context);
     rs::jsapi::DynamicObject::Create(
-        *context,
+        context,
         [](const char* name, rs::jsapi::Value& value) {            
             value = 42;
         }, 
@@ -471,20 +467,20 @@ TEST_F(SimpleDynamicObjectTests, test16) {
     ASSERT_TRUE(!!obj);   
     ASSERT_TRUE(rs::jsapi::DynamicObject::IsDynamicObject(obj));
     
-    rs::jsapi::Value nullObj(*context, JS::NullHandleValue);    
+    rs::jsapi::Value nullObj(context, JS::NullHandleValue);    
     ASSERT_FALSE(rs::jsapi::DynamicObject::IsDynamicObject(nullObj));
     
-    rs::jsapi::Value undefinedObj(*context, JS::UndefinedHandleValue);    
+    rs::jsapi::Value undefinedObj(context, JS::UndefinedHandleValue);    
     ASSERT_FALSE(rs::jsapi::DynamicObject::IsDynamicObject(undefinedObj));
     
-    rs::jsapi::Value numValue(*context, 123);    
+    rs::jsapi::Value numValue(context, 123);    
     ASSERT_FALSE(rs::jsapi::DynamicObject::IsDynamicObject(numValue));
     
-    rs::jsapi::Value strValue(*context, "123");    
+    rs::jsapi::Value strValue(context, "123");    
     ASSERT_FALSE(rs::jsapi::DynamicObject::IsDynamicObject(strValue));
     
-    rs::jsapi::Value array(*context);
-    rs::jsapi::DynamicArray::Create(*context,
+    rs::jsapi::Value array(context);
+    rs::jsapi::DynamicArray::Create(context,
         [](int index, rs::jsapi::Value& value) { value = 42; },
         nullptr,
         []() { return 1; },

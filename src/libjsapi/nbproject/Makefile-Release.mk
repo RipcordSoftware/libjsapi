@@ -36,13 +36,15 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 # Object Files
 OBJECTFILES= \
 	${OBJECTDIR}/context.o \
+	${OBJECTDIR}/context_instance.o \
 	${OBJECTDIR}/context_state.o \
+	${OBJECTDIR}/context_thread_guard.o \
 	${OBJECTDIR}/dynamic_array.o \
 	${OBJECTDIR}/dynamic_object.o \
+	${OBJECTDIR}/exceptions.o \
 	${OBJECTDIR}/function_arguments.o \
 	${OBJECTDIR}/global.o \
 	${OBJECTDIR}/object.o \
-	${OBJECTDIR}/runtime.o \
 	${OBJECTDIR}/script.o \
 	${OBJECTDIR}/value.o
 
@@ -57,7 +59,6 @@ TESTFILES= \
 	${TESTDIR}/TestFiles/f13 \
 	${TESTDIR}/TestFiles/f8 \
 	${TESTDIR}/TestFiles/f3 \
-	${TESTDIR}/TestFiles/f4 \
 	${TESTDIR}/TestFiles/f2 \
 	${TESTDIR}/TestFiles/f11 \
 	${TESTDIR}/TestFiles/f9 \
@@ -96,10 +97,20 @@ ${OBJECTDIR}/context.o: context.cpp
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -I../../externals/installed/include/mozjs -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/context.o context.cpp
 
+${OBJECTDIR}/context_instance.o: context_instance.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../../externals/installed/include/mozjs -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/context_instance.o context_instance.cpp
+
 ${OBJECTDIR}/context_state.o: context_state.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -I../../externals/installed/include/mozjs -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/context_state.o context_state.cpp
+
+${OBJECTDIR}/context_thread_guard.o: context_thread_guard.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../../externals/installed/include/mozjs -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/context_thread_guard.o context_thread_guard.cpp
 
 ${OBJECTDIR}/dynamic_array.o: dynamic_array.cpp 
 	${MKDIR} -p ${OBJECTDIR}
@@ -110,6 +121,11 @@ ${OBJECTDIR}/dynamic_object.o: dynamic_object.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -I../../externals/installed/include/mozjs -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/dynamic_object.o dynamic_object.cpp
+
+${OBJECTDIR}/exceptions.o: exceptions.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../../externals/installed/include/mozjs -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/exceptions.o exceptions.cpp
 
 ${OBJECTDIR}/function_arguments.o: function_arguments.cpp 
 	${MKDIR} -p ${OBJECTDIR}
@@ -125,11 +141,6 @@ ${OBJECTDIR}/object.o: object.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -I../../externals/installed/include/mozjs -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/object.o object.cpp
-
-${OBJECTDIR}/runtime.o: runtime.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../../externals/installed/include/mozjs -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/runtime.o runtime.cpp
 
 ${OBJECTDIR}/script.o: script.cpp 
 	${MKDIR} -p ${OBJECTDIR}
@@ -154,7 +165,7 @@ ${TESTDIR}/TestFiles/f5: ../../externals/installed/lib/libgtest_main.a
 
 ${TESTDIR}/TestFiles/f5: ${TESTDIR}/tests/call_js_function_tests.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
-	${LINK.cc} -Wl,--whole-archive ../../externals/installed/lib/libmozglue.a -Wl,--no-whole-archive  -o ${TESTDIR}/TestFiles/f5 $^ ${LDLIBSOPTIONS} -lpthread `pkg-config --libs zlib` $(LDLIBS)   
+	${LINK.cc}   -o ${TESTDIR}/TestFiles/f5 $^ ${LDLIBSOPTIONS} -Wl,--whole-archive ../../externals/installed/lib/libmozglue.a -Wl,--no-whole-archive -lpthread `pkg-config --libs zlib` $(LDLIBS)   
 
 ${TESTDIR}/TestFiles/f6: ../../externals/installed/lib/libjs_static.ajs
 
@@ -164,7 +175,7 @@ ${TESTDIR}/TestFiles/f6: ../../externals/installed/lib/libgtest_main.a
 
 ${TESTDIR}/TestFiles/f6: ${TESTDIR}/tests/call_native_function_tests.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
-	${LINK.cc} -Wl,--whole-archive ../../externals/installed/lib/libmozglue.a -Wl,--no-whole-archive  -o ${TESTDIR}/TestFiles/f6 $^ ${LDLIBSOPTIONS} -lpthread `pkg-config --libs zlib` $(LDLIBS)   
+	${LINK.cc}   -o ${TESTDIR}/TestFiles/f6 $^ ${LDLIBSOPTIONS} -Wl,--whole-archive ../../externals/installed/lib/libmozglue.a -Wl,--no-whole-archive -lpthread `pkg-config --libs zlib` $(LDLIBS)   
 
 ${TESTDIR}/TestFiles/f12: ../../externals/installed/lib/libjs_static.ajs
 
@@ -174,7 +185,7 @@ ${TESTDIR}/TestFiles/f12: ../../externals/installed/lib/libgtest_main.a
 
 ${TESTDIR}/TestFiles/f12: ${TESTDIR}/tests/function_arguments_tests.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
-	${LINK.cc} -Wl,--whole-archive ../../externals/installed/lib/libmozglue.a -Wl,--no-whole-archive  -o ${TESTDIR}/TestFiles/f12 $^ ${LDLIBSOPTIONS} -lpthread `pkg-config --libs zlib` $(LDLIBS)   
+	${LINK.cc}   -o ${TESTDIR}/TestFiles/f12 $^ ${LDLIBSOPTIONS} -Wl,--whole-archive ../../externals/installed/lib/libmozglue.a -Wl,--no-whole-archive -lpthread `pkg-config --libs zlib` $(LDLIBS)   
 
 ${TESTDIR}/TestFiles/f13: ../../externals/installed/lib/libjs_static.ajs
 
@@ -184,7 +195,7 @@ ${TESTDIR}/TestFiles/f13: ../../externals/installed/lib/libgtest_main.a
 
 ${TESTDIR}/TestFiles/f13: ${TESTDIR}/tests/gc_tests.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
-	${LINK.cc} -Wl,--whole-archive ../../externals/installed/lib/libmozglue.a -Wl,--no-whole-archive  -o ${TESTDIR}/TestFiles/f13 $^ ${LDLIBSOPTIONS} -lpthread `pkg-config --libs zlib` $(LDLIBS)   
+	${LINK.cc}   -o ${TESTDIR}/TestFiles/f13 $^ ${LDLIBSOPTIONS} -Wl,--whole-archive ../../externals/installed/lib/libmozglue.a -Wl,--no-whole-archive -lpthread `pkg-config --libs zlib` $(LDLIBS)   
 
 ${TESTDIR}/TestFiles/f8: ../../externals/installed/lib/libjs_static.ajs
 
@@ -194,7 +205,7 @@ ${TESTDIR}/TestFiles/f8: ../../externals/installed/lib/libgtest_main.a
 
 ${TESTDIR}/TestFiles/f8: ${TESTDIR}/tests/global_property_tests.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
-	${LINK.cc} -Wl,--whole-archive ../../externals/installed/lib/libmozglue.a -Wl,--no-whole-archive  -o ${TESTDIR}/TestFiles/f8 $^ ${LDLIBSOPTIONS} -lpthread `pkg-config --libs zlib` $(LDLIBS)   
+	${LINK.cc}   -o ${TESTDIR}/TestFiles/f8 $^ ${LDLIBSOPTIONS} -Wl,--whole-archive ../../externals/installed/lib/libmozglue.a -Wl,--no-whole-archive -lpthread `pkg-config --libs zlib` $(LDLIBS)   
 
 ${TESTDIR}/TestFiles/f3: ../../externals/installed/lib/libjs_static.ajs
 
@@ -204,17 +215,7 @@ ${TESTDIR}/TestFiles/f3: ../../externals/installed/lib/libgtest_main.a
 
 ${TESTDIR}/TestFiles/f3: ${TESTDIR}/tests/multi_context_tests.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
-	${LINK.cc} -Wl,--whole-archive ../../externals/installed/lib/libmozglue.a -Wl,--no-whole-archive  -o ${TESTDIR}/TestFiles/f3 $^ ${LDLIBSOPTIONS} -lpthread `pkg-config --libs zlib` $(LDLIBS)   
-
-${TESTDIR}/TestFiles/f4: ../../externals/installed/lib/libjs_static.ajs
-
-${TESTDIR}/TestFiles/f4: ../../externals/installed/lib/libgtest.a
-
-${TESTDIR}/TestFiles/f4: ../../externals/installed/lib/libgtest_main.a
-
-${TESTDIR}/TestFiles/f4: ${TESTDIR}/tests/multi_runtime_tests.o ${OBJECTFILES:%.o=%_nomain.o}
-	${MKDIR} -p ${TESTDIR}/TestFiles
-	${LINK.cc} -Wl,--whole-archive ../../externals/installed/lib/libmozglue.a -Wl,--no-whole-archive  -o ${TESTDIR}/TestFiles/f4 $^ ${LDLIBSOPTIONS} -lpthread `pkg-config --libs zlib` $(LDLIBS)   
+	${LINK.cc}   -o ${TESTDIR}/TestFiles/f3 $^ ${LDLIBSOPTIONS} -Wl,--whole-archive ../../externals/installed/lib/libmozglue.a -Wl,--no-whole-archive -lpthread `pkg-config --libs zlib` $(LDLIBS)   
 
 ${TESTDIR}/TestFiles/f2: ../../externals/installed/lib/libjs_static.ajs
 
@@ -224,7 +225,7 @@ ${TESTDIR}/TestFiles/f2: ../../externals/installed/lib/libgtest_main.a
 
 ${TESTDIR}/TestFiles/f2: ${TESTDIR}/tests/script_exception_tests.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
-	${LINK.cc} -Wl,--whole-archive ../../externals/installed/lib/libmozglue.a -Wl,--no-whole-archive  -o ${TESTDIR}/TestFiles/f2 $^ ${LDLIBSOPTIONS} -lpthread `pkg-config --libs zlib` $(LDLIBS)   
+	${LINK.cc}   -o ${TESTDIR}/TestFiles/f2 $^ ${LDLIBSOPTIONS} -Wl,--whole-archive ../../externals/installed/lib/libmozglue.a -Wl,--no-whole-archive -lpthread `pkg-config --libs zlib` $(LDLIBS)   
 
 ${TESTDIR}/TestFiles/f11: ../../externals/installed/lib/libjs_static.ajs
 
@@ -234,7 +235,7 @@ ${TESTDIR}/TestFiles/f11: ../../externals/installed/lib/libgtest_main.a
 
 ${TESTDIR}/TestFiles/f11: ${TESTDIR}/tests/simple_dynamic_array_tests.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
-	${LINK.cc} -Wl,--whole-archive ../../externals/installed/lib/libmozglue.a -Wl,--no-whole-archive  -o ${TESTDIR}/TestFiles/f11 $^ ${LDLIBSOPTIONS} -lpthread `pkg-config --libs zlib` $(LDLIBS)   
+	${LINK.cc}   -o ${TESTDIR}/TestFiles/f11 $^ ${LDLIBSOPTIONS} -Wl,--whole-archive ../../externals/installed/lib/libmozglue.a -Wl,--no-whole-archive -lpthread `pkg-config --libs zlib` $(LDLIBS)   
 
 ${TESTDIR}/TestFiles/f9: ../../externals/installed/lib/libjs_static.ajs
 
@@ -244,7 +245,7 @@ ${TESTDIR}/TestFiles/f9: ../../externals/installed/lib/libgtest_main.a
 
 ${TESTDIR}/TestFiles/f9: ${TESTDIR}/tests/simple_dynamic_object_tests.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
-	${LINK.cc} -Wl,--whole-archive ../../externals/installed/lib/libmozglue.a -Wl,--no-whole-archive  -o ${TESTDIR}/TestFiles/f9 $^ ${LDLIBSOPTIONS} -lpthread `pkg-config --libs zlib` $(LDLIBS)   
+	${LINK.cc}   -o ${TESTDIR}/TestFiles/f9 $^ ${LDLIBSOPTIONS} -Wl,--whole-archive ../../externals/installed/lib/libmozglue.a -Wl,--no-whole-archive -lpthread `pkg-config --libs zlib` $(LDLIBS)   
 
 ${TESTDIR}/TestFiles/f7: ../../externals/installed/lib/libjs_static.ajs
 
@@ -254,7 +255,7 @@ ${TESTDIR}/TestFiles/f7: ../../externals/installed/lib/libgtest_main.a
 
 ${TESTDIR}/TestFiles/f7: ${TESTDIR}/tests/simple_object_tests.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
-	${LINK.cc} -Wl,--whole-archive ../../externals/installed/lib/libmozglue.a -Wl,--no-whole-archive  -o ${TESTDIR}/TestFiles/f7 $^ ${LDLIBSOPTIONS} -lpthread `pkg-config --libs zlib` $(LDLIBS)   
+	${LINK.cc}   -o ${TESTDIR}/TestFiles/f7 $^ ${LDLIBSOPTIONS} -Wl,--whole-archive ../../externals/installed/lib/libmozglue.a -Wl,--no-whole-archive -lpthread `pkg-config --libs zlib` $(LDLIBS)   
 
 ${TESTDIR}/TestFiles/f1: ../../externals/installed/lib/libjs_static.ajs
 
@@ -264,7 +265,7 @@ ${TESTDIR}/TestFiles/f1: ../../externals/installed/lib/libgtest_main.a
 
 ${TESTDIR}/TestFiles/f1: ${TESTDIR}/tests/simple_script_tests.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
-	${LINK.cc} -Wl,--whole-archive ../../externals/installed/lib/libmozglue.a -Wl,--no-whole-archive  -o ${TESTDIR}/TestFiles/f1 $^ ${LDLIBSOPTIONS} -lpthread `pkg-config --libs zlib` $(LDLIBS)   
+	${LINK.cc}   -o ${TESTDIR}/TestFiles/f1 $^ ${LDLIBSOPTIONS} -Wl,--whole-archive ../../externals/installed/lib/libmozglue.a -Wl,--no-whole-archive -lpthread `pkg-config --libs zlib` $(LDLIBS)   
 
 ${TESTDIR}/TestFiles/f10: ../../externals/installed/lib/libjs_static.ajs
 
@@ -274,7 +275,7 @@ ${TESTDIR}/TestFiles/f10: ../../externals/installed/lib/libgtest_main.a
 
 ${TESTDIR}/TestFiles/f10: ${TESTDIR}/tests/simple_value_tests.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
-	${LINK.cc} -Wl,--whole-archive ../../externals/installed/lib/libmozglue.a -Wl,--no-whole-archive  -o ${TESTDIR}/TestFiles/f10 $^ ${LDLIBSOPTIONS} -lpthread `pkg-config --libs zlib` $(LDLIBS)   
+	${LINK.cc}   -o ${TESTDIR}/TestFiles/f10 $^ ${LDLIBSOPTIONS} -Wl,--whole-archive ../../externals/installed/lib/libmozglue.a -Wl,--no-whole-archive -lpthread `pkg-config --libs zlib` $(LDLIBS)   
 
 
 ${TESTDIR}/tests/call_js_function_tests.o: tests/call_js_function_tests.cpp 
@@ -311,12 +312,6 @@ ${TESTDIR}/tests/multi_context_tests.o: tests/multi_context_tests.cpp
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -I../../externals/installed/include/mozjs -I../../externals/installed/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/multi_context_tests.o tests/multi_context_tests.cpp
-
-
-${TESTDIR}/tests/multi_runtime_tests.o: tests/multi_runtime_tests.cpp 
-	${MKDIR} -p ${TESTDIR}/tests
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../../externals/installed/include/mozjs -I../../externals/installed/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/multi_runtime_tests.o tests/multi_runtime_tests.cpp
 
 
 ${TESTDIR}/tests/script_exception_tests.o: tests/script_exception_tests.cpp 
@@ -368,6 +363,19 @@ ${OBJECTDIR}/context_nomain.o: ${OBJECTDIR}/context.o context.cpp
 	    ${CP} ${OBJECTDIR}/context.o ${OBJECTDIR}/context_nomain.o;\
 	fi
 
+${OBJECTDIR}/context_instance_nomain.o: ${OBJECTDIR}/context_instance.o context_instance.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/context_instance.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -I../../externals/installed/include/mozjs -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/context_instance_nomain.o context_instance.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/context_instance.o ${OBJECTDIR}/context_instance_nomain.o;\
+	fi
+
 ${OBJECTDIR}/context_state_nomain.o: ${OBJECTDIR}/context_state.o context_state.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	@NMOUTPUT=`${NM} ${OBJECTDIR}/context_state.o`; \
@@ -379,6 +387,19 @@ ${OBJECTDIR}/context_state_nomain.o: ${OBJECTDIR}/context_state.o context_state.
 	    $(COMPILE.cc) -O2 -I../../externals/installed/include/mozjs -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/context_state_nomain.o context_state.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/context_state.o ${OBJECTDIR}/context_state_nomain.o;\
+	fi
+
+${OBJECTDIR}/context_thread_guard_nomain.o: ${OBJECTDIR}/context_thread_guard.o context_thread_guard.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/context_thread_guard.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -I../../externals/installed/include/mozjs -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/context_thread_guard_nomain.o context_thread_guard.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/context_thread_guard.o ${OBJECTDIR}/context_thread_guard_nomain.o;\
 	fi
 
 ${OBJECTDIR}/dynamic_array_nomain.o: ${OBJECTDIR}/dynamic_array.o dynamic_array.cpp 
@@ -405,6 +426,19 @@ ${OBJECTDIR}/dynamic_object_nomain.o: ${OBJECTDIR}/dynamic_object.o dynamic_obje
 	    $(COMPILE.cc) -O2 -I../../externals/installed/include/mozjs -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/dynamic_object_nomain.o dynamic_object.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/dynamic_object.o ${OBJECTDIR}/dynamic_object_nomain.o;\
+	fi
+
+${OBJECTDIR}/exceptions_nomain.o: ${OBJECTDIR}/exceptions.o exceptions.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/exceptions.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -I../../externals/installed/include/mozjs -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/exceptions_nomain.o exceptions.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/exceptions.o ${OBJECTDIR}/exceptions_nomain.o;\
 	fi
 
 ${OBJECTDIR}/function_arguments_nomain.o: ${OBJECTDIR}/function_arguments.o function_arguments.cpp 
@@ -446,19 +480,6 @@ ${OBJECTDIR}/object_nomain.o: ${OBJECTDIR}/object.o object.cpp
 	    ${CP} ${OBJECTDIR}/object.o ${OBJECTDIR}/object_nomain.o;\
 	fi
 
-${OBJECTDIR}/runtime_nomain.o: ${OBJECTDIR}/runtime.o runtime.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/runtime.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O2 -I../../externals/installed/include/mozjs -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/runtime_nomain.o runtime.cpp;\
-	else  \
-	    ${CP} ${OBJECTDIR}/runtime.o ${OBJECTDIR}/runtime_nomain.o;\
-	fi
-
 ${OBJECTDIR}/script_nomain.o: ${OBJECTDIR}/script.o script.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	@NMOUTPUT=`${NM} ${OBJECTDIR}/script.o`; \
@@ -495,7 +516,6 @@ ${OBJECTDIR}/value_nomain.o: ${OBJECTDIR}/value.o value.cpp
 	    ${TESTDIR}/TestFiles/f13 || true; \
 	    ${TESTDIR}/TestFiles/f8 || true; \
 	    ${TESTDIR}/TestFiles/f3 || true; \
-	    ${TESTDIR}/TestFiles/f4 || true; \
 	    ${TESTDIR}/TestFiles/f2 || true; \
 	    ${TESTDIR}/TestFiles/f11 || true; \
 	    ${TESTDIR}/TestFiles/f9 || true; \

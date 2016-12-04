@@ -31,7 +31,7 @@
 
 class Entry {
 public:
-    Entry(rs::jsapi::Runtime& rt, Gtk::Entry* entry);
+    Entry(rs::jsapi::Context& rt, Gtk::Entry* entry);
     
     void GetText(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result);
     void SetText(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result);
@@ -46,7 +46,7 @@ private:
     void GetCallback(const char* name, rs::jsapi::Value& value);
     void SetCallback(const char* name, const rs::jsapi::Value& value);
     
-    rs::jsapi::Runtime& rt_;
+    rs::jsapi::Context& cx_;
     rs::jsapi::Value obj_;
     Gtk::Entry* entry_;    
     Widget widget_; 

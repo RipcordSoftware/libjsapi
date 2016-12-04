@@ -31,7 +31,7 @@
 
 class Builder {
 public:
-    Builder(rs::jsapi::Runtime& rt);
+    Builder(rs::jsapi::Context& cx);
     
     void AddFromFile(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result);
     void GetWidget(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result);
@@ -51,7 +51,7 @@ private:
     
     Gtk::Widget* FindWidget(const std::vector<rs::jsapi::Value>& args);
     
-    rs::jsapi::Runtime& rt_;
+    rs::jsapi::Context& cx_;
     rs::jsapi::Value obj_;
     Glib::RefPtr<Gtk::Builder> builder_;
     

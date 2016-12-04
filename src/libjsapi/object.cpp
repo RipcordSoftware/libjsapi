@@ -29,10 +29,17 @@
 
 #include <cstring>
 
+JSClassOps rs::jsapi::Object::classOps_ = {
+    nullptr, nullptr,
+    Object::Get, Object::Set, 
+    nullptr, nullptr, 
+    nullptr, Object::Finalize,
+    nullptr, nullptr,
+    nullptr, nullptr
+};
+
 JSClass rs::jsapi::Object::class_ = { 
-    "rs_jsapi_object", JSCLASS_HAS_PRIVATE, nullptr, nullptr,
-    Object::Get, Object::Set, nullptr, nullptr, 
-    nullptr, Object::Finalize 
+    "rs_jsapi_object", JSCLASS_HAS_PRIVATE, &classOps_
 };
 
 bool rs::jsapi::Object::Create(JSContext* cx, const std::vector<const char*>& properties,
@@ -100,7 +107,7 @@ bool rs::jsapi::Object::Get(JSContext* cx, JS::HandleObject obj, JS::HandleId id
             vp.set(value);
             return true;
         } catch (const std::exception& ex) {
-            JS_ReportError(cx, ex.what());
+            JS_ReportWarning(cx, ex.what());
             return false;
         }
     } else {

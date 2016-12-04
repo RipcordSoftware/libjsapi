@@ -2,13 +2,13 @@
 
 #include <cstring>
 
-Entry::Entry(rs::jsapi::Runtime& rt, Gtk::Entry* entry) : rt_(rt), obj_(rt), entry_(entry), widget_(entry, obj_) {
+Entry::Entry(rs::jsapi::Context& cx, Gtk::Entry* entry) : cx_(cx), obj_(cx), entry_(entry), widget_(entry, obj_) {
     auto functions = widget_.GetFunctions();
 
     functions.emplace_back("setText", std::bind(&Entry::SetText, this, std::placeholders::_1, std::placeholders::_2));
     functions.emplace_back("getText", std::bind(&Entry::GetText, this, std::placeholders::_1, std::placeholders::_2));
 
-    rs::jsapi::Object::Create(rt, { "value", "innerHTML" }, 
+    rs::jsapi::Object::Create(cx, { "value", "innerHTML" }, 
         std::bind(&Entry::GetCallback, this, std::placeholders::_1, std::placeholders::_2),
         std::bind(&Entry::SetCallback, this, std::placeholders::_1, std::placeholders::_2),
         functions, std::bind(&Entry::Finalizer, this), obj_);
@@ -24,7 +24,7 @@ void Entry::SetCallback(const char* name, const rs::jsapi::Value& value) {
     if (std::strcmp(name, "value") == 0 || std::strcmp(name, "innerHTML") == 0) {
         std::vector<rs::jsapi::Value> args;
         args.push_back(value);
-        rs::jsapi::Value result(rt_);
+        rs::jsapi::Value result(cx_);
         SetText(args, result);
     }   
 }

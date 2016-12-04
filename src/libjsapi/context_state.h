@@ -35,23 +35,23 @@ namespace jsapi {
 class ContextState final {
 public:
     
-    static bool NewState(JSContext* cx, JSErrorReporter = nullptr, void* ptr = nullptr);
+    static bool NewState(JSContext* cx, JS::WarningReporter = nullptr, void* ptr = nullptr);
     static bool DeleteState(JSContext* cx);
        
     static bool SetDataPtr(JSContext* cx, void* ptr);
     static void* GetDataPtr(JSContext* cx);
     
-    static void ReportError(JSContext* cx, const char* message, JSErrorReport* report);    
-    static void DetachErrorReporter(JSContext* cx);
+    static void ReportWarning(JSContext* cx, const char* message, JSErrorReport* report);    
+    static void DetachWarningReporter(JSContext* cx);
     
 private:
 
     struct State final {
     public:
-        State(JSErrorReporter errorReporter, void* ptr) : 
-                errorReporter_(errorReporter), ptr_(ptr) {}
+        State(JS::WarningReporter warningReporter, void* ptr) : 
+                warningReporter_(warningReporter), ptr_(ptr) {}
         
-        std::atomic<JSErrorReporter> errorReporter_;
+        std::atomic<JS::WarningReporter> warningReporter_;
         void* ptr_;
     };
     

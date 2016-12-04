@@ -1,6 +1,6 @@
 #include "button.h"
 
-Button::Button(rs::jsapi::Runtime& rt, Gtk::Button* button) : rt_(rt), button_(button), obj_(rt), widget_(button, obj_) {
+Button::Button(rs::jsapi::Context& cx, Gtk::Button* button) : cx_(cx), button_(button), obj_(cx), widget_(button, obj_) {
     auto functions = widget_.GetFunctions();
 
     functions.emplace_back("getLabel", std::bind(&Button::SetLabel, this, std::placeholders::_1, std::placeholders::_2));        
@@ -9,7 +9,7 @@ Button::Button(rs::jsapi::Runtime& rt, Gtk::Button* button) : rt_(rt), button_(b
     functions.emplace_back("setFocus", std::bind(&Button::SetFocus, this, std::placeholders::_1, std::placeholders::_2)); 
     functions.emplace_back("focus", std::bind(&Button::SetFocus, this, std::placeholders::_1, std::placeholders::_2)); 
 
-    rs::jsapi::Object::Create(rt, {}, nullptr, nullptr, 
+    rs::jsapi::Object::Create(cx, {}, nullptr, nullptr, 
         functions, std::bind(&Button::Finalizer, this), obj_);
 }
 
@@ -41,8 +41,8 @@ void Button::OnClick(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value
 
 void Button::OnButtonClicked() {
     if (onClick_.isFunction()) {   
-        rs::jsapi::FunctionArguments args(rt_);
-        rs::jsapi::Value result(rt_);
+        rs::jsapi::FunctionArguments args(cx_);
+        rs::jsapi::Value result(cx_);
         onClick_.CallFunction(args, result);
     }
 }

@@ -27,10 +27,17 @@
 #include "value.h"
 #include "vector_utils.h"
 
+JSClassOps rs::jsapi::Global::privateFunctionStateClassOps_ = {
+    nullptr, nullptr,
+    nullptr, nullptr, 
+    nullptr, nullptr, 
+    nullptr, Global::Finalize,
+    nullptr, nullptr,
+    nullptr, nullptr
+};
+
 JSClass rs::jsapi::Global::privateFunctionStateClass_ = { 
-    "rs_jsapi_global_function_object", JSCLASS_HAS_PRIVATE, nullptr, nullptr,
-    nullptr, nullptr, nullptr, nullptr, 
-    nullptr, Global::Finalize 
+    "rs_jsapi_global_function_object", JSCLASS_HAS_PRIVATE, &privateFunctionStateClassOps_
 };
 
 const char* rs::jsapi::Global::privateFunctionStatePropertyName_ = "__rs_jsapi__private_global_function_state";

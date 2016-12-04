@@ -66,6 +66,7 @@ private:
     static DynamicObjectState* GetState(JSObject* obj);
     static void SetState(JSObject* obj, DynamicObjectState* state);
     
+    static JSClassOps classOps_;
     static JSClass class_;
 };
 

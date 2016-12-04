@@ -29,10 +29,17 @@
 #include <vector>
 #include <cstring>
 
+JSClassOps rs::jsapi::DynamicObject::classOps_ = {
+    nullptr, nullptr,
+    DynamicObject::Get, DynamicObject::Set, 
+    DynamicObject::Enumerate, nullptr, 
+    nullptr, DynamicObject::Finalize,
+    nullptr, nullptr,
+    nullptr, nullptr
+};
+
 JSClass rs::jsapi::DynamicObject::class_ = { 
-    "rs_jsapi_dynamicobject", JSCLASS_HAS_PRIVATE, nullptr, nullptr,
-    DynamicObject::Get, DynamicObject::Set, DynamicObject::Enumerate, nullptr, 
-    nullptr, DynamicObject::Finalize 
+    "rs_jsapi_dynamicobject", JSCLASS_HAS_PRIVATE, &classOps_
 };
 
 bool rs::jsapi::DynamicObject::Create(JSContext* cx, GetCallback getter, DynamicObject::SetCallback setter, EnumeratorCallback enumerator, FinalizeCallback finalize, Value& obj) {

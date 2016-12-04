@@ -31,7 +31,7 @@
 
 class Application {
 public:
-    Application(rs::jsapi::Runtime& rt, const char* appName, int argc = 0, char** argv = nullptr);
+    Application(rs::jsapi::Context& cx, const char* appName, int argc = 0, char** argv = nullptr);
     
     void Run(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result);
     
@@ -42,7 +42,7 @@ private:
         delete this;
     }
     
-    rs::jsapi::Runtime& rt_;
+    rs::jsapi::Context& cx_;
     rs::jsapi::Value obj_;
     Glib::RefPtr<Gtk::Application> app_;
 };

@@ -31,7 +31,7 @@
 
 class CheckButton {
 public:
-    CheckButton(rs::jsapi::Runtime& rt, Gtk::CheckButton* button);
+    CheckButton(rs::jsapi::Context& cx, Gtk::CheckButton* button);
     
     void GetActive(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result);
     void SetActive(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result);
@@ -51,12 +51,12 @@ private:
     
     void OnButtonClicked();
     
-    rs::jsapi::Runtime& rt_;
+    rs::jsapi::Context& cx_;
     rs::jsapi::Value obj_;
     Gtk::CheckButton* button_;    
     Widget widget_; 
     
-    rs::jsapi::Value onClick_ { rt_ };
+    rs::jsapi::Value onClick_ { cx_ };
 
 };
 

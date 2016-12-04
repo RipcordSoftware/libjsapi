@@ -31,7 +31,7 @@
 
 class DrawingArea {
 public:
-    DrawingArea(rs::jsapi::Runtime& rt, Gtk::DrawingArea* entry);
+    DrawingArea(rs::jsapi::Context& cx, Gtk::DrawingArea* entry);
     
     void SetSourceRgb(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result);
     void SetLineWidth(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result);
@@ -52,13 +52,13 @@ private:
     
     bool OnGtkDraw(const Cairo::RefPtr<Cairo::Context>& cr);
     
-    rs::jsapi::Runtime& rt_;
+    rs::jsapi::Context& cx_;
     rs::jsapi::Value obj_;
     Gtk::DrawingArea* area_;    
     Widget widget_; 
     
     Cairo::RefPtr<Cairo::Context> onDrawContext_;
-    rs::jsapi::Value onDraw_ { rt_ };
+    rs::jsapi::Value onDraw_ { cx_ };
     
     Cairo::RefPtr<Cairo::ImageSurface> image_;
 };

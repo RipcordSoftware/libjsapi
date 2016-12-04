@@ -34,13 +34,12 @@ protected:
     
     virtual void TearDown() {
         
-    }   
-    
-    rs::jsapi::Runtime rt_;
+    }
 };
 
 TEST_F(FunctionArgumentsTests, test1) {
-    rs::jsapi::FunctionArguments args(rt_);
+    rs::jsapi::Context cx;
+    rs::jsapi::FunctionArguments args(cx);
     
     ASSERT_EQ(0, args.getLength());
     args.Clear();
@@ -49,7 +48,8 @@ TEST_F(FunctionArgumentsTests, test1) {
 }
 
 TEST_F(FunctionArgumentsTests, test2) {
-    rs::jsapi::FunctionArguments args(rt_);   
+    rs::jsapi::Context cx;
+    rs::jsapi::FunctionArguments args(cx);   
     
     args.Append(99);
  
@@ -60,7 +60,8 @@ TEST_F(FunctionArgumentsTests, test2) {
 }
 
 TEST_F(FunctionArgumentsTests, test3) {
-    rs::jsapi::FunctionArguments args(rt_);   
+    rs::jsapi::Context cx;
+    rs::jsapi::FunctionArguments args(cx);   
     
     args.Append(99);
  
@@ -71,7 +72,8 @@ TEST_F(FunctionArgumentsTests, test3) {
 }
 
 TEST_F(FunctionArgumentsTests, test4) {
-    rs::jsapi::FunctionArguments args(rt_);   
+    rs::jsapi::Context cx;
+    rs::jsapi::FunctionArguments args(cx);   
     
     args.Append(99);
     ASSERT_EQ(1, args.getLength());
@@ -85,7 +87,7 @@ TEST_F(FunctionArgumentsTests, test4) {
     ASSERT_EQ(99, args[0].toInt32());    
     
     ASSERT_TRUE(args[1].isString());
-    rs::jsapi::Value result(rt_, args[1].toString());    
+    rs::jsapi::Value result(cx, args[1].toString());    
     ASSERT_TRUE(result.isString());
     ASSERT_STREQ("Hello world", result.ToString().c_str());
     
@@ -94,21 +96,23 @@ TEST_F(FunctionArgumentsTests, test4) {
 }
 
 TEST_F(FunctionArgumentsTests, test5) {
-    rs::jsapi::FunctionArguments args(rt_);   
+    rs::jsapi::Context cx;
+    rs::jsapi::FunctionArguments args(cx);   
     
-    JS::RootedObject obj(rt_.getRuntime());
+    JS::RootedObject obj(cx.getContext());
     args.Append(obj);
     ASSERT_EQ(1, args.getLength());
     ASSERT_FALSE(args.Empty());
     
-    JS::RootedValue value(rt_.getRuntime());
+    JS::RootedValue value(cx.getContext());
     args.Append(value);
     ASSERT_EQ(2, args.getLength());
     ASSERT_FALSE(args.Empty());
 }
 
-TEST_F(FunctionArgumentsTests, test6) {        
-    rs::jsapi::FunctionArguments args(rt_);
+TEST_F(FunctionArgumentsTests, test6) {
+    rs::jsapi::Context cx;
+    rs::jsapi::FunctionArguments args(cx);
     
     ASSERT_THROW({        
         args[0].isString();

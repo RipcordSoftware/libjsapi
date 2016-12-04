@@ -31,6 +31,8 @@
 
 #include "exceptions.h"
 #include "script.h"
+#include "context_instance.h"
+#include "context_thread_guard.h"
 
 namespace rs {
 namespace jsapi {
@@ -42,7 +44,7 @@ class Value;
 class Context final {
     friend class Runtime;
 public:
-    Context(Runtime& rt);    
+    Context(uint32_t maxBytes = JS::DefaultHeapMaxBytes, bool enableBaselineCompiler = true, bool enableIonCompiler = true);
     ~Context();
     
     bool Evaluate(const char* script);
@@ -62,6 +64,7 @@ public:
     
     operator JSContext*() { return cx_; }
     
+    void GCNow() { JS_GC(cx_); }
     void MaybeGC() { JS_MaybeGC(cx_); }
         
 private:
@@ -69,12 +72,20 @@ private:
     friend bool Script::Execute();
     friend bool Script::Execute(Value&);
     
-    std::unique_ptr<ScriptException> getError();
-    
-    static void ReportError(JSContext *cx, const char *message, JSErrorReport *report);
+    std::unique_ptr<ScriptException> GetError();
+    std::unique_ptr<ScriptException> GetContextError();
+    std::unique_ptr<ScriptException> GetContextException();
+
+    static JSContext* NewContext(uint32_t maxbytes);
+    static void ReportWarning(JSContext *cx, const char *message, JSErrorReport *report);
     
     void DestroyContext();
+    
+    static JS::CompartmentOptions options_;
    
+    ContextInstance inst_;
+    const ContextThreadGuard threadGuard_;
+    
     JSContext* cx_;
     JS::PersistentRootedObject global_;
     JSCompartment* oldCompartment_;

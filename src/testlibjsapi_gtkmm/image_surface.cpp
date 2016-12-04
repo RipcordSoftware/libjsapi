@@ -3,11 +3,11 @@
 #include <cstring>
 #include <algorithm>
 
-ImageSurface::ImageSurface(rs::jsapi::Runtime& rt, unsigned width, unsigned height, unsigned depth) :
-        rt_(rt), obj_(rt), width_(width), height_(height), depth_(depth), array_(rt), refCount_(2),
+ImageSurface::ImageSurface(rs::jsapi::Context& cx, unsigned width, unsigned height, unsigned depth) :
+        cx_(cx), obj_(cx), width_(width), height_(height), depth_(depth), array_(cx), refCount_(2),
         data_(width_ * height_ * depth_, 0) {
 
-    rs::jsapi::Object::Create(rt, { "data", "width", "height", "depth" }, 
+    rs::jsapi::Object::Create(cx, { "data", "width", "height", "depth" }, 
         std::bind(&ImageSurface::GetCallback, this, std::placeholders::_1, std::placeholders::_2),
         nullptr,
         {}, 
@@ -15,7 +15,7 @@ ImageSurface::ImageSurface(rs::jsapi::Runtime& rt, unsigned width, unsigned heig
     
     rs::jsapi::Object::SetPrivate(obj_, typeid(ImageSurface).hash_code(), this);
     
-    rs::jsapi::DynamicArray::Create(rt,
+    rs::jsapi::DynamicArray::Create(cx,
         [&](int index, rs::jsapi::Value& value) { value.set(data_[index]); },
         [&](int index, const rs::jsapi::Value& value) { 
             if (value.isInt32()) {

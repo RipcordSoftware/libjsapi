@@ -34,7 +34,7 @@
 
 class ImageSurface {
 public:
-    ImageSurface(rs::jsapi::Runtime& rt, unsigned width, unsigned height, unsigned depth = 4);        
+    ImageSurface(rs::jsapi::Context& cx, unsigned width, unsigned height, unsigned depth = 4);        
     
     operator rs::jsapi::Value&() { return obj_; }
     
@@ -49,7 +49,7 @@ private:
     
     void GetCallback(const char* name, rs::jsapi::Value& value);
     
-    rs::jsapi::Runtime& rt_;
+    rs::jsapi::Context& cx_;
     rs::jsapi::Value obj_;
     unsigned width_;
     unsigned height_;

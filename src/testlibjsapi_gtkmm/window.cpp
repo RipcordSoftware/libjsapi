@@ -7,7 +7,7 @@
 #include "label.h"
 #include "button.h"
 
-Window::Window(rs::jsapi::Runtime& rt, Gtk::Window* window) : rt_(rt), obj_(rt), widget_(window_, obj_), window_(window) {
+Window::Window(rs::jsapi::Context& cx, Gtk::Window* window) : cx_(cx), obj_(cx), widget_(window_, obj_), window_(window) {
     
     auto functions = widget_.GetFunctions();
     
@@ -18,7 +18,7 @@ Window::Window(rs::jsapi::Runtime& rt, Gtk::Window* window) : rt_(rt), obj_(rt),
     functions.emplace_back("addLabel", std::bind(&Window::AddLabel, this, std::placeholders::_1, std::placeholders::_2));
     functions.emplace_back("addButton", std::bind(&Window::AddButton, this, std::placeholders::_1, std::placeholders::_2));
 
-    rs::jsapi::Object::Create(rt, 
+    rs::jsapi::Object::Create(cx, 
         { "width", "height" }, 
         std::bind(&Window::GetCallback, this, std::placeholders::_1, std::placeholders::_2),
         nullptr,
@@ -58,7 +58,7 @@ void Window::GetLabel(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Valu
 
     for (auto c : children) {
         if (c->get_name().compare(name) == 0) {
-            auto label = new Label(rt_, reinterpret_cast<Gtk::Label*>(children[0]));
+            auto label = new Label(cx_, reinterpret_cast<Gtk::Label*>(children[0]));
             result = *label;
             return;
         }
@@ -75,7 +75,7 @@ void Window::AddLabel(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Valu
     }
 
     window_->add(*label);
-    result = *(new Label(rt_, label));
+    result = *(new Label(cx_, label));
 }      
 
 void Window::AddButton(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result) { 
@@ -86,7 +86,7 @@ void Window::AddButton(const std::vector<rs::jsapi::Value>& args, rs::jsapi::Val
     }
 
     window_->add(*button);
-    result = *(new Button(rt_, button));
+    result = *(new Button(cx_, button));
 }  
 
 Gtk::Window* Window::getWindowFromValue(const rs::jsapi::Value& value) {

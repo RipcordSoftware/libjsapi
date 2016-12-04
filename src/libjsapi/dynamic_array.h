@@ -63,6 +63,7 @@ private:
     static DynamicArrayState* GetState(JSObject* obj);
     static void SetState(JSObject* obj, DynamicArrayState* state);
     
+    static JSClassOps classOps_;
     static JSClass class_;
 };
 

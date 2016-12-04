@@ -56,7 +56,7 @@ public:
 
 class ScriptException : public Exception {
 public:
-    ScriptException(const char* message, JSErrorReport* error) :
+    ScriptException(const char* message, const JSErrorReport* error) :
         message(message != nullptr ? message : ""),
         filename(error->filename != nullptr ? error->filename : ""), 
         lineno(error->lineno),
@@ -66,6 +66,9 @@ public:
         errorNumber(error->errorNumber),
         exnType(error->exnType) {
     }
+        
+    ScriptException(const JSErrorReport* error) : 
+        ScriptException(GetExceptionMessage(error).c_str(), error) {}
         
     virtual const char* what() const noexcept override {
         return message.length() > 0 ? message.c_str() : "An error or exception happened in JSAPI";
@@ -79,6 +82,10 @@ public:
     const unsigned uctokenOffset;
     const unsigned errorNumber;
     const int16_t exnType;
+    
+private:
+    static std::string U16toString(const char16_t* ptr);
+    static std::string GetExceptionMessage(const JSErrorReport* error);
 };
 
 class ValueCastException : public Exception {

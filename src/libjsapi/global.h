@@ -38,7 +38,7 @@ class Value;
 
 class Global final {
 public:
-    typedef std::function<void(const std::vector<Value>&, Value&)> FunctionCallback;
+    using FunctionCallback = std::function<void(const std::vector<Value>&, Value&)>;
     
     Global() = delete;
     Global(const Global& orig) = delete;
@@ -64,6 +64,7 @@ private:
     static GlobalFunctionState* GetFunctionState(JSObject* obj);
     static void SetFunctionState(JSObject* obj, GlobalFunctionState* state);
     
+    static JSClassOps privateFunctionStateClassOps_;
     static JSClass privateFunctionStateClass_;
     static const char* privateFunctionStatePropertyName_;
 };

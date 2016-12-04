@@ -1,7 +1,7 @@
 SHELL:=/bin/bash
 
 GTEST_VER:=1.7.0
-MOZJS_VER:=45.0.2
+MOZJS_VER:=50.1.0
 MOZJS_VER_SUFFIX:=
 
 MOZJS_CONFIG_FLAGS:=--disable-jemalloc --disable-shared-js --disable-tests --enable-install-strip --without-intl-api
@@ -52,7 +52,7 @@ $(MOZJS_LIB): $(MOZJS_ARCHIVE_PATH)
 $(MOZJS_ARCHIVE_PATH):
 	mkdir -p $(INSTALLED_DIRS) && \
 	cd $(EXTERNALS) && \
-	(test -f $(CACHE_PATH)/$(MOZJS_ARCHIVE_NAME) && cp -fp $(CACHE_PATH)/$(MOZJS_ARCHIVE_NAME) .) || curl -L https://people-mozilla.org/~sfink/mozjs-$(MOZJS_VER)$(MOZJS_VER_SUFFIX).tar.bz2 -o $(MOZJS_ARCHIVE_NAME) && \
+	(test -f $(CACHE_PATH)/$(MOZJS_ARCHIVE_NAME) && cp -fp $(CACHE_PATH)/$(MOZJS_ARCHIVE_NAME) .) || curl ftp://ftp.ripcordsoftware.com/pub/mozjs-$(MOZJS_VER)$(MOZJS_VER_SUFFIX).tar.bz2 -o $(MOZJS_ARCHIVE_NAME) && \
 	mkdir -p $(MOZJS_SOURCE_PATH) && cd $(MOZJS_SOURCE_PATH) && \
 	tar xfj ../$(MOZJS_ARCHIVE_NAME) --strip-components=1 && \
 	mkdir -p $(MOZJS_BUILD_PATH) && cd $(MOZJS_BUILD_PATH) && \

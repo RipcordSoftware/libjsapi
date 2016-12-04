@@ -2,10 +2,10 @@
 
 #include "window.h"
 
-Application::Application(rs::jsapi::Runtime& rt, const char* appName, int argc, char** argv) : rt_(rt), obj_(rt) {
+Application::Application(rs::jsapi::Context& cx, const char* appName, int argc, char** argv) : cx_(cx), obj_(cx) {
     app_ = Gtk::Application::create(argc, argv, appName);
     
-    rs::jsapi::Object::Create(rt, {}, nullptr, nullptr, 
+    rs::jsapi::Object::Create(cx, {}, nullptr, nullptr, 
         { { "run", std::bind(&Application::Run, this, std::placeholders::_1, std::placeholders::_2) } }, 
         std::bind(&Application::Finalizer, this), obj_);
 }
