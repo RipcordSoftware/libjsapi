@@ -20,6 +20,7 @@ addons:
     - llvm-toolchain-precise-3.5
     packages:
     - binutils-gold    
+    - autoconf2.13
     - g++-4.9
     - clang-3.5
     - zlib1g-dev
