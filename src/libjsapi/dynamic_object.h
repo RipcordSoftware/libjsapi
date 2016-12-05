@@ -43,7 +43,7 @@ public:
     using EnumeratorCallback = std::function<bool(std::vector<std::string>& props, std::vector<std::pair<std::string, JSNative>>& funcs)>;
     using FinalizeCallback = std::function<void()>;
     
-    static bool Create(JSContext*, GetCallback getter, SetCallback setter, EnumeratorCallback enumerator, FinalizeCallback finalize, Value& obj);
+    static bool Create(JSContext*, const GetCallback& getter, const SetCallback& setter, const EnumeratorCallback& enumerator, const FinalizeCallback& finalize, Value& obj);
     
     static bool SetPrivate(Value&, uint64_t, void*);
     static bool GetPrivate(const Value&, uint64_t&, void*&);

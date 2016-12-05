@@ -52,9 +52,9 @@ public:
     
     static bool Create(JSContext*, 
         const std::vector<const char*>& properties,
-        GetCallback getter, SetCallback setter,
+        const GetCallback& getter, const SetCallback& setter,
         const std::vector<std::pair<const char*, FunctionCallback>>& functions,
-        FinalizeCallback finalizer,
+        const FinalizeCallback& finalizer,
         Value& obj);
     
     static bool SetPrivate(Value&, uint64_t, void*);

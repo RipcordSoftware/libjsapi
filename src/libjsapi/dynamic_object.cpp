@@ -40,7 +40,7 @@ JSClass rs::jsapi::DynamicObject::class_ = {
     "rs_jsapi_dynamicobject", JSCLASS_HAS_PRIVATE, &classOps_
 };
 
-bool rs::jsapi::DynamicObject::Create(JSContext* cx, GetCallback getter, DynamicObject::SetCallback setter, EnumeratorCallback enumerator, FinalizeCallback finalize, Value& obj) {
+bool rs::jsapi::DynamicObject::Create(JSContext* cx, const GetCallback& getter, const SetCallback& setter, const EnumeratorCallback& enumerator, const FinalizeCallback& finalize, Value& obj) {
     JSAutoRequest ar(cx);    
     JS::RootedObject newObj(cx, JS_NewObject(cx, &class_));
     

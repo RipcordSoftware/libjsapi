@@ -40,7 +40,7 @@ JSClass rs::jsapi::DynamicArray::class_ = {
     "rs_jsapi_dynamicarray", JSCLASS_HAS_PRIVATE, &classOps_
 };
 
-bool rs::jsapi::DynamicArray::Create(JSContext* cx, GetCallback getter, SetCallback setter, LengthCallback length, FinalizeCallback finalize, Value& array) {
+bool rs::jsapi::DynamicArray::Create(JSContext* cx, const GetCallback& getter, const SetCallback& setter, const LengthCallback& length, const FinalizeCallback& finalize, Value& array) {
     JSAutoRequest ar(cx);    
     JS::RootedObject obj(cx, JS_NewObject(cx, &class_));
     

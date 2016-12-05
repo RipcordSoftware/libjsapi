@@ -43,7 +43,7 @@ public:
     using LengthCallback = std::function<int()>;
     using FinalizeCallback = std::function<void()>;
     
-    static bool Create(JSContext*, GetCallback getter, SetCallback setter, LengthCallback length, FinalizeCallback finalize, Value& array);
+    static bool Create(JSContext*, const GetCallback& getter, const SetCallback& setter, const LengthCallback& length, const FinalizeCallback& finalize, Value& array);
     
     static bool SetPrivate(Value&, uint64_t, void*);
     static bool GetPrivate(const Value&, uint64_t&, void*&);
