@@ -56,7 +56,7 @@ $(MOZJS_ARCHIVE_PATH):
 	mkdir -p $(MOZJS_SOURCE_PATH) && cd $(MOZJS_SOURCE_PATH) && \
 	tar xfj ../$(MOZJS_ARCHIVE_NAME) --strip-components=1 && \
 	mkdir -p $(MOZJS_BUILD_PATH) && cd $(MOZJS_BUILD_PATH) && \
-	../configure --prefix=$(INSTALLED) $(MOZJS_CONFIG_FLAGS)
+	CC=$(CC) CXX=$(CXX) ../configure --prefix=$(INSTALLED) $(MOZJS_CONFIG_FLAGS)
 
 $(GTEST_LIB): $(GTEST_ARCHIVE_PATH)
 	mkdir -p $(INSTALLED_DIRS) && \
