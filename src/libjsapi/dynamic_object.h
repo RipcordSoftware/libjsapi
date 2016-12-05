@@ -31,18 +31,17 @@
 
 #include <jsapi.h>
 
+#include "value.h"
+
 namespace rs {
 namespace jsapi {
-    
-class Context;
-class Value;
 
 class DynamicObject final {
 public:
-    typedef std::function<void(const char* name, Value& value)> GetCallback;
-    typedef std::function<void(const char* name, const Value& value)> SetCallback;
-    typedef std::function<bool(std::vector<std::string>& props, std::vector<std::pair<std::string, JSNative>>& funcs)> EnumeratorCallback;
-    typedef std::function<void()> FinalizeCallback;
+    using GetCallback = std::function<void(const char* name, Value& value)>;
+    using SetCallback = std::function<void(const char* name, const Value& value)>;
+    using EnumeratorCallback = std::function<bool(std::vector<std::string>& props, std::vector<std::pair<std::string, JSNative>>& funcs)>;
+    using FinalizeCallback = std::function<void()>;
     
     static bool Create(JSContext*, GetCallback getter, SetCallback setter, EnumeratorCallback enumerator, FinalizeCallback finalize, Value& obj);
     

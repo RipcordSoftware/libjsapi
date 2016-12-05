@@ -24,9 +24,7 @@
 
 #include "dynamic_object.h"
 #include "context.h"
-#include "value.h"
 
-#include <vector>
 #include <cstring>
 
 JSClassOps rs::jsapi::DynamicObject::classOps_ = {

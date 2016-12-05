@@ -37,12 +37,10 @@
 namespace rs {
 namespace jsapi {
 
-class Runtime;
 class FunctionArguments;
 class Value;
 
 class Context final {
-    friend class Runtime;
 public:
     Context(uint32_t maxBytes = JS::DefaultHeapMaxBytes, bool enableBaselineCompiler = true, bool enableIonCompiler = true);
     ~Context();

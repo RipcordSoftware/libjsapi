@@ -30,11 +30,12 @@
 #include <functional>
 #include <vector>
 
+#include "value.h"
+
 namespace rs {
 namespace jsapi {
     
 class Context;
-class Value;
 
 class Global final {
 public:

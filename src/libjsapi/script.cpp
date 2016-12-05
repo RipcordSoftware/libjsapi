@@ -25,7 +25,6 @@
 #include "script.h"
 
 #include "context.h"
-#include "value.h"
 
 rs::jsapi::Script::Script(Context& cx, const char* code) : 
     cx_(cx), code_(code), script_(cx.getContext()) {

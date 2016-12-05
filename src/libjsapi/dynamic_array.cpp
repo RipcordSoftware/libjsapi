@@ -24,9 +24,7 @@
 
 #include "dynamic_array.h"
 #include "context.h"
-#include "value.h"
 
-#include <vector>
 #include <cstring>
 
 JSClassOps rs::jsapi::DynamicArray::classOps_ = {

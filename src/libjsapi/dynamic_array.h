@@ -31,18 +31,17 @@
 
 #include <jsapi.h>
 
+#include "value.h"
+
 namespace rs {
 namespace jsapi {
-    
-class Context;
-class Value;
 
 class DynamicArray final {
 public:
-    typedef std::function<void(int index, Value& value)> GetCallback;
-    typedef std::function<void(int index, const Value& value)> SetCallback;
-    typedef std::function<int()> LengthCallback;
-    typedef std::function<void()> FinalizeCallback;
+    using GetCallback = std::function<void(int index, Value& value)>;
+    using SetCallback = std::function<void(int index, const Value& value)>;
+    using LengthCallback = std::function<int()>;
+    using FinalizeCallback = std::function<void()>;
     
     static bool Create(JSContext*, GetCallback getter, SetCallback setter, LengthCallback length, FinalizeCallback finalize, Value& array);
     

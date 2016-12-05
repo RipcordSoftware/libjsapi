@@ -24,7 +24,6 @@
 
 #include "global.h"
 #include "context.h"
-#include "value.h"
 #include "vector_utils.h"
 
 JSClassOps rs::jsapi::Global::privateFunctionStateClassOps_ = {

@@ -24,7 +24,6 @@
 
 #include "function_arguments.h"
 #include "context.h"
-#include "value.h"
 #include "object.h"
 
 rs::jsapi::FunctionArguments::FunctionArguments(Context& cx) : cx_(cx), args_(cx_) {

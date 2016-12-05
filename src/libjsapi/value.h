@@ -35,8 +35,6 @@
 namespace rs {
 namespace jsapi {
 
-class Context;
-class Value;
 class FunctionArguments;
     
 class Value final {
