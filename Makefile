@@ -56,7 +56,7 @@ $(MOZJS_ARCHIVE_PATH):
 	mkdir -p $(MOZJS_SOURCE_PATH) && cd $(MOZJS_SOURCE_PATH) && \
 	tar xfj ../$(MOZJS_ARCHIVE_NAME) --strip-components=1 && \
 	mkdir -p $(MOZJS_BUILD_PATH) && cd $(MOZJS_BUILD_PATH) && \
-	CC=$(CC) CXX=$(CXX) ../configure --prefix=$(INSTALLED) $(MOZJS_CONFIG_FLAGS)
+	CC="$(CC)" CXX="$(CXX)" ../configure --prefix=$(INSTALLED) $(MOZJS_CONFIG_FLAGS)
 
 $(GTEST_LIB): $(GTEST_ARCHIVE_PATH)
 	mkdir -p $(INSTALLED_DIRS) && \
@@ -71,4 +71,4 @@ $(GTEST_ARCHIVE_PATH):
 	(test -f $(CACHE_PATH)/$(GTEST_ARCHIVE_NAME) && cp -fp $(CACHE_PATH)/$(GTEST_ARCHIVE_NAME) .) || curl ftp://ftp.ripcordsoftware.com/pub/gtest-$(GTEST_VER).zip -o $(GTEST_ARCHIVE_NAME) && \
 	unzip -o $(GTEST_ARCHIVE_NAME) && \
 	cd gtest-$(GTEST_VER) && \
-	CC=$(CC) CXX=$(CXX) ./configure
+	CC="$(CC)" CXX="$(CXX)" ./configure
