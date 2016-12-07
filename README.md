@@ -3,7 +3,7 @@
 [![License](http://img.shields.io/:license-mit-blue.svg)](http://doge.mit-license.org)
 
 # libjsapi
-A SpiderMonkey 45 (Mozilla) JSAPI wrapper for C++ 11.
+A SpiderMonkey 50 (Mozilla) JSAPI wrapper for C++ 11.
 
 The JSAPI interface to the SpiderMonkey JavaScript VM can be difficult to integrate into 
 applications without an intermediate abstraction layer managing object creation, object lifetimes and 
@@ -35,16 +35,15 @@ The simplest thing that could possibly work:
 #include "libjsapi.h"
 
 int main() {
-    // create the runtime which hosts spidermonkey
-    rs::jsapi::Runtime rt;
+    // create the context which hosts spidermonkey
+    rs::jsapi::Context cx;
     
     // execute a script in the context of the runtime, getting the result
-    rs::jsapi::Value result(rt);
-    rt.Evaluate("(function(){return 42;})();", result);
+    rs::jsapi::Value result(cx);
+    cx.Evaluate("(function(){return 42;})();", result);
     
     // output the result to the console
     std::cout << result << std::endl;
-    return 0;
 }
 ```
 
@@ -54,22 +53,21 @@ Among other things we can expose C++ lambdas (and methods) to JS:
 #include "libjsapi.h"
 
 int main() {
-    // create the runtime which hosts spidermonkey
-    rs::jsapi::Runtime rt;
+    // create the context which hosts spidermonkey
+    rs::jsapi::Context cx;
     
     // define a function in global scope implemented by a C++ lambda
-    rs::jsapi::Global::DefineFunction(rt, "getTheAnswer", 
+    rs::jsapi::Global::DefineFunction(cx, "getTheAnswer", 
         [](const std::vector<rs::jsapi::Value>& args, rs::jsapi::Value& result) { 
             result = 42; 
     });
     
     // call the native function from JS
-    rs::jsapi::Value result(rt);
-    rt.Evaluate("(function(){return getTheAnswer();})();", result);
+    rs::jsapi::Value result(cx);
+    cx.Evaluate("(function(){return getTheAnswer();})();", result);
     
     // output the result to the console
     std::cout << result << std::endl;
-    return 0;
 }
 ```
 
