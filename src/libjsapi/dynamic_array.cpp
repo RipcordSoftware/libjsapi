@@ -47,7 +47,7 @@ bool rs::jsapi::DynamicArray::Create(JSContext* cx, const GetCallback& getter, c
     if (obj) {
         JS_DefineProperty(cx, obj, "length", 0, JSPROP_READONLY, DynamicArray::Length);
         
-        auto state = new DynamicArrayState { getter, setter, length, finalize, 0, nullptr };
+        auto state = new DynamicArrayState{getter, setter, length, finalize};
         DynamicArray::SetState(obj, state);
         
         array.set(obj);
@@ -116,8 +116,8 @@ bool rs::jsapi::DynamicArray::Set(JSContext* cx, JS::HandleObject obj, JS::Handl
 
 void rs::jsapi::DynamicArray::Finalize(JSFreeOp* fop, JSObject* obj) {
     auto state = GetState(obj);
-    if (state != nullptr && state->finalize != nullptr) {
-        state->finalize();
+    if (state != nullptr && state->finalizer != nullptr) {
+        state->finalizer();
     }
     
     SetState(obj, nullptr);
