@@ -1,4 +1,4 @@
-SHELL:=/bin/bash
+SHELL:=bash
 
 GTEST_VER:=1.7.0
 MOZJS_VER:=50.1.0
