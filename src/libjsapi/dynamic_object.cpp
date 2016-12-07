@@ -40,7 +40,7 @@ bool rs::jsapi::DynamicObject::Create(JSContext* cx, const GetCallback& getter, 
     JS::RootedObject newObj(cx, JS_NewObject(cx, &class_, JS::NullPtr()));
     
     if (newObj) {
-        auto state = new DynamicObjectState { getter, setter, enumerator, finalize, 0, nullptr };
+        auto state = new DynamicObjectState{getter, setter, enumerator, finalize};
         DynamicObject::SetState(newObj, state);
         
         obj.set(newObj);
@@ -169,8 +169,8 @@ bool rs::jsapi::DynamicObject::Enumerate(JSContext* cx, JS::HandleObject obj) {
 
 void rs::jsapi::DynamicObject::Finalize(JSFreeOp* fop, JSObject* obj) {
     auto state = DynamicObject::GetState(obj);
-    if (state != nullptr && state->finalize != nullptr) {
-        state->finalize();
+    if (state != nullptr && state->finalizer != nullptr) {
+        state->finalizer();
     }
     
     SetState(obj, nullptr);

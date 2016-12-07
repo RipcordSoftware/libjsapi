@@ -52,7 +52,19 @@ public:
     static bool IsDynamicObject(const Value&);
     
 private:
-    struct DynamicObjectState { GetCallback getter; SetCallback setter; EnumeratorCallback enumerator; FinalizeCallback finalize; uint64_t data; void* ptr; };
+    struct DynamicObjectState { 
+        DynamicObjectState(const GetCallback& g, const SetCallback& s,
+            const EnumeratorCallback& e, const FinalizeCallback& f,
+            uint64_t d = 0, void* p = nullptr) :
+            getter(g), setter(s), enumerator(e), finalizer(f), data(d), ptr(p) {}
+
+        const GetCallback getter;
+        const SetCallback setter;
+        const EnumeratorCallback enumerator;
+        const FinalizeCallback finalizer;
+        uint64_t data;
+        void* ptr;
+    };
     
     static bool Get(JSContext*, JS::HandleObject, JS::HandleId, JS::MutableHandleValue);
     static bool Set(JSContext*, JS::HandleObject, JS::HandleId, bool, JS::MutableHandleValue);

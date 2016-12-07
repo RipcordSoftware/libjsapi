@@ -52,7 +52,19 @@ public:
     static bool IsDynamicArray(const Value&);
     
 private:
-    struct DynamicArrayState { GetCallback getter; SetCallback setter; LengthCallback length; FinalizeCallback finalize; uint64_t data; void* ptr; };
+    struct DynamicArrayState { 
+        DynamicArrayState(const GetCallback& g, const SetCallback& s,
+            const LengthCallback& l, const FinalizeCallback& f,
+            uint64_t d = 0, void* p = nullptr) :
+            getter(g), setter(s), length(l), finalizer(f), data(d), ptr(p) {}
+
+        const GetCallback getter;
+        const SetCallback setter;
+        const LengthCallback length;
+        const FinalizeCallback finalizer;
+        uint64_t data;
+        void* ptr;
+    };
     
     static bool Get(JSContext*, JS::HandleObject, JS::HandleId, JS::MutableHandleValue);
     static bool Set(JSContext*, JS::HandleObject, JS::HandleId, bool, JS::MutableHandleValue);

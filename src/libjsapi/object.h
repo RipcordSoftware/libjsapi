@@ -63,9 +63,13 @@ public:
     
 private:
     struct ObjectState { 
-        GetCallback getter; 
-        SetCallback setter; 
-        FinalizeCallback finalizer; 
+        ObjectState(const GetCallback& g, const SetCallback& s,
+            const FinalizeCallback& f, uint64_t d = 0, void* p = nullptr) :
+            getter(g), setter(s), finalizer(f), data(d), ptr(p) {}
+
+        const GetCallback getter;
+        const SetCallback setter;
+        const FinalizeCallback finalizer;
         Functions functions;
         uint64_t data;
         void* ptr;
