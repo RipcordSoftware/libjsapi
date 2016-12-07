@@ -6,11 +6,11 @@
 int main() {
     std::vector<int> data = { 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144 };
 
-    rs::jsapi::Runtime rt;
+    rs::jsapi::Context cx;
 
     // create a dynamic array which exposes the `data` vector to JS
-    rs::jsapi::Value array(rt);
-    rs::jsapi::DynamicArray::Create(rt,
+    rs::jsapi::Value array(cx);
+    rs::jsapi::DynamicArray::Create(cx,
         [&](int index, rs::jsapi::Value& value) { value = data[index]; },
         nullptr,
         [&]() { return data.size(); },
@@ -19,10 +19,10 @@ int main() {
 
     // create a function which returns the value of the item 'n'
     // on the passed array
-    rt.Evaluate("var myfunc=function(arr, n){ return arr[n]; }");
+    cx.Evaluate("var myfunc=function(arr, n){ return arr[n]; }");
 
     // create an arguments instance so we can call the JS function
-    rs::jsapi::FunctionArguments args(rt);
+    rs::jsapi::FunctionArguments args(cx);
     args.Append(array);
     args.Append(0);
 
@@ -30,11 +30,9 @@ int main() {
     for (int i = 0; i < data.size(); ++i) {
         args[1].setInt32(i);
 
-        rs::jsapi::Value result(rt);
-        rt.Call("myfunc", args, result);
+        rs::jsapi::Value result(cx);
+        cx.Call("myfunc", args, result);
 
         std::cout << result << std::endl;
     }
-
-    return 0;
 }
