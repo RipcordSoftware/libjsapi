@@ -42,7 +42,7 @@ class Value;
 
 class Context final {
 public:
-    Context(uint32_t maxBytes = JS::DefaultHeapMaxBytes, bool enableBaselineCompiler = true, bool enableIonCompiler = true);
+    Context(uint32_t maxBytes = JS::DefaultHeapMaxBytes, uint32_t maxNurseryBytes = JS::DefaultNurseryBytes, bool enableBaselineCompiler = true, bool enableIonCompiler = true);
     ~Context();
     
     bool Evaluate(const char* script);
@@ -74,7 +74,7 @@ private:
     std::unique_ptr<ScriptException> GetContextError();
     std::unique_ptr<ScriptException> GetContextException();
 
-    static JSContext* NewContext(uint32_t maxbytes);
+    static JSContext* NewContext(uint32_t maxbytes, uint32_t maxNurseryBytes);
     static void ReportWarning(JSContext *cx, const char *message, JSErrorReport *report);
     
     void DestroyContext();

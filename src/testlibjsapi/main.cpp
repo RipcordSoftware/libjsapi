@@ -33,9 +33,9 @@ int main() {
 
     threads.emplace_back([] {
         rs::jsapi::Context cx1;
-        
+
         rs::jsapi::Script script1(cx1, "(function(){return 42;})();");
-        script1.Compile();        
+        script1.Compile();
 
         rs::jsapi::Value result(cx1);
         script1.Execute(result);
@@ -44,7 +44,7 @@ int main() {
             auto val = result.toNumber();
             std::cout << val << std::endl;
         }
-            
+
         rs::jsapi::Value result2(cx1);
         script1.Execute(result2);
 
@@ -53,10 +53,10 @@ int main() {
             std::cout << val << std::endl;
         }
     });
-    
+
     threads.emplace_back([] {
         rs::jsapi::Context cx2;
-        
+
         rs::jsapi::Script script2(cx2, "(function(){return 3.14159;})();");
         script2.Compile();
 
@@ -66,7 +66,7 @@ int main() {
         if (result.isNumber()) {
             auto val = result.toNumber();
             std::cout << val << std::endl;
-        }       
+        }
 
         rs::jsapi::Value result2(cx2);
         script2.Execute(result2);
@@ -76,7 +76,7 @@ int main() {
             std::cout << val << std::endl;
         }
     });
-    
+
     for (auto& thread : threads) {
         thread.join();
     }

@@ -3,6 +3,7 @@
 #include <memory>
 #include <cstdlib>
 
+#include <jsapi.h>
 #include <js/Initialization.h>
 
 #ifdef __GNUC__
@@ -14,15 +15,19 @@
 std::atomic<bool> rs::jsapi::ContextInstance::initCalled_ INIT_PRIORITY(0);
 std::atomic<int> rs::jsapi::ContextInstance::count_ INIT_PRIORITY(0);
 std::mutex rs::jsapi::ContextInstance::m_ INIT_PRIORITY(0);
+std::atomic<JSContext*> rs::jsapi::ContextInstance::context_;
 
 rs::jsapi::ContextInstance::ContextInstance() {
     if (count_ == 0 && !initCalled_) {
         std::lock_guard<std::mutex> lk(m_);
         if (count_ == 0 && !initCalled_) {
-            JS_Init();           
+            JS_Init();
+
+            context_ = JS_NewContext(JS::DefaultHeapMaxBytes, JS::DefaultNurseryBytes);
+            JS::InitSelfHostedCode(context_);
             
             // shutdown JS at process end
-            std::atexit([] { JS_ShutDown(); });
+            std::atexit(AtExit);
 
             // keep track of the number of instances
             ++count_;
@@ -37,6 +42,15 @@ rs::jsapi::ContextInstance::ContextInstance() {
     }   
 }
 
-rs::jsapi::ContextInstance::~ContextInstance() {    
+rs::jsapi::ContextInstance::~ContextInstance() {
     --count_;
+}
+
+void rs::jsapi::ContextInstance::AtExit() {
+    // ideally we should destroy the context, however Destroy() must be
+    // called on the right thread - and we probably aren't on the right one
+    // so it would just blow up
+    //JS_DestroyContext(context_);
+    
+    JS_ShutDown();
 }

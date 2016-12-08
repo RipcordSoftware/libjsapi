@@ -40,8 +40,9 @@ static JSClass globalClass = {
 
 JS::CompartmentOptions rs::jsapi::Context::options_;
 
-rs::jsapi::Context::Context(uint32_t maxBytes, bool enableBaselineCompiler, bool enableIonCompiler) : 
-        cx_(NewContext(maxBytes)),
+rs::jsapi::Context::Context(uint32_t maxBytes, uint32_t maxNurseryBytes,
+        bool enableBaselineCompiler, bool enableIonCompiler) : 
+        cx_(NewContext(maxBytes, maxNurseryBytes)),
         global_(cx_, JS_NewGlobalObject(cx_, &globalClass, nullptr, JS::DontFireOnNewGlobalHook, options_)),
         oldCompartment_(nullptr) {
     JS::SetWarningReporter(cx_, &ReportWarning);
@@ -192,8 +193,8 @@ bool rs::jsapi::Context::Call(Value& value, const FunctionArguments& args, Value
     return status;
 }
 
-JSContext* rs::jsapi::Context::NewContext(uint32_t maxBytes) {
-    auto cx = JS_NewContext(maxBytes);
+JSContext* rs::jsapi::Context::NewContext(uint32_t maxBytes, uint32_t maxNurseryBytes) {
+    auto cx = JS_NewContext(maxBytes, maxNurseryBytes, ContextInstance::GetParentContext());
     JS::InitSelfHostedCode(cx);
     return cx;
 }

@@ -28,6 +28,8 @@
 #include <atomic>
 #include <mutex>
 
+class JSContext;
+
 namespace rs {
 namespace jsapi {
 
@@ -35,11 +37,16 @@ class ContextInstance {
 public:
     ContextInstance();
     ~ContextInstance();
+    
+    static JSContext* GetParentContext() { return context_; }
 
 private:
     static std::atomic<bool> initCalled_;
     static std::atomic<int> count_;
     static std::mutex m_;
+    static std::atomic<JSContext*> context_;
+    
+    static void AtExit();
 };
 
 }}
