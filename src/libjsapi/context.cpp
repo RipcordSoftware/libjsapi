@@ -118,11 +118,15 @@ void rs::jsapi::Context::DestroyContext() {
 }
 
 bool rs::jsapi::Context::Evaluate(const char* script) {
+    CheckCallingThread();
+    
     Value result(*this);        
     return Evaluate(script, result);
 }
 
 bool rs::jsapi::Context::Evaluate(const char* script, Value& result) {
+    CheckCallingThread();
+    
     JSAutoRequest ar(cx_);    
     JS::CompileOptions options(cx_);
     auto status = JS::Evaluate(cx_, options, script, std::strlen(script), result);
@@ -141,6 +145,8 @@ bool rs::jsapi::Context::Call(const char* name) {
 }
 
 bool rs::jsapi::Context::Call(const char* name, Value& result) {
+    CheckCallingThread();
+    
     JSAutoRequest ar(cx_);    
     auto status = JS_CallFunctionName(cx_, global_, name, JS::HandleValueArray::empty(), result);    
     
@@ -158,6 +164,8 @@ bool rs::jsapi::Context::Call(const char* name, const FunctionArguments& args) {
 }
 
 bool rs::jsapi::Context::Call(const char* name, const FunctionArguments& args, Value& result) {
+    CheckCallingThread();
+    
     JSAutoRequest ar(cx_);
     auto status = JS_CallFunctionName(cx_, global_, name, args, result);    
     
@@ -181,6 +189,8 @@ bool rs::jsapi::Context::Call(Value& value, const FunctionArguments& args, Value
     auto cx = value.getContext();
     auto that = static_cast<Context*>(ContextState::GetDataPtr(cx));
     if (that) {
+        that->CheckCallingThread();
+        
         JSAutoRequest ar{cx};
         status = JS_CallFunctionValue(cx, that->global_, value, args, result);
         

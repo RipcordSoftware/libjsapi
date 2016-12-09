@@ -46,9 +46,13 @@ public:
     static bool RemoveThread(std::thread::id id);
     static bool RemoveThread();
     
+    void CheckCallingThread() const;
+
 private:
     static std::vector<std::thread::id> activeThreads_;
-    static std::mutex activeThreadsLock_;    
+    static std::mutex activeThreadsLock_;
+    
+    const std::thread::id id_;
 };
 
 }}

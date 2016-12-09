@@ -57,13 +57,13 @@ public:
     Context(const Context&) = delete;
     Context& operator =(const Context&) = delete;
     
-    JSContext* getContext() { return cx_; }
-    JS::HandleObject getGlobal() { return global_; }
+    JSContext* getContext() { CheckCallingThread(); return cx_; }
+    JS::HandleObject getGlobal() { CheckCallingThread(); return global_; }
     
     operator JSContext*() { return cx_; }
     
-    void GCNow() { JS_GC(cx_); }
-    void MaybeGC() { JS_MaybeGC(cx_); }
+    void GCNow() { CheckCallingThread(); JS_GC(cx_); }
+    void MaybeGC() { CheckCallingThread(); JS_MaybeGC(cx_); }
         
 private:
     friend bool Script::Compile();
@@ -78,6 +78,8 @@ private:
     static void ReportWarning(JSContext *cx, const char *message, JSErrorReport *report);
     
     void DestroyContext();
+    
+    void CheckCallingThread() { threadGuard_.CheckCallingThread(); }
     
     static JS::CompartmentOptions options_;
    

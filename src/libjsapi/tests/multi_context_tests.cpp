@@ -69,102 +69,159 @@ TEST_F(MultiContextTests, test1) {
     
     thread.join();
 }
-#if 0
+
 TEST_F(MultiContextTests, test2) {
-    rs::jsapi::Script bootstrapScript1(context_, "var count = 42;");
-    bootstrapScript1.Compile();
-    bootstrapScript1.Execute();
-    
-    rs::jsapi::Context context2;
-    rs::jsapi::Script bootstrapScript2(context2, "var count = 42;");
-    bootstrapScript2.Compile();
-    bootstrapScript2.Execute();
-    
-    rs::jsapi::Script script1(context_, "(function(){return count++;})();");
-    script1.Compile();
-    
-    rs::jsapi::Script script2(context2, "(function(){return count++;})();");
-    script2.Compile();
-    
-    rs::jsapi::Value result1a(context_);
-    script1.Execute(result1a);
+    std::thread t1([] {
+        rs::jsapi::Context cx1;
+        rs::jsapi::Script bootstrapScript1(cx1, "var count = 42;");
+        bootstrapScript1.Compile();
+        bootstrapScript1.Execute();
 
-    ASSERT_TRUE(result1a.isNumber());
-    ASSERT_EQ(42, result1a.toNumber());
-    
-    rs::jsapi::Value result1b(context_);
-    script1.Execute(result1b);
+        rs::jsapi::Script script1(cx1, "(function(){return count++;})();");
+        script1.Compile();
 
-    ASSERT_TRUE(result1b.isNumber());
-    ASSERT_EQ(43, result1b.toNumber());
-    
-    rs::jsapi::Value result2a(context2);
-    script2.Execute(result2a);
+        rs::jsapi::Value result1a(cx1);
+        script1.Execute(result1a);
+        
+        ASSERT_TRUE(result1a.isNumber());
+        ASSERT_EQ(42, result1a.toNumber());
 
-    ASSERT_TRUE(result2a.isNumber());
-    ASSERT_EQ(42, result2a.toNumber());
+        rs::jsapi::Value result1b(cx1);
+        script1.Execute(result1b);
+
+        ASSERT_TRUE(result1b.isNumber());
+        ASSERT_EQ(43, result1b.toNumber());
+    });
+    
+    std::thread t2([] {
+        rs::jsapi::Context cx2;
+        rs::jsapi::Script bootstrapScript2(cx2, "var count = 42;");
+        bootstrapScript2.Compile();
+        bootstrapScript2.Execute();  
+
+        rs::jsapi::Script script2(cx2, "(function(){return count++;})();");
+        script2.Compile();   
+
+        rs::jsapi::Value result2a(cx2);
+        script2.Execute(result2a);
+
+        ASSERT_TRUE(result2a.isNumber());
+        ASSERT_EQ(42, result2a.toNumber());
+    });
+    
+    t1.join();
+    t2.join();
 }
 
-//TEST_F(MultiContextTests, test3) {        
-//    std::thread t([&]() {  
-//        ASSERT_THROW({
-//            rt_.NewContext();
-//        }, rs::jsapi::RuntimeWrongThreadException);
-//    });
-//       
-//    t.join();
-//}
-
-//TEST_F(MultiContextTests, test3b) {        
-//    std::thread t([&]() {  
-//        bool thrown = false;
-//        try {
-//            rt_.NewContext();
-//        } catch (const rs::jsapi::RuntimeWrongThreadException& ex) {
-//            auto what = ex.what();
-//            ASSERT_TRUE(MultiContextTests::SanityCheckWhatMessage(what));
-//            thrown = true;
-//        }
-//        
-//        ASSERT_TRUE(thrown);
-//    });
-//       
-//    t.join();
-//}
-
-//TEST_F(MultiContextTests, test4) {        
-//    std::thread t([&]() {  
-//        ASSERT_THROW({
-//            rs::jsapi::Context& cx = rt_;
-//        }, rs::jsapi::RuntimeWrongThreadException);
-//    });
-//       
-//    t.join();
-//}
-
-//TEST_F(MultiContextTests, test5) {        
-//    std::thread t([&]() {  
-//        ASSERT_THROW({
-//            rt_.getRuntime();
-//        }, rs::jsapi::RuntimeWrongThreadException);
-//    });
-//       
-//    t.join();
-//}
-
-TEST_F(MultiContextTests, test6) {                
-    std::thread t([&]() {
+TEST_F(MultiContextTests, test3) {
+    ASSERT_THROW({
         rs::jsapi::Context cx;
-        rs::jsapi::Script script(cx, "(function(){return 42;})();");
-        script.Compile();
+    }, rs::jsapi::ContextThreadInstanceException);
+}
 
-        rs::jsapi::Value result(cx);
-        script.Execute(result);
+TEST_F(MultiContextTests, test4) {        
+    std::thread t([&]() {
+        bool thrown = false;
+        try {
+            context_.Evaluate("");
+        } catch (const rs::jsapi::ContextWrongThreadException& ex) {
+            auto what = ex.what();
+            ASSERT_TRUE(MultiContextTests::SanityCheckWhatMessage(what));
+            thrown = true;
+        }
 
-        ASSERT_TRUE(result.isNumber());
-        ASSERT_EQ(42, result.toNumber());
+        ASSERT_TRUE(thrown);
     });
        
     t.join();
 }
-#endif
+
+TEST_F(MultiContextTests, test5) {        
+    std::thread t([&]() {
+        bool thrown = false;
+        try {
+            rs::jsapi::Value v{context_};
+            context_.Evaluate("", v);
+        } catch (const rs::jsapi::ContextWrongThreadException& ex) {
+            auto what = ex.what();
+            ASSERT_TRUE(MultiContextTests::SanityCheckWhatMessage(what));
+            thrown = true;
+        }
+        
+        ASSERT_TRUE(thrown);
+    });
+       
+    t.join();
+}
+
+TEST_F(MultiContextTests, test6) {        
+    std::thread t([&]() {
+        bool thrown = false;
+        try {
+            context_.Call("");
+        } catch (const rs::jsapi::ContextWrongThreadException& ex) {
+            auto what = ex.what();
+            ASSERT_TRUE(MultiContextTests::SanityCheckWhatMessage(what));
+            thrown = true;
+        }
+
+        ASSERT_TRUE(thrown);
+    });
+       
+    t.join();
+}
+
+TEST_F(MultiContextTests, test7) {
+    std::thread t([&]() {
+        bool thrown = false;
+        try {
+            rs::jsapi::Value v{context_};
+            context_.Call("", v);
+        } catch (const rs::jsapi::ContextWrongThreadException& ex) {
+            auto what = ex.what();
+            ASSERT_TRUE(MultiContextTests::SanityCheckWhatMessage(what));
+            thrown = true;
+        }
+
+        ASSERT_TRUE(thrown);
+    });
+       
+    t.join();
+}
+
+TEST_F(MultiContextTests, test8) {
+    std::thread t([&]() {
+        bool thrown = false;
+        try {
+            rs::jsapi::Value v{context_};
+            rs::jsapi::Context::Call(v, {context_});
+        } catch (const rs::jsapi::ContextWrongThreadException& ex) {
+            auto what = ex.what();
+            ASSERT_TRUE(MultiContextTests::SanityCheckWhatMessage(what));
+            thrown = true;
+        }
+
+        ASSERT_TRUE(thrown);
+    });
+
+    t.join();
+}
+
+TEST_F(MultiContextTests, test9) {
+    std::thread t([&]() {
+        bool thrown = false;
+        try {
+            rs::jsapi::Value v{context_};
+            rs::jsapi::Value res{context_};
+            rs::jsapi::Context::Call(v, {context_}, res);
+        } catch (const rs::jsapi::ContextWrongThreadException& ex) {
+            auto what = ex.what();
+            ASSERT_TRUE(MultiContextTests::SanityCheckWhatMessage(what));
+            thrown = true;
+        }
+
+        ASSERT_TRUE(thrown);
+    });
+       
+    t.join();
+}

@@ -40,17 +40,17 @@ public:
     }
 };
 
-class RuntimeWrongThreadException : public Exception {
+class ContextWrongThreadException : public Exception {
 public:
     virtual const char* what() const noexcept override {
-        return "Runtime call made from the wrong thread";
+        return "Context call made from the wrong thread";
     }
 };
 
-class RuntimeThreadInstanceException : public Exception {
+class ContextThreadInstanceException : public Exception {
 public:
     virtual const char* what() const noexcept override {
-        return "A runtime is already active on this thread";
+        return "A context is already active on this thread";
     }
 };
 

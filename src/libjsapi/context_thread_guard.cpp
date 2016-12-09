@@ -7,9 +7,9 @@
 std::vector<std::thread::id> rs::jsapi::ContextThreadGuard::activeThreads_;
 std::mutex rs::jsapi::ContextThreadGuard::activeThreadsLock_;
 
-rs::jsapi::ContextThreadGuard::ContextThreadGuard(std::thread::id id) {
+rs::jsapi::ContextThreadGuard::ContextThreadGuard(std::thread::id id) : id_(id) {
     if (!AddThread(id)) {
-        throw RuntimeThreadInstanceException();
+        throw ContextThreadInstanceException();
     }
 }
 
@@ -39,4 +39,10 @@ bool rs::jsapi::ContextThreadGuard::RemoveThread(std::thread::id id) {
 
 bool rs::jsapi::ContextThreadGuard::RemoveThread() {
     return RemoveThread(std::this_thread::get_id());
+}
+
+void rs::jsapi::ContextThreadGuard::CheckCallingThread() const {
+    if (std::this_thread::get_id() != id_) {
+        throw ContextWrongThreadException();
+    }
 }
