@@ -54,7 +54,7 @@ bool MultiContextTests::SanityCheckWhatMessage(const char* msg) {
     return true;
 }
 
-TEST_F(MultiContextTests, test1) {
+TEST_F(MultiContextTests, test1a) {
     std::thread thread([] {
         rs::jsapi::Context cx;
         rs::jsapi::Script script(cx, "(function(){return 42;})();");
@@ -65,6 +65,36 @@ TEST_F(MultiContextTests, test1) {
 
         ASSERT_TRUE(result.isNumber());
         ASSERT_EQ(42, result.toNumber());
+    });
+    
+    thread.join();
+}
+
+TEST_F(MultiContextTests, test1b) {
+    std::thread thread([] {
+        {
+            rs::jsapi::Context cx;
+            rs::jsapi::Script script(cx, "(function(){return 42;})();");
+            script.Compile();
+
+            rs::jsapi::Value result(cx);
+            script.Execute(result);
+
+            ASSERT_TRUE(result.isNumber());
+            ASSERT_EQ(42, result.toNumber());
+        }
+        
+        {
+            rs::jsapi::Context cx;
+            rs::jsapi::Script script(cx, "(function(){return 42;})();");
+            script.Compile();
+
+            rs::jsapi::Value result(cx);
+            script.Execute(result);
+
+            ASSERT_TRUE(result.isNumber());
+            ASSERT_EQ(42, result.toNumber());
+        }
     });
     
     thread.join();
