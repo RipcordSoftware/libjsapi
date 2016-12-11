@@ -26,15 +26,19 @@ GTEST_ARCHIVE_PATH:=$(EXTERNALS)/$(GTEST_ARCHIVE_NAME)
 GTEST_H:=$(INSTALLED_INC)/gtest/gtest.h
 GTEST_LIB:=$(INSTALLED_LIB)/libgtest.a
 
-.PHONY: build all test clean .jsapi .googletest
+.PHONY: build all test examples clean .jsapi .googletest
 .PRECIOUS: $(MOZJS_ARCHIVE_PATH) $(GTEST_ARCHIVE_PATH) $(MOZJS_LIB) $(GTEST_LIB)
 .NOTPARALLEL: test
 
 build all test: .jsapi .googletest
 	cd src/libjsapi && $(MAKE) $@
 
+examples: build
+	cd examples && $(MAKE)
+
 clean:
 	cd src/libjsapi && $(MAKE) $@
+	cd examples && $(MAKE) $@
 
 .jsapi: $(MOZJS_LIB)
 
