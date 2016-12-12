@@ -49,9 +49,10 @@ $(MOZJS_LIB): $(MOZJS_ARCHIVE_PATH)
 	cd $(MOZJS_BUILD_PATH) && \
 	$(MAKE) MAKEOVERRIDES= && \
 	$(MAKE) install MAKEOVERRIDES= && \
-	cp -fp dist/sdk/lib/libmozglue.a $(INSTALLED_LIB) && \
+	export LIBMOZGLUE=dist/sdk/lib/libmozglue.a && if [ -e $${LIBMOZGLUE} ]; then cp -fp $${LIBMOZGLUE} $(INSTALLED_LIB); fi && \
+	export LIBMOZGLUE=dist/sdk/lib/libmozglue.dylib && if [ -e $${LIBMOZGLUE} ]; then cp -fp $${LIBMOZGLUE} $(INSTALLED_LIB); fi && \
 	cd $(INSTALLED_INC) && \
-	((test -L mozjs && rm mozjs) || true) && ln -s mozjs-?? mozjs
+	if [ -L mozjs ]; then rm mozjs; fi && ln -s mozjs-?? mozjs
 
 $(MOZJS_ARCHIVE_PATH):
 	mkdir -p $(INSTALLED_DIRS) && \

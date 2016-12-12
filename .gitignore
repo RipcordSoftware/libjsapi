@@ -52,3 +52,6 @@ examples/square
 examples/object
 examples/dynamicobject
 examples/dynamicarray
+
+# ignore mac output files
+*.dSYM
