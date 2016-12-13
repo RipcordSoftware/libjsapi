@@ -132,10 +132,16 @@
         <rebuildPropChanged>false</rebuildPropChanged>
       </toolsSet>
       <compileType>
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
         <ccTool>
           <standard>8</standard>
           <incDir>
             <pElem>../../externals/installed/include/mozjs</pElem>
+            <pElem>.</pElem>
           </incDir>
           <commandLine>$(COVERAGE_FLAGS)</commandLine>
         </ccTool>
@@ -181,7 +187,6 @@
         <linkerTool>
           <additionalDep>../../externals/installed/lib/libjs_static.ajs ../../externals/installed/lib/libgtest.a ../../externals/installed/lib/libgtest_main.a</additionalDep>
           <linkerLibItems>
-            <linkerOptionItem>-Wl,--whole-archive ../../externals/installed/lib/libmozglue.a -Wl,--no-whole-archive</linkerOptionItem>
             <linkerLibStdlibItem>PosixThreads</linkerLibStdlibItem>
             <linkerOptionItem>`pkg-config --libs zlib`</linkerOptionItem>
             <linkerOptionItem>$(LDLIBS)</linkerOptionItem>
@@ -292,21 +297,6 @@
         </ccTool>
         <linkerTool>
           <output>${TESTDIR}/TestFiles/f3</output>
-        </linkerTool>
-      </folder>
-      <folder path="TestFiles/f4">
-        <cTool>
-          <incDir>
-            <pElem>.</pElem>
-          </incDir>
-        </cTool>
-        <ccTool>
-          <incDir>
-            <pElem>.</pElem>
-          </incDir>
-        </ccTool>
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f4</output>
         </linkerTool>
       </folder>
       <folder path="TestFiles/f5">
@@ -451,12 +441,16 @@
       <compileType>
         <cTool>
           <developmentMode>5</developmentMode>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
         </cTool>
         <ccTool>
           <developmentMode>5</developmentMode>
           <standard>8</standard>
           <incDir>
             <pElem>../../externals/installed/include/mozjs</pElem>
+            <pElem>.</pElem>
           </incDir>
         </ccTool>
         <fortranCompilerTool>
@@ -506,7 +500,6 @@
         <linkerTool>
           <additionalDep>../../externals/installed/lib/libjs_static.ajs ../../externals/installed/lib/libgtest.a ../../externals/installed/lib/libgtest_main.a</additionalDep>
           <linkerLibItems>
-            <linkerOptionItem>-Wl,--whole-archive ../../externals/installed/lib/libmozglue.a -Wl,--no-whole-archive</linkerOptionItem>
             <linkerLibStdlibItem>PosixThreads</linkerLibStdlibItem>
             <linkerOptionItem>`pkg-config --libs zlib`</linkerOptionItem>
             <linkerOptionItem>$(LDLIBS)</linkerOptionItem>
@@ -616,21 +609,6 @@
         </ccTool>
         <linkerTool>
           <output>${TESTDIR}/TestFiles/f3</output>
-        </linkerTool>
-      </folder>
-      <folder path="TestFiles/f4">
-        <cTool>
-          <incDir>
-            <pElem>.</pElem>
-          </incDir>
-        </cTool>
-        <ccTool>
-          <incDir>
-            <pElem>.</pElem>
-          </incDir>
-        </ccTool>
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f4</output>
         </linkerTool>
       </folder>
       <folder path="TestFiles/f5">

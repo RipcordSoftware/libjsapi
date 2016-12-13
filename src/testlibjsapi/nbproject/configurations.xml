@@ -58,7 +58,6 @@
               </makeArtifact>
             </linkerLibProjectItem>
             <linkerOptionItem>../../externals/installed/lib/libjs_static.ajs</linkerOptionItem>
-            <linkerOptionItem>-Wl,--whole-archive ../../externals/installed/lib/libmozglue.a -Wl,--no-whole-archive</linkerOptionItem>
             <linkerLibStdlibItem>PosixThreads</linkerLibStdlibItem>
             <linkerLibStdlibItem>DataCompression</linkerLibStdlibItem>
             <linkerOptionItem>$(LDLIBS)</linkerOptionItem>
@@ -107,7 +106,6 @@
               </makeArtifact>
             </linkerLibProjectItem>
             <linkerOptionItem>../../externals/installed/lib/libjs_static.ajs</linkerOptionItem>
-            <linkerOptionItem>-Wl,--whole-archive ../../externals/installed/lib/libmozglue.a -Wl,--no-whole-archive</linkerOptionItem>
             <linkerLibStdlibItem>PosixThreads</linkerLibStdlibItem>
             <linkerLibStdlibItem>DataCompression</linkerLibStdlibItem>
             <linkerOptionItem>$(LDLIBS)</linkerOptionItem>

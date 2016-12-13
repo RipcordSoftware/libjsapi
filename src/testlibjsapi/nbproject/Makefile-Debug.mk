@@ -52,7 +52,7 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=../libjsapi/dist/Debug/GNU-Linux-x86/libjsapi.a ../../externals/installed/lib/libjs_static.ajs -Wl,--whole-archive ../../externals/installed/lib/libmozglue.a -Wl,--no-whole-archive -lpthread -lz $(LDLIBS)
+LDLIBSOPTIONS=../libjsapi/dist/Debug/GNU-Linux-x86/libjsapi.a ../../externals/installed/lib/libjs_static.ajs -lpthread -lz $(LDLIBS)
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}

@@ -165,7 +165,7 @@ ${TESTDIR}/TestFiles/f5: ../../externals/installed/lib/libgtest_main.a
 
 ${TESTDIR}/TestFiles/f5: ${TESTDIR}/tests/call_js_function_tests.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
-	${LINK.cc}   -o ${TESTDIR}/TestFiles/f5 $^ ${LDLIBSOPTIONS} -Wl,--whole-archive ../../externals/installed/lib/libmozglue.a -Wl,--no-whole-archive -lpthread `pkg-config --libs zlib` $(LDLIBS)   
+	${LINK.cc}   -o ${TESTDIR}/TestFiles/f5 $^ ${LDLIBSOPTIONS} -lpthread `pkg-config --libs zlib` $(LDLIBS)   
 
 ${TESTDIR}/TestFiles/f6: ../../externals/installed/lib/libjs_static.ajs
 
@@ -175,7 +175,7 @@ ${TESTDIR}/TestFiles/f6: ../../externals/installed/lib/libgtest_main.a
 
 ${TESTDIR}/TestFiles/f6: ${TESTDIR}/tests/call_native_function_tests.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
-	${LINK.cc}   -o ${TESTDIR}/TestFiles/f6 $^ ${LDLIBSOPTIONS} -Wl,--whole-archive ../../externals/installed/lib/libmozglue.a -Wl,--no-whole-archive -lpthread `pkg-config --libs zlib` $(LDLIBS)   
+	${LINK.cc}   -o ${TESTDIR}/TestFiles/f6 $^ ${LDLIBSOPTIONS} -lpthread `pkg-config --libs zlib` $(LDLIBS)   
 
 ${TESTDIR}/TestFiles/f12: ../../externals/installed/lib/libjs_static.ajs
 
@@ -185,7 +185,7 @@ ${TESTDIR}/TestFiles/f12: ../../externals/installed/lib/libgtest_main.a
 
 ${TESTDIR}/TestFiles/f12: ${TESTDIR}/tests/function_arguments_tests.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
-	${LINK.cc}   -o ${TESTDIR}/TestFiles/f12 $^ ${LDLIBSOPTIONS} -Wl,--whole-archive ../../externals/installed/lib/libmozglue.a -Wl,--no-whole-archive -lpthread `pkg-config --libs zlib` $(LDLIBS)   
+	${LINK.cc}   -o ${TESTDIR}/TestFiles/f12 $^ ${LDLIBSOPTIONS} -lpthread `pkg-config --libs zlib` $(LDLIBS)   
 
 ${TESTDIR}/TestFiles/f13: ../../externals/installed/lib/libjs_static.ajs
 
@@ -195,7 +195,7 @@ ${TESTDIR}/TestFiles/f13: ../../externals/installed/lib/libgtest_main.a
 
 ${TESTDIR}/TestFiles/f13: ${TESTDIR}/tests/gc_tests.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
-	${LINK.cc}   -o ${TESTDIR}/TestFiles/f13 $^ ${LDLIBSOPTIONS} -Wl,--whole-archive ../../externals/installed/lib/libmozglue.a -Wl,--no-whole-archive -lpthread `pkg-config --libs zlib` $(LDLIBS)   
+	${LINK.cc}   -o ${TESTDIR}/TestFiles/f13 $^ ${LDLIBSOPTIONS} -lpthread `pkg-config --libs zlib` $(LDLIBS)   
 
 ${TESTDIR}/TestFiles/f8: ../../externals/installed/lib/libjs_static.ajs
 
@@ -205,7 +205,7 @@ ${TESTDIR}/TestFiles/f8: ../../externals/installed/lib/libgtest_main.a
 
 ${TESTDIR}/TestFiles/f8: ${TESTDIR}/tests/global_property_tests.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
-	${LINK.cc}   -o ${TESTDIR}/TestFiles/f8 $^ ${LDLIBSOPTIONS} -Wl,--whole-archive ../../externals/installed/lib/libmozglue.a -Wl,--no-whole-archive -lpthread `pkg-config --libs zlib` $(LDLIBS)   
+	${LINK.cc}   -o ${TESTDIR}/TestFiles/f8 $^ ${LDLIBSOPTIONS} -lpthread `pkg-config --libs zlib` $(LDLIBS)   
 
 ${TESTDIR}/TestFiles/f3: ../../externals/installed/lib/libjs_static.ajs
 
@@ -215,7 +215,7 @@ ${TESTDIR}/TestFiles/f3: ../../externals/installed/lib/libgtest_main.a
 
 ${TESTDIR}/TestFiles/f3: ${TESTDIR}/tests/multi_context_tests.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
-	${LINK.cc}   -o ${TESTDIR}/TestFiles/f3 $^ ${LDLIBSOPTIONS} -Wl,--whole-archive ../../externals/installed/lib/libmozglue.a -Wl,--no-whole-archive -lpthread `pkg-config --libs zlib` $(LDLIBS)   
+	${LINK.cc}   -o ${TESTDIR}/TestFiles/f3 $^ ${LDLIBSOPTIONS} -lpthread `pkg-config --libs zlib` $(LDLIBS)   
 
 ${TESTDIR}/TestFiles/f2: ../../externals/installed/lib/libjs_static.ajs
 
@@ -225,7 +225,7 @@ ${TESTDIR}/TestFiles/f2: ../../externals/installed/lib/libgtest_main.a
 
 ${TESTDIR}/TestFiles/f2: ${TESTDIR}/tests/script_exception_tests.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
-	${LINK.cc}   -o ${TESTDIR}/TestFiles/f2 $^ ${LDLIBSOPTIONS} -Wl,--whole-archive ../../externals/installed/lib/libmozglue.a -Wl,--no-whole-archive -lpthread `pkg-config --libs zlib` $(LDLIBS)   
+	${LINK.cc}   -o ${TESTDIR}/TestFiles/f2 $^ ${LDLIBSOPTIONS} -lpthread `pkg-config --libs zlib` $(LDLIBS)   
 
 ${TESTDIR}/TestFiles/f11: ../../externals/installed/lib/libjs_static.ajs
 
@@ -235,7 +235,7 @@ ${TESTDIR}/TestFiles/f11: ../../externals/installed/lib/libgtest_main.a
 
 ${TESTDIR}/TestFiles/f11: ${TESTDIR}/tests/simple_dynamic_array_tests.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
-	${LINK.cc}   -o ${TESTDIR}/TestFiles/f11 $^ ${LDLIBSOPTIONS} -Wl,--whole-archive ../../externals/installed/lib/libmozglue.a -Wl,--no-whole-archive -lpthread `pkg-config --libs zlib` $(LDLIBS)   
+	${LINK.cc}   -o ${TESTDIR}/TestFiles/f11 $^ ${LDLIBSOPTIONS} -lpthread `pkg-config --libs zlib` $(LDLIBS)   
 
 ${TESTDIR}/TestFiles/f9: ../../externals/installed/lib/libjs_static.ajs
 
@@ -245,7 +245,7 @@ ${TESTDIR}/TestFiles/f9: ../../externals/installed/lib/libgtest_main.a
 
 ${TESTDIR}/TestFiles/f9: ${TESTDIR}/tests/simple_dynamic_object_tests.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
-	${LINK.cc}   -o ${TESTDIR}/TestFiles/f9 $^ ${LDLIBSOPTIONS} -Wl,--whole-archive ../../externals/installed/lib/libmozglue.a -Wl,--no-whole-archive -lpthread `pkg-config --libs zlib` $(LDLIBS)   
+	${LINK.cc}   -o ${TESTDIR}/TestFiles/f9 $^ ${LDLIBSOPTIONS} -lpthread `pkg-config --libs zlib` $(LDLIBS)   
 
 ${TESTDIR}/TestFiles/f7: ../../externals/installed/lib/libjs_static.ajs
 
@@ -255,7 +255,7 @@ ${TESTDIR}/TestFiles/f7: ../../externals/installed/lib/libgtest_main.a
 
 ${TESTDIR}/TestFiles/f7: ${TESTDIR}/tests/simple_object_tests.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
-	${LINK.cc}   -o ${TESTDIR}/TestFiles/f7 $^ ${LDLIBSOPTIONS} -Wl,--whole-archive ../../externals/installed/lib/libmozglue.a -Wl,--no-whole-archive -lpthread `pkg-config --libs zlib` $(LDLIBS)   
+	${LINK.cc}   -o ${TESTDIR}/TestFiles/f7 $^ ${LDLIBSOPTIONS} -lpthread `pkg-config --libs zlib` $(LDLIBS)   
 
 ${TESTDIR}/TestFiles/f1: ../../externals/installed/lib/libjs_static.ajs
 
@@ -265,7 +265,7 @@ ${TESTDIR}/TestFiles/f1: ../../externals/installed/lib/libgtest_main.a
 
 ${TESTDIR}/TestFiles/f1: ${TESTDIR}/tests/simple_script_tests.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
-	${LINK.cc}   -o ${TESTDIR}/TestFiles/f1 $^ ${LDLIBSOPTIONS} -Wl,--whole-archive ../../externals/installed/lib/libmozglue.a -Wl,--no-whole-archive -lpthread `pkg-config --libs zlib` $(LDLIBS)   
+	${LINK.cc}   -o ${TESTDIR}/TestFiles/f1 $^ ${LDLIBSOPTIONS} -lpthread `pkg-config --libs zlib` $(LDLIBS)   
 
 ${TESTDIR}/TestFiles/f10: ../../externals/installed/lib/libjs_static.ajs
 
@@ -275,7 +275,7 @@ ${TESTDIR}/TestFiles/f10: ../../externals/installed/lib/libgtest_main.a
 
 ${TESTDIR}/TestFiles/f10: ${TESTDIR}/tests/simple_value_tests.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
-	${LINK.cc}   -o ${TESTDIR}/TestFiles/f10 $^ ${LDLIBSOPTIONS} -Wl,--whole-archive ../../externals/installed/lib/libmozglue.a -Wl,--no-whole-archive -lpthread `pkg-config --libs zlib` $(LDLIBS)   
+	${LINK.cc}   -o ${TESTDIR}/TestFiles/f10 $^ ${LDLIBSOPTIONS} -lpthread `pkg-config --libs zlib` $(LDLIBS)   
 
 
 ${TESTDIR}/tests/call_js_function_tests.o: tests/call_js_function_tests.cpp 

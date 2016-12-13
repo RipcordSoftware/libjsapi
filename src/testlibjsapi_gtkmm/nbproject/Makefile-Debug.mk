@@ -62,7 +62,7 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=../libjsapi/dist/Debug/GNU-Linux-x86/libjsapi.a ../../externals/installed/lib/libjs_static.ajs -Wl,--whole-archive ../../externals/installed/lib/libmozglue.a -Wl,--no-whole-archive `pkg-config gtkmm-3.0 --libs` -lz  $(LDLIBS)  
+LDLIBSOPTIONS=../libjsapi/dist/Debug/GNU-Linux-x86/libjsapi.a ../../externals/installed/lib/libjs_static.ajs `pkg-config gtkmm-3.0 --libs` -lz  $(LDLIBS)  
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}

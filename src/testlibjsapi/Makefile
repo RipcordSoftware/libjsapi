@@ -49,10 +49,11 @@ MKDIR=mkdir
 CP=cp
 CCADMIN=CCadmin
 
-LDLIBS:=$(shell echo 'int main(){}' | $(CXX) -x c++ -o /dev/null -ldl - > /dev/null 2>&1 && echo '-ldl')
-LDLIBS+=$(shell echo 'int main(){}' | $(CXX) -x c++ -o /dev/null -lrt - > /dev/null 2>&1 && echo '-lrt')
+include ../make/coverage.mk
+include ../make/ldlibs.mk
 
-COVERAGE_FLAGS:=$(shell cd /tmp; echo 'int main(){}' | $(CXX) -x c++ -o /dev/null --coverage - > /dev/null 2>&1 && echo '--coverage')
+include ../make/libmozglue.mk
+LDLIBS:=$(call LIBMOZGLUE, ../../externals/installed/lib) $(LDLIBS)
 
 # build
 build: .build-post
