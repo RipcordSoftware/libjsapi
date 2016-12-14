@@ -9,6 +9,8 @@ if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
     gem install coveralls-lcov
 elif [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
     brew update
+    brew tap homebrew/versions
+    brew install autoconf213
 fi
 
 popd
