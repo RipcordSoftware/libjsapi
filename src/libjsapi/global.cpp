@@ -74,7 +74,7 @@ bool rs::jsapi::Global::CallFunction(JSContext* cx, unsigned argc, JS::Value* vp
     auto state = Global::GetFunctionState(&args.callee(), cx, privateFunctionStatePropertyName_);
     if (state) {
         try {
-#if defined(__APPLE__) && __clang_major__ < 8
+#if (defined(__APPLE__) && __clang_major__ < 8) || (!defined(__APPLE__) && __clang_major < 4)
             std::vector<Value> vArgs;
 #else
             static thread_local std::vector<Value> vArgs;
