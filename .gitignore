@@ -55,3 +55,7 @@ examples/dynamicarray
 
 # ignore mac output files
 *.dSYM
+
+# ignore osx pollution
+.DS_Store
+

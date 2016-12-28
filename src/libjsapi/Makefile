@@ -49,11 +49,17 @@ MKDIR=mkdir
 CP=cp
 CCADMIN=CCadmin
 
+# include common vars
+include ../make/externals.mk
 include ../make/coverage.mk
 include ../make/ldlibs.mk
 
+# add libmozglue params to the linker options
 include ../make/libmozglue.mk
-LDLIBS:=$(call LIBMOZGLUE, ../../externals/installed/lib) $(LDLIBS)
+LDLIBS:=$(call LIBMOZGLUE, $(EXT_INSTALLED_LIB)) $(LDLIBS)
+
+# test needs the path to the lib dir on OSX
+test: export DYLD_LIBRARY_PATH=$(EXT_INSTALLED_LIB)
 
 # build
 build: .build-post
