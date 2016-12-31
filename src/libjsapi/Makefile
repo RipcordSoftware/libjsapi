@@ -58,9 +58,6 @@ include ../make/ldlibs.mk
 include ../make/libmozglue.mk
 LDLIBS:=$(call LIBMOZGLUE, $(EXT_INSTALLED_LIB)) $(LDLIBS)
 
-# test needs the path to the lib dir on OSX
-test: export DYLD_LIBRARY_PATH=$(EXT_INSTALLED_LIB)
-
 # build
 build: .build-post
 
@@ -116,6 +113,7 @@ test: .test-post
 
 .test-pre: build-tests
 # Add your pre 'test' code here...
+	if [ -e "$(EXT_INSTALLED_LIB)/libmozglue.dylib" ]; then cp -f "$(EXT_INSTALLED_LIB)/libmozglue.dylib" "$(CND_BUILDDIR)/${CONF}/${CND_PLATFORM_${CONF}}/tests/TestFiles"; fi
 
 .test-post: .test-impl
 # Add your post 'test' code here...
