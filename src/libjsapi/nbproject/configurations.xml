@@ -188,7 +188,7 @@
           <additionalDep>../../externals/installed/lib/libjs_static.ajs ../../externals/installed/lib/libgtest.a ../../externals/installed/lib/libgtest_main.a</additionalDep>
           <linkerLibItems>
             <linkerLibStdlibItem>PosixThreads</linkerLibStdlibItem>
-            <linkerOptionItem>`pkg-config --libs zlib`</linkerOptionItem>
+            <linkerLibStdlibItem>DataCompression</linkerLibStdlibItem>
             <linkerOptionItem>$(LDLIBS)</linkerOptionItem>
           </linkerLibItems>
           <commandLine>$(COVERAGE_FLAGS)</commandLine>
@@ -501,7 +501,7 @@
           <additionalDep>../../externals/installed/lib/libjs_static.ajs ../../externals/installed/lib/libgtest.a ../../externals/installed/lib/libgtest_main.a</additionalDep>
           <linkerLibItems>
             <linkerLibStdlibItem>PosixThreads</linkerLibStdlibItem>
-            <linkerOptionItem>`pkg-config --libs zlib`</linkerOptionItem>
+            <linkerLibStdlibItem>DataCompression</linkerLibStdlibItem>
             <linkerOptionItem>$(LDLIBS)</linkerOptionItem>
           </linkerLibItems>
         </linkerTool>
