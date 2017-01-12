@@ -10,8 +10,7 @@ if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
 elif [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
     brew update
     test -d ~/.ccache && brew install ccache
-    brew tap homebrew/versions
-    brew install autoconf213
+    brew install autoconf@2.13
 fi
 
 popd
