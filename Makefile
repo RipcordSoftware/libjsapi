@@ -4,7 +4,7 @@ GTEST_VER:=1.7.0
 MOZJS_VER:=50.1.0
 MOZJS_VER_SUFFIX:=
 
-MOZJS_CONFIG_FLAGS:=--disable-jemalloc --disable-shared-js --disable-tests --enable-install-strip --without-intl-api
+MOZJS_CONFIG_FLAGS+=--disable-jemalloc --disable-shared-js --disable-tests --enable-install-strip --without-intl-api
 
 CACHE_PATH:=~/Downloads
 
