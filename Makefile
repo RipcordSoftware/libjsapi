@@ -57,7 +57,7 @@ $(MOZJS_LIB): $(MOZJS_ARCHIVE_PATH)
 $(MOZJS_ARCHIVE_PATH):
 	mkdir -p $(INSTALLED_DIRS) && \
 	cd $(EXTERNALS) && \
-	(test -f $(CACHE_PATH)/$(MOZJS_ARCHIVE_NAME) && cp -fp $(CACHE_PATH)/$(MOZJS_ARCHIVE_NAME) .) || curl ftp://ftp.ripcordsoftware.com/pub/mozjs-$(MOZJS_VER)$(MOZJS_VER_SUFFIX).tar.bz2 -o $(MOZJS_ARCHIVE_NAME) && \
+	(test -f $(CACHE_PATH)/$(MOZJS_ARCHIVE_NAME) && cp -fp $(CACHE_PATH)/$(MOZJS_ARCHIVE_NAME) .) || curl http://cdn.ripcordsoftware.com/mozjs-$(MOZJS_VER)$(MOZJS_VER_SUFFIX).tar.bz2 -o $(MOZJS_ARCHIVE_NAME) && \
 	mkdir -p $(MOZJS_SOURCE_PATH) && cd $(MOZJS_SOURCE_PATH) && \
 	tar xfj ../$(MOZJS_ARCHIVE_NAME) --strip-components=1 && \
 	mkdir -p $(MOZJS_BUILD_PATH) && cd $(MOZJS_BUILD_PATH) && \
@@ -73,7 +73,7 @@ $(GTEST_LIB): $(GTEST_ARCHIVE_PATH)
 $(GTEST_ARCHIVE_PATH):
 	mkdir -p $(INSTALLED_DIRS) && \
 	cd $(EXTERNALS) && \
-	(test -f $(CACHE_PATH)/$(GTEST_ARCHIVE_NAME) && cp -fp $(CACHE_PATH)/$(GTEST_ARCHIVE_NAME) .) || curl ftp://ftp.ripcordsoftware.com/pub/gtest-$(GTEST_VER).zip -o $(GTEST_ARCHIVE_NAME) && \
+	(test -f $(CACHE_PATH)/$(GTEST_ARCHIVE_NAME) && cp -fp $(CACHE_PATH)/$(GTEST_ARCHIVE_NAME) .) || curl http://cdn.ripcordsoftware.com/gtest-$(GTEST_VER).zip -o $(GTEST_ARCHIVE_NAME) && \
 	unzip -o $(GTEST_ARCHIVE_NAME) && \
 	cd gtest-$(GTEST_VER) && \
 	CC="$(CC)" CFLAGS="$(CFLAGS)" CXX="$(CXX)" CXXFLAGS="$(CXXFLAGS)" ./configure
